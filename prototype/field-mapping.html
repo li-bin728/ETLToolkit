@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0d9488">
+    <meta name="description" content="字段智能映射 - AI 辅助源表字段到目标标准表的智能映射，支持置信度审核">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="字段智能映射 - MediData AI">
+    <meta property="og:description" content="AI 辅助源表字段到目标标准表的智能映射">
+    <title>字段智能映射 - MediData AI</title>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="stylesheet" href="components/tailwind.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="components/common.css">
+    <script src="components/common.js" defer></script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+    <a href="#main-content" class="skip-link">跳转到主内容</a>
+    <div class="flex h-screen overflow-hidden">
+        <!-- 侧边栏 -->
+        <aside id="sidebar" class="w-64 gradient-bg text-white flex flex-col flex-shrink-0"></aside>
+
+        <!-- 主内容区 -->
+        <main id="main-content" class="flex-1 flex flex-col overflow-hidden" role="main">
+            <!-- 顶部导航 -->
+            <header id="header" class="glass-effect border-b border-gray-200 dark:border-gray-700 px-6 py-4 flex items-center justify-between flex-shrink-0 z-10"></header>
+
+            <!-- 面包屑 -->
+            <div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-2">
+                <nav id="breadcrumb" class="breadcrumb"></nav>
+            </div>
+
+            <!-- 页面内容 -->
+            <div class="flex-1 overflow-hidden flex">
+                <!-- 左侧：源表配置 -->
+                <div class="w-80 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 overflow-y-auto scrollbar-thin flex-shrink-0">
+                    <div class="p-4 border-b border-gray-100 dark:border-gray-700">
+                        <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-4">目标标准表</h3>
+                        <select aria-label="选择目标标准表" class="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus mb-4" onchange="changeTargetTable(this)">
+                            <option>PAT_PATIENT_INFO</option>
+                            <option>PAT_VISIT_INFO</option>
+                            <option>HIS_ORDER</option>
+                        </select>
+                        <div class="bg-medical-50 dark:bg-medical-900/30 rounded-lg p-3">
+                            <p class="text-xs text-medical-700 dark:text-medical-300 font-medium mb-1" id="targetTableName">已选择：PAT_PATIENT_INFO</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400" id="targetTableDesc">患者基本信息表 · 28个字段</p>
+                        </div>
+                    </div>
+                    <div class="p-4 border-b border-gray-100 dark:border-gray-700">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="font-semibold text-gray-900 dark:text-gray-100">源表配置</h3>
+                            <button class="text-xs text-medical-600 hover:text-medical-700 font-medium" data-action="openModal" data-args="addSourceTableModal">
+                                <i class="fas fa-plus mr-1"></i>添加源表
+                            </button>
+                        </div>
+                        <div class="space-y-3" id="sourceTableList">
+                            <div class="source-table-card bg-gray-50 dark:bg-gray-700 rounded-lg p-3 border border-gray-200 dark:border-gray-700">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-sm font-medium text-gray-800 dark:text-gray-200">HIS_PATIENT</span>
+                                    <button class="text-gray-400 hover:text-danger-600" aria-label="移除源表 HIS_PATIENT" onclick="removeSourceTable(this)">
+                                        <i class="fas fa-times" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">HIS_主数据库 · 15个字段</p>
+                            </div>
+                            <div class="source-table-card bg-gray-50 dark:bg-gray-700 rounded-lg p-3 border border-gray-200 dark:border-gray-700">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-sm font-medium text-gray-800 dark:text-gray-200">EMR_PATIENT_BASIC</span>
+                                    <button class="text-gray-400 hover:text-danger-600" aria-label="移除源表 EMR_PATIENT_BASIC" onclick="removeSourceTable(this)">
+                                        <i class="fas fa-times" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">EMR_电子病历库 · 12个字段</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <button id="aiMappingBtn" class="w-full py-2.5 bg-medical-600 text-white rounded-xl text-sm font-medium hover:bg-medical-700 transition-colors flex items-center justify-center gap-2 btn-transition" onclick="aiSmartMapping()">
+                            <i class="fas fa-robot"></i> AI 智能映射
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 中间：映射关系 -->
+                <div class="flex-1 overflow-y-auto p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">字段智能映射</h2>
+                            <p class="text-gray-500 dark:text-gray-400 mt-1">将源表字段映射到标准表字段，建立数据标准化关系</p>
+                        </div>
+                        <div class="flex gap-3">
+                            <button class="px-4 py-2.5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors flex items-center gap-2 btn-transition" data-action="showToast" data-args="保存草稿成功|success">
+                                <i class="fas fa-save"></i> 保存草稿
+                            </button>
+                            <button class="px-4 py-2.5 bg-medical-600 text-white rounded-xl text-sm font-medium hover:bg-medical-700 transition-colors flex items-center gap-2 shadow-md shadow-medical-600/20 btn-transition" onclick="showConfirm({message:'确认提交审核？', onConfirm:function(){ showToast('提交审核成功', 'success'); }})">
+                                <i class="fas fa-check"></i> 提交审核
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 映射统计 -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 stats-grid gap-4 mb-6">
+                        <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 card-hover">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-2xl font-bold text-gray-900 dark:text-gray-100" id="statTargetCount">28</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">目标字段</p>
+                                </div>
+                                <div class="w-10 h-10 bg-primary-50 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-bullseye text-primary-600"></i>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-3">
+                                <span class="text-primary-600 font-medium" id="statTargetTable">PAT_PATIENT_INFO</span>
+                            </div>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 card-hover">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-2xl font-bold text-success-600">22</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">已映射</p>
+                                </div>
+                                <div class="w-10 h-10 bg-success-50 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-check-circle text-success-600"></i>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-3">
+                                <span class="text-success-600 font-medium">78.6%</span> 完成率
+                            </div>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 card-hover">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-2xl font-bold text-warning-600">4</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">待审核</p>
+                                </div>
+                                <div class="w-10 h-10 bg-warning-50 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-clock text-warning-600"></i>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-3">
+                                <span class="text-warning-600 font-medium">AI 推荐</span> 待确认
+                            </div>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 card-hover">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-2xl font-bold text-gray-400">2</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">未映射</p>
+                                </div>
+                                <div class="w-10 h-10 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-unlink text-gray-400"></i>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-3">
+                                <span class="text-gray-400 font-medium">需手动</span> 配置
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI 映射建议 -->
+                    <div class="suggestion-card s-info mb-6">
+                        <div class="s-title"><i class="fas fa-robot"></i> AI 映射建议</div>
+                        <div class="s-desc">检测到 2 个未映射字段，其中 <strong>BIRTH_DATE</strong> 与源表 <strong>HIS_PATIENT.BIRTHDAY</strong> 语义相似度 88%，建议自动映射。点击左侧「AI 智能映射」可一键补全。</div>
+                    </div>
+
+                    <!-- 映射表格 -->
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
+                        <div class="px-4 py-3 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between">
+                            <h3 class="font-semibold text-gray-900 dark:text-gray-100">映射关系</h3>
+                            <div class="flex items-center gap-2">
+                                <button class="text-xs text-medical-600 hover:text-medical-700 px-2 py-1 rounded-xl hover:bg-medical-50 transition-colors" data-action="showToast" data-args="导出映射关系...|success">
+                                    <i class="fas fa-download mr-1"></i>导出
+                                </button>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm">
+                                    <thead class="sticky-head">
+                                        <tr class="border-b border-gray-200 dark:border-gray-700">
+                                        <th class="text-left py-2 px-3 font-medium text-gray-500 dark:text-gray-400 text-xs">序号</th>
+                                        <th class="text-left py-2 px-3 font-medium text-gray-500 dark:text-gray-400 text-xs">目标字段</th>
+                                        <th class="text-left py-2 px-3 font-medium text-gray-500 dark:text-gray-400 text-xs">源字段</th>
+                                        <th class="text-left py-2 px-3 font-medium text-gray-500 dark:text-gray-400 text-xs">源表</th>
+                                        <th class="text-left py-2 px-3 font-medium text-gray-500 dark:text-gray-400 text-xs">置信度</th>
+                                        <th class="text-left py-2 px-3 font-medium text-gray-500 dark:text-gray-400 text-xs">状态</th>
+                                        <th class="text-left py-2 px-3 font-medium text-gray-500 dark:text-gray-400 text-xs">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="field-row border-b border-gray-100 dark:border-gray-800">
+                                        <td class="py-2.5 px-3 text-xs text-gray-400">1</td>
+                                        <td class="py-2.5 px-3">
+                                            <span class="font-mono text-xs text-primary-600 font-medium">PATIENT_ID</span>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400">患者唯一标识</p>
+                                        </td>
+                                        <td class="py-2.5 px-3">
+                                            <span class="font-mono text-xs text-gray-700 dark:text-gray-300">PAT_ID</span>
+                                        </td>
+                                        <td class="py-2.5 px-3">
+                                            <span class="text-xs bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-2 py-0.5 rounded">HIS_PATIENT</span>
+                                        </td>
+                                        <td class="py-2.5 px-3">
+                                            <div class="flex items-center gap-2">
+                                                <div class="w-12 bg-gray-100 dark:bg-gray-700 rounded-full h-1.5">
+                                                    <div class="bg-success-500 h-1.5 rounded-full" style="width: 98%"></div>
+                                                </div>
+                                                <span class="text-xs text-success-600 font-medium">98%</span>
+                                            </div>
+                                        </td>
+                                        <td class="py-2.5 px-3">
+                                            <span class="mapping-badge mapping-done"><i class="fas fa-check-circle"></i>已确认</span>
+                                        </td>
+                                        <td class="py-2.5 px-3">
+                                            <div class="flex items-center gap-2">
+                                                <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑" onclick="openEditMappingModal('PATIENT_ID','PAT_ID','98%')"><i class="fas fa-edit text-xs" aria-hidden="true"></i></button>
+                                                <button type="button" class="text-danger-600 hover:text-danger-700 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除映射" onclick="deleteMapping(this)"><i class="fas fa-unlink text-xs" aria-hidden="true"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="field-row border-b border-gray-100 dark:border-gray-800">
+                                        <td class="py-2.5 px-3 text-xs text-gray-400">2</td>
+                                        <td class="py-2.5 px-3">
+                                            <span class="font-mono text-xs text-primary-600 font-medium">NAME</span>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400">患者姓名</p>
+                                        </td>
+                                        <td class="py-2.5 px-3">
+                                            <span class="font-mono text-xs text-gray-700 dark:text-gray-300">PAT_NAME</span>
+                                        </td>
+                                        <td class="py-2.5 px-3">
+                                            <span class="text-xs bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-2 py-0.5 rounded">HIS_PATIENT</span>
+                                        </td>
+                                        <td class="py-2.5 px-3">
+                                            <div class="flex items-center gap-2">
+                                                <div class="w-12 bg-gray-100 dark:bg-gray-700 rounded-full h-1.5">
+                                                    <div class="bg-success-500 h-1.5 rounded-full" style="width: 95%"></div>
+                                                </div>
+                                                <span class="text-xs text-success-600 font-medium">95%</span>
+                                            </div>
+                                        </td>
+                                        <td class="py-2.5 px-3">
+                                            <span class="mapping-badge mapping-done"><i class="fas fa-check-circle"></i>已确认</span>
+                                        </td>
+                                        <td class="py-2.5 px-3">
+                                            <div class="flex items-center gap-2">
+                                                <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑" onclick="openEditMappingModal('NAME','PAT_NAME','95%')"><i class="fas fa-edit text-xs" aria-hidden="true"></i></button>
+                                                <button type="button" class="text-danger-600 hover:text-danger-700 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除映射" onclick="deleteMapping(this)"><i class="fas fa-unlink text-xs" aria-hidden="true"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="field-row border-b border-gray-100 dark:border-gray-800">
+                                        <td class="py-2.5 px-3 text-xs text-gray-400">3</td>
+                                        <td class="py-2.5 px-3">
+                                            <span class="font-mono text-xs text-primary-600 font-medium">GENDER</span>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400">性别</p>
+                                        </td>
+                                        <td class="py-2.5 px-3">
+                                            <span class="font-mono text-xs text-gray-700 dark:text-gray-300">SEX</span>
+                                        </td>
+                                        <td class="py-2.5 px-3">
+                                            <span class="text-xs bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-2 py-0.5 rounded">EMR_PATIENT_BASIC</span>
+                                        </td>
+                                        <td class="py-2.5 px-3">
+                                            <div class="flex items-center gap-2">
+                                                <div class="w-12 bg-gray-100 dark:bg-gray-700 rounded-full h-1.5">
+                                                    <div class="bg-warning-500 h-1.5 rounded-full" style="width: 72%"></div>
+                                                </div>
+                                                <span class="text-xs text-warning-600 font-medium">72%</span>
+                                            </div>
+                                        </td>
+                                        <td class="py-2.5 px-3">
+                                            <span class="mapping-badge mapping-pending"><i class="fas fa-clock"></i>待审核</span>
+                                        </td>
+                                        <td class="py-2.5 px-3">
+                                            <div class="flex items-center gap-2">
+                                                <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑" onclick="openEditMappingModal('GENDER','SEX','72%')"><i class="fas fa-edit text-xs" aria-hidden="true"></i></button>
+                                                <button type="button" class="text-danger-600 hover:text-danger-700 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除映射" onclick="deleteMapping(this)"><i class="fas fa-unlink text-xs" aria-hidden="true"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="field-row border-b border-gray-100 dark:border-gray-800" data-unmapped="true">
+                                        <td class="py-2.5 px-3 text-xs text-gray-400">4</td>
+                                        <td class="py-2.5 px-3">
+                                            <span class="font-mono text-xs text-primary-600 font-medium">BIRTH_DATE</span>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400">出生日期</p>
+                                        </td>
+                                        <td class="py-2.5 px-3">
+                                            <span class="text-xs text-gray-400">-</span>
+                                        </td>
+                                        <td class="py-2.5 px-3">
+                                            <span class="text-xs text-gray-400">-</span>
+                                        </td>
+                                        <td class="py-2.5 px-3">
+                                            <span class="text-xs text-gray-400">-</span>
+                                        </td>
+                                        <td class="py-2.5 px-3">
+                                            <span class="mapping-badge mapping-none"><i class="fas fa-minus-circle"></i>未映射</span>
+                                        </td>
+                                        <td class="py-2.5 px-3">
+                                            <button class="text-medical-600 hover:text-medical-700 transition-colors text-xs font-medium" onclick="openManualMappingModal('BIRTH_DATE')">
+                                                <i class="fas fa-plus mr-1"></i>映射
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- 编辑映射模态框 -->
+    <div id="editMappingModal" class="modal fixed inset-0 z-50 items-center justify-center bg-black/50" onclick="if(event.target===this)closeModal('editMappingModal')">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-lg mx-4 flex flex-col max-h-[90vh]">
+            <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">编辑映射关系</h3>
+            </div>
+            <div class="p-6 space-y-4">
+                <div>
+                    <label for="editTargetField" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">目标字段</label>
+                    <input id="editTargetField" type="text" readonly class="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-lg text-sm">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">源字段</label>
+                    <select class="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus">
+                        <option>PAT_ID</option>
+                        <option>PAT_NAME</option>
+                        <option>SEX</option>
+                        <option>BIRTHDAY</option>
+                        <option>MOBILE</option>
+                        <option>ID_CARD_NO</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">转换规则</label>
+                    <textarea rows="3" class="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus resize-none" placeholder="如需数据转换，请输入转换规则..."></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">置信度</label>
+                    <div id="editConfidence" class="text-sm font-medium text-success-600"></div>
+                </div>
+            </div>
+            <div class="p-6 border-t border-gray-100 dark:border-gray-700 flex justify-end gap-3">
+                <button class="px-4 py-2.5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-xl text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors" data-action="closeModal" data-args="editMappingModal">取消</button>
+                <button class="px-4 py-2.5 bg-medical-600 text-white rounded-xl text-sm font-medium hover:bg-medical-700 transition-colors shadow-md shadow-medical-600/20" onclick="closeModal('editMappingModal');showToast('映射关系已更新','success')">确认</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 手动映射模态框 -->
+    <div id="manualMappingModal" class="modal fixed inset-0 z-50 items-center justify-center bg-black/50" onclick="if(event.target===this)closeModal('manualMappingModal')">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-lg mx-4 flex flex-col max-h-[90vh]">
+            <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">手动映射</h3>
+            </div>
+            <div class="p-6 space-y-4">
+                <div>
+                    <label for="manualTargetField" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">目标字段</label>
+                    <input id="manualTargetField" type="text" readonly class="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-lg text-sm">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">源表</label>
+                    <select class="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus">
+                        <option>HIS_PATIENT</option>
+                        <option>EMR_PATIENT_BASIC</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">源字段</label>
+                    <select class="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus">
+                        <option>PAT_ID</option>
+                        <option>PAT_NAME</option>
+                        <option>SEX</option>
+                        <option>BIRTHDAY</option>
+                        <option>MOBILE</option>
+                        <option>ID_CARD_NO</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">转换规则（可选）</label>
+                    <textarea rows="3" class="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus resize-none" placeholder="如需数据转换，请输入转换规则..."></textarea>
+                </div>
+            </div>
+            <div class="p-6 border-t border-gray-100 dark:border-gray-700 flex justify-end gap-3">
+                <button class="px-4 py-2.5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-xl text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors" data-action="closeModal" data-args="manualMappingModal">取消</button>
+                <button class="px-4 py-2.5 bg-medical-600 text-white rounded-xl text-sm font-medium hover:bg-medical-700 transition-colors shadow-md shadow-medical-600/20" onclick="closeModal('manualMappingModal');showToast('手动映射已建立','success')">确认</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加源表模态框 -->
+    <div id="addSourceTableModal" class="modal fixed inset-0 z-50 items-center justify-center bg-black/50" onclick="if(event.target===this)closeModal('addSourceTableModal')">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-lg mx-4 flex flex-col max-h-[90vh]">
+            <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">添加源表</h3>
+            </div>
+            <div class="p-6 space-y-4">
+                <div>
+                    <label for="addSourceDatasource" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">数据源</label>
+                    <select id="addSourceDatasource" class="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus">
+                        <option value="HIS_主数据库">HIS_主数据库</option>
+                        <option value="LIS_检验数据库">LIS_检验数据库</option>
+                        <option value="PACS_影像数据库">PACS_影像数据库</option>
+                        <option value="EMR_电子病历库">EMR_电子病历库</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="addSourceTableName" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">表名</label>
+                    <select id="addSourceTableName" class="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus">
+                        <option>LIS_TEST_RESULT</option>
+                        <option>PACS_IMAGE_INFO</option>
+                        <option>LIS_SPECIMEN</option>
+                    </select>
+                </div>
+            </div>
+            <div class="p-6 border-t border-gray-100 dark:border-gray-700 flex justify-end gap-3">
+                <button class="px-4 py-2.5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-xl text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors" data-action="closeModal" data-args="addSourceTableModal">取消</button>
+                <button class="px-4 py-2.5 bg-medical-600 text-white rounded-xl text-sm font-medium hover:bg-medical-700 transition-colors shadow-md shadow-medical-600/20" onclick="addSourceTable()">确认</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 模态框开关统一使用 common.js 全局 openModal/closeModal（含 ESC 关闭与焦点处理）
+        function openEditMappingModal(targetField, sourceField, confidence) {
+            document.getElementById('editTargetField').value = targetField;
+            document.getElementById('editConfidence').textContent = confidence;
+            openModal('editMappingModal');
+        }
+        function openManualMappingModal(targetField) {
+            document.getElementById('manualTargetField').value = targetField;
+            openModal('manualMappingModal');
+        }
+        // 列序约定：0=序号 1=目标字段 2=源字段 3=源表 4=置信度 5=状态 6=操作
+        function deleteMapping(btn) {
+            showConfirm({
+                title: '解除映射',
+                message: '确定解除该映射关系？',
+                type: 'warning',
+                onConfirm: function() {
+                    var tr = btn.closest('tr');
+                    var tds = tr.querySelectorAll('td');
+                    var targetField = tds[1].querySelector('span').textContent.trim();
+                    tds[2].innerHTML = '<span class="text-xs text-gray-400">-</span>';
+                    tds[3].innerHTML = '<span class="text-xs text-gray-400">-</span>';
+                    tds[4].innerHTML = '<span class="text-xs text-gray-400">-</span>';
+                    tds[5].innerHTML = '<span class="mapping-badge mapping-none"><i class="fas fa-minus-circle"></i>未映射</span>';
+                    tds[6].innerHTML = '<button class="text-medical-600 hover:text-medical-700 transition-colors text-xs font-medium" onclick="openManualMappingModal(\'' + targetField + '\')"><i class="fas fa-plus mr-1"></i>映射</button>';
+                    tr.setAttribute('data-unmapped', 'true');
+                    showToast('映射已解除', 'success');
+                }
+            });
+        }
+        function removeSourceTable(btn) {
+            showConfirm({
+                title: '移除源表',
+                message: '确定移除该源表？相关映射将同步失效。',
+                type: 'warning',
+                onConfirm: function() {
+                    var card = btn.closest('.source-table-card');
+                    if (card) card.remove(); // 真实移除节点，避免隐藏节点累积
+                    showToast('源表已移除', 'success');
+                }
+            });
+        }
+        function addSourceTable() {
+            var ds = document.getElementById('addSourceDatasource').value;
+            var tn = document.getElementById('addSourceTableName').value;
+            var container = document.getElementById('sourceTableList');
+            if (!container) return;
+            var card = document.createElement('div');
+            card.className = 'source-table-card bg-gray-50 dark:bg-gray-700 rounded-lg p-3 border border-gray-200 dark:border-gray-700';
+            card.innerHTML = '<div class="flex items-center justify-between mb-2"><span class="text-sm font-medium text-gray-800 dark:text-gray-200">' + MediData.escapeHtml(tn) + '</span><button class="text-gray-400 hover:text-danger-600" aria-label="移除源表 ' + MediData.escapeHtml(tn) + '" onclick="removeSourceTable(this)"><i class="fas fa-times" aria-hidden="true"></i></button></div><p class="text-xs text-gray-500 dark:text-gray-400">' + MediData.escapeHtml(ds) + ' · 新增</p>';
+            container.appendChild(card);
+            closeModal('addSourceTableModal');
+            showToast('源表已添加', 'success');
+        }
+        // 目标标准表切换：联动更新信息卡与统计
+        function changeTargetTable(sel) {
+            var info = {
+                'PAT_PATIENT_INFO': { cn: '患者基本信息表', fields: 28 },
+                'PAT_VISIT_INFO': { cn: '患者就诊信息表', fields: 35 },
+                'HIS_ORDER': { cn: '医嘱表', fields: 42 }
+            }[sel.value] || { cn: '-', fields: 0 };
+            document.getElementById('targetTableName').textContent = '已选择：' + sel.value;
+            document.getElementById('targetTableDesc').textContent = info.cn + ' · ' + info.fields + '个字段';
+            document.getElementById('statTargetTable').textContent = sel.value;
+            document.getElementById('statTargetCount').textContent = info.fields;
+            showToast('已切换目标表：' + sel.value, 'info');
+        }
+        // AI 推荐映射表（演示数据）：目标字段 → 推荐源字段/源表/置信度
+        var AI_MAPPING_RECOMMENDATIONS = {
+            'BIRTH_DATE': { source: 'BIRTHDAY', table: 'HIS_PATIENT', confidence: 88 }
+        };
+
+        function aiSmartMapping() {
+            var btn = document.getElementById('aiMappingBtn');
+            var unmapped = document.querySelectorAll('tr[data-unmapped="true"]');
+            if (unmapped.length === 0) {
+                showToast('当前没有未映射字段', 'info');
+                return;
+            }
+            var origHTML = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> AI分析中...';
+            btn.disabled = true;
+            setTimeout(function() {
+                btn.innerHTML = origHTML;
+                btn.disabled = false;
+                var applied = 0;
+                unmapped.forEach(function(tr) {
+                    var tds = tr.querySelectorAll('td');
+                    var fieldName = tds[1].querySelector('span').textContent.trim();
+                    var rec = AI_MAPPING_RECOMMENDATIONS[fieldName];
+                    if (!rec) return; // 无推荐保持未映射，状态不自相矛盾
+                    tds[2].innerHTML = '<span class="font-mono text-xs text-gray-700 dark:text-gray-300">' + rec.source + '</span>';
+                    tds[3].innerHTML = '<span class="text-xs bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-2 py-0.5 rounded">' + rec.table + '</span>';
+                    tds[4].innerHTML = '<div class="flex items-center gap-2"><div class="w-12 bg-gray-100 dark:bg-gray-700 rounded-full h-1.5"><div class="bg-warning-500 h-1.5 rounded-full" style="width: ' + rec.confidence + '%"></div></div><span class="text-xs text-warning-600 font-medium">' + rec.confidence + '%</span></div>';
+                    tds[5].innerHTML = '<span class="mapping-badge mapping-pending"><i class="fas fa-clock"></i>待审核</span>';
+                    tds[6].innerHTML = '<div class="flex items-center gap-2">'
+                        + '<button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑" aria-label="编辑映射 ' + fieldName + '" onclick="openEditMappingModal(\'' + fieldName + '\',\'' + rec.source + '\',\'' + rec.confidence + '%\')"><i class="fas fa-edit text-xs" aria-hidden="true"></i></button>'
+                        + '<button type="button" class="text-danger-600 hover:text-danger-700 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除映射" aria-label="删除映射 ' + fieldName + '" onclick="deleteMapping(this)"><i class="fas fa-unlink text-xs" aria-hidden="true"></i></button></div>';
+                    tr.removeAttribute('data-unmapped');
+                    applied++;
+                });
+                if (applied > 0) {
+                    showToast('AI智能映射完成，新增 ' + applied + ' 条推荐映射，请审核确认', 'success');
+                } else {
+                    showToast('AI 未找到置信度达标的映射建议，请手动配置', 'warning');
+                }
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

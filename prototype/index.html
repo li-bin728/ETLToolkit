@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0d9488">
+    <meta name="description" content="MediData AI - 基于大模型的医疗数据治理智能平台，支持智能字段映射、SQL开发、数据血缘溯源">
+    <title>MediData AI - 医疗数据治理智能平台</title>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="stylesheet" href="components/tailwind.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="components/common.css">
+    <script src="components/common.js" defer></script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+    <a href="#main-content" class="skip-link">跳转到主内容</a>
+    <div class="flex h-screen overflow-hidden">
+        <!-- 侧边栏 -->
+        <aside id="sidebar" class="w-64 gradient-bg text-white flex flex-col flex-shrink-0"></aside>
+
+        <!-- 主内容区 -->
+        <main id="main-content" class="flex-1 flex flex-col overflow-hidden" role="main">
+            <!-- 顶部导航 -->
+            <header id="header" class="glass-effect border-b border-gray-200 dark:border-gray-700 px-6 py-4 flex items-center justify-between flex-shrink-0 z-10"></header>
+
+            <!-- 面包屑 -->
+            <div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-2">
+                <nav id="breadcrumb" class="breadcrumb"></nav>
+            </div>
+
+            <!-- 工作台内容 -->
+            <div class="flex-1 overflow-y-auto p-6">
+                <!-- 欢迎区域 -->
+                <div class="mb-8" data-reveal>
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">早上好，张工程师 <span class="inline-block animate-pulse-slow">👋</span></h2>
+                            <p class="text-gray-500 dark:text-gray-400 mt-1" id="welcome-date">您有 <span class="text-medical-600 font-semibold">5</span> 个待处理任务</p>
+                        </div>
+                        <div class="flex gap-3">
+                            <button id="btn-export-report" class="px-4 py-2.5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors flex items-center gap-2 btn-transition focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" data-action="exportDailyReport">
+                                    <i class="fas fa-download" aria-hidden="true"></i> 导出日报
+                                </button>
+                                <button id="btn-new-task" class="px-4 py-2.5 bg-medical-600 text-white rounded-xl text-sm font-medium hover:bg-medical-700 transition-colors flex items-center gap-2 shadow-md shadow-medical-600/20 btn-transition focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" data-action="navigate" data-args="task-management.html">
+                                    <i class="fas fa-plus" aria-hidden="true"></i> 新建任务
+                                </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 核心指标卡片 -->
+                <div class="grid grid-cols-2 md:grid-cols-4 stats-grid gap-6 mb-8" data-reveal>
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 card-hover border border-gray-100 dark:border-gray-700">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-medical-50 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-database text-medical-600 text-xl" aria-hidden="true"></i>
+                            </div>
+                            <span class="text-xs font-medium text-success-600 bg-success-50 px-2 py-1 rounded-full">+2 本周</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 dark:text-gray-100">24</h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">已接入数据源</p>
+                        <div class="mt-3 flex items-center gap-2">
+                            <span class="status-dot status-online"></span>
+                            <span class="text-xs text-gray-500 dark:text-gray-400">22 正常</span>
+                            <span class="status-dot status-warning ml-2"></span>
+                            <span class="text-xs text-gray-500 dark:text-gray-400">2 告警</span>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 card-hover border border-gray-100 dark:border-gray-700">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-table text-primary-600 text-xl" aria-hidden="true"></i>
+                            </div>
+                            <span class="text-xs font-medium text-primary-600 bg-primary-50 px-2 py-1 rounded-full">+156 本周</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 dark:text-gray-100">1,247</h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">标准表字段映射</p>
+                        <div class="mt-3">
+                            <div class="flex items-center justify-between text-xs mb-1">
+                                <span class="text-gray-500 dark:text-gray-400">完成率</span>
+                                <span class="font-medium text-gray-900 dark:text-gray-100">78.5%</span>
+                            </div>
+                            <div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-2">
+                                <div class="bg-primary-500 h-2 rounded-full transition-[width] duration-500" style="width: 78.5%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 card-hover border border-gray-100 dark:border-gray-700">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-warning-50 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-code text-warning-600 text-xl" aria-hidden="true"></i>
+                            </div>
+                            <span class="text-xs font-medium text-warning-600 bg-warning-50 px-2 py-1 rounded-full">+12 本周</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 dark:text-gray-100">89</h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">ETL脚本任务</p>
+                        <div class="mt-3 flex items-center gap-2">
+                            <span class="text-xs px-2 py-1 bg-success-50 text-success-700 rounded">67 成功</span>
+                            <span class="text-xs px-2 py-1 bg-warning-50 text-warning-700 rounded">15 运行中</span>
+                            <span class="text-xs px-2 py-1 bg-danger-50 text-danger-700 rounded">7 失败</span>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 card-hover border border-gray-100 dark:border-gray-700">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-danger-50 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-shield-alt text-danger-600 text-xl" aria-hidden="true"></i>
+                            </div>
+                            <span class="text-xs font-medium text-danger-600 bg-danger-50 px-2 py-1 rounded-full">3 待处理</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 dark:text-gray-100">96.2%</h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">数据质量评分</p>
+                        <div class="mt-3 flex items-center gap-2">
+                            <span class="text-xs px-2 py-1 bg-success-50 text-success-700 rounded">完整性 98%</span>
+                            <span class="text-xs px-2 py-1 bg-warning-50 text-warning-700 rounded">一致性 94%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 主要内容区域 -->
+                <div class="grid grid-cols-12 gap-6" data-reveal>
+                    <!-- 左侧：任务进度与快捷入口 -->
+                    <div class="col-span-12 lg:col-span-8 space-y-6">
+                        <!-- AI 智能助手 -->
+                        <div class="bg-gradient-to-r from-medical-600 to-medical-700 rounded-2xl p-6 text-white relative overflow-hidden" role="region" aria-label="AI 智能助手">
+                            <div class="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/3"></div>
+                            <div class="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/4"></div>
+                            <div class="relative z-10">
+                                <div class="flex items-center justify-between mb-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center animate-pulse-slow">
+                                            <i class="fas fa-robot text-xl" aria-hidden="true"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-lg font-bold">AI 智能助手</h3>
+                                            <p class="text-medical-100 text-sm">基于大模型的医疗数据治理助手</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-2 bg-white/10 rounded-lg px-3 py-1.5">
+                                        <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                                        <span class="text-xs">AI 服务在线</span>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-5 gap-3 mt-4">
+                                    <a href="field-mapping.html" class="bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-xl p-3 text-center transition-colors transition-shadow btn-transition focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:outline-none">
+                                        <i class="fas fa-magic text-2xl mb-2" aria-hidden="true"></i>
+                                        <p class="text-xs">智能映射</p>
+                                    </a>
+                                    <a href="sql-developer.html" class="bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-xl p-3 text-center transition-colors transition-shadow btn-transition focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:outline-none">
+                                        <i class="fas fa-bolt text-2xl mb-2" aria-hidden="true"></i>
+                                        <p class="text-xs">生成SQL</p>
+                                    </a>
+                                    <a href="script-generator.html" class="bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-xl p-3 text-center transition-colors transition-shadow btn-transition focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:outline-none">
+                                        <i class="fas fa-file-code text-2xl mb-2" aria-hidden="true"></i>
+                                        <p class="text-xs">生成脚本</p>
+                                    </a>
+                                    <a href="dictionary.html" class="bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-xl p-3 text-center transition-colors transition-shadow btn-transition focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:outline-none">
+                                        <i class="fas fa-language text-2xl mb-2" aria-hidden="true"></i>
+                                        <p class="text-xs">字典映射</p>
+                                    </a>
+                                    <button type="button" class="bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-xl p-3 text-center transition-colors transition-shadow btn-transition focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:outline-none" data-action="toggleAIDrawer">
+                                        <i class="fas fa-comments text-2xl mb-2" aria-hidden="true"></i>
+                                        <p class="text-xs">智能问答</p>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 第二行：项目进度 + 最近活动 -->
+                        <div class="grid grid-cols-2 gap-6">
+                            <!-- 项目进度 -->
+                            <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700">
+                                <div class="flex items-center justify-between mb-5">
+                                    <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">项目总进度</h3>
+                                    <div class="flex gap-1">
+                                        <button type="button" class="text-xs text-gray-500 dark:text-gray-400 hover:text-medical-600 px-2 py-1 rounded hover:bg-medical-50 transition-colors focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" data-action="switchTimeDimension">本周</button>
+                                    <button type="button" class="text-xs text-medical-600 bg-medical-50 px-2 py-1 rounded font-medium focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" data-action="switchTimeDimension">本月</button>
+                                    <button type="button" class="text-xs text-gray-500 dark:text-gray-400 hover:text-medical-600 px-2 py-1 rounded hover:bg-medical-50 transition-colors focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" data-action="switchTimeDimension">全部</button>
+                                    </div>
+                                </div>
+                                <div class="space-y-4">
+                                    <div data-progress-item>
+                                        <div class="flex items-center justify-between mb-1.5">
+                                            <div class="flex items-center gap-2">
+                                                <span class="w-2 h-2 bg-medical-500 rounded-full"></span>
+                                                <span class="text-sm font-medium text-gray-700">HIS 系统数据采集</span>
+                                            </div>
+                                            <span class="text-sm font-bold text-medical-600">85%</span>
+                                        </div>
+                                        <div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-2">
+                                            <div class="bg-medical-500 h-2 rounded-full transition-[width] duration-500" style="width: 85%"></div>
+                                        </div>
+                                        <p class="text-xs text-gray-400 mt-1">已完成 425 / 500 个字段映射 · 预计剩余 3 天</p>
+                                    </div>
+                                    <div data-progress-item>
+                                        <div class="flex items-center justify-between mb-1.5">
+                                            <div class="flex items-center gap-2">
+                                                <span class="w-2 h-2 bg-primary-500 rounded-full"></span>
+                                                <span class="text-sm font-medium text-gray-700">LIS 检验系统对接</span>
+                                            </div>
+                                            <span class="text-sm font-bold text-primary-600">62%</span>
+                                        </div>
+                                        <div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-2">
+                                            <div class="bg-primary-500 h-2 rounded-full transition-[width] duration-500" style="width: 62%"></div>
+                                        </div>
+                                        <p class="text-xs text-gray-400 mt-1">已完成 186 / 300 个字段映射 · 预计剩余 7 天</p>
+                                    </div>
+                                    <div data-progress-item>
+                                        <div class="flex items-center justify-between mb-1.5">
+                                            <div class="flex items-center gap-2">
+                                                <span class="w-2 h-2 bg-warning-500 rounded-full"></span>
+                                                <span class="text-sm font-medium text-gray-700">PACS 影像数据迁移</span>
+                                            </div>
+                                            <span class="text-sm font-bold text-warning-600">38%</span>
+                                        </div>
+                                        <div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-2">
+                                            <div class="bg-warning-500 h-2 rounded-full transition-[width] duration-500" style="width: 38%"></div>
+                                        </div>
+                                        <p class="text-xs text-gray-400 mt-1">已完成 76 / 200 个字段映射 · 预计剩余 14 天</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 最近活动 -->
+                            <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700">
+                                <div class="flex items-center justify-between mb-4">
+                                    <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">最近活动</h3>
+                                    <a href="audit-log.html" class="text-sm text-medical-600 hover:text-medical-700">查看全部</a>
+                                </div>
+                                <div class="space-y-3">
+                                    <div class="flex items-start gap-3">
+                                        <div class="w-8 h-8 bg-medical-50 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                                            <i class="fas fa-robot text-medical-600 text-sm" aria-hidden="true"></i>
+                                        </div>
+                                        <div class="flex-1">
+                                            <p class="text-sm text-gray-800">AI 完成 <span class="font-medium">HIS_ORDER</span> 表 36 个字段智能映射推荐</p>
+                                            <p class="text-xs text-gray-400 mt-0.5">10 分钟前 · 置信度 92%</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <div class="w-8 h-8 bg-primary-50 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                                            <i class="fas fa-check-circle text-primary-600 text-sm" aria-hidden="true"></i>
+                                        </div>
+                                        <div class="flex-1">
+                                            <p class="text-sm text-gray-800">张工程师审核通过了 <span class="font-medium">PAT_PATIENT_INFO</span> 字段映射</p>
+                                            <p class="text-xs text-gray-400 mt-0.5">32 分钟前 · 通过 24 个，退回 3 个</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <div class="w-8 h-8 bg-danger-50 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                                            <i class="fas fa-shield-alt text-danger-600 text-sm" aria-hidden="true"></i>
+                                        </div>
+                                        <div class="flex-1">
+                                            <p class="text-sm text-gray-800">数据质量检查发现 <span class="font-medium">PACS_IMAGE</span> 表 15 条异常记录</p>
+                                            <p class="text-xs text-gray-400 mt-0.5">45 分钟前 · 影像日期格式不一致</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <div class="w-8 h-8 bg-warning-50 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                                            <i class="fas fa-exclamation-triangle text-warning-600 text-sm" aria-hidden="true"></i>
+                                        </div>
+                                        <div class="flex-1">
+                                            <p class="text-sm text-gray-800">数据源 <span class="font-medium">LIS_检验库</span> 连接异常</p>
+                                            <p class="text-xs text-gray-400 mt-0.5">1 小时前 · 已自动重试 3 次</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <div class="w-8 h-8 bg-success-50 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                                            <i class="fas fa-play text-success-600 text-sm" aria-hidden="true"></i>
+                                        </div>
+                                        <div class="flex-1">
+                                            <p class="text-sm text-gray-800">ETL 任务 <span class="font-medium">HIS_PATIENT_SYNC</span> 执行成功</p>
+                                            <p class="text-xs text-gray-400 mt-0.5">2 小时前 · 同步 12,450 条记录</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 第三行：数据源状态 + ETL任务监控 -->
+                        <div class="grid grid-cols-2 gap-6">
+                            <!-- 数据源状态监控 -->
+                            <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700">
+                                <div class="flex items-center justify-between mb-4">
+                                    <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">数据源状态监控</h3>
+                                    <a href="datasource.html" class="text-sm text-medical-600 hover:text-medical-700">管理</a>
+                                </div>
+                                <div class="space-y-3">
+                                    <div class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-xl">
+                                        <div class="w-10 h-10 bg-success-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                                            <i class="fas fa-database text-success-600" aria-hidden="true"></i>
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <div class="flex items-center justify-between">
+                                                <p class="text-sm font-medium text-gray-800 truncate">HIS_主数据库</p>
+                                                <span class="text-xs bg-success-50 text-success-600 px-2 py-0.5 rounded-full">正常</span>
+                                            </div>
+                                            <p class="text-xs text-gray-500 mt-0.5">Oracle · 156 表 · 2,340 字段</p>
+                                        </div>
+                                        <span class="text-xs text-gray-400">2分钟前</span>
+                                    </div>
+                                    <div class="flex items-center gap-3 p-3 bg-warning-50 dark:bg-yellow-900/20 rounded-xl border border-warning-100 dark:border-warning-800">
+                                        <div class="w-10 h-10 bg-warning-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                            <i class="fas fa-database text-warning-600" aria-hidden="true"></i>
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <div class="flex items-center justify-between">
+                                                <p class="text-sm font-medium text-gray-800 truncate">LIS_检验数据库</p>
+                                                <span class="text-xs bg-warning-50 text-warning-600 px-2 py-0.5 rounded-full">告警</span>
+                                            </div>
+                                            <p class="text-xs text-warning-600 mt-0.5">连接超时 · Schema变更待处理</p>
+                                        </div>
+                                        <span class="text-xs text-gray-400">1小时前</span>
+                                    </div>
+                                    <div class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-xl">
+                                        <div class="w-10 h-10 bg-success-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                                            <i class="fas fa-image text-success-600" aria-hidden="true"></i>
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <div class="flex items-center justify-between">
+                                                <p class="text-sm font-medium text-gray-800 truncate">PACS_影像数据库</p>
+                                                <span class="text-xs bg-success-50 text-success-600 px-2 py-0.5 rounded-full">正常</span>
+                                            </div>
+                                            <p class="text-xs text-gray-500 mt-0.5">PostgreSQL · 89 表 · 1,560 字段</p>
+                                        </div>
+                                        <span class="text-xs text-gray-400">5分钟前</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- ETL任务实时监控 -->
+                            <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700">
+                                <div class="flex items-center justify-between mb-4">
+                                    <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">ETL任务实时监控</h3>
+                                    <a href="task-management.html" class="text-sm text-medical-600 hover:text-medical-700">全部任务</a>
+                                </div>
+                                <div class="space-y-3">
+                                    <div class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-xl">
+                                        <div class="w-10 h-10 bg-success-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                                            <i class="fas fa-check-circle text-success-600" aria-hidden="true"></i>
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <div class="flex items-center justify-between">
+                                                <p class="text-sm font-medium text-gray-800 truncate">HIS_PATIENT_SYNC</p>
+                                                <span class="text-xs bg-success-50 text-success-600 px-2 py-0.5 rounded-full">成功</span>
+                                            </div>
+                                            <p class="text-xs text-gray-500 mt-0.5">同步 12,450 条 · 耗时 3分24秒</p>
+                                        </div>
+                                        <span class="text-xs text-gray-400">2小时前</span>
+                                    </div>
+                                    <div class="flex items-center gap-3 p-3 bg-primary-50 dark:bg-blue-900/20 rounded-xl border border-primary-100 dark:border-primary-800">
+                                        <div class="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                            <i class="fas fa-spinner fa-spin text-primary-600" aria-hidden="true"></i>
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <div class="flex items-center justify-between">
+                                                <p class="text-sm font-medium text-gray-800 truncate">LIS_RESULT_ETL</p>
+                                                <span class="text-xs bg-primary-50 text-primary-600 px-2 py-0.5 rounded-full">运行中</span>
+                                            </div>
+                                            <p class="text-xs text-gray-500 mt-0.5">已处理 45,230 / 89,100 条 · 51%</p>
+                                            <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-1 mt-1.5">
+                                                <div class="bg-primary-500 h-1 rounded-full transition-[width] duration-500" style="width: 51%"></div>
+                                            </div>
+                                        </div>
+                                        <span class="text-xs text-gray-400">进行中</span>
+                                    </div>
+                                    <div class="flex items-center gap-3 p-3 bg-danger-50 dark:bg-red-900/20 rounded-xl border border-danger-100 dark:border-danger-800">
+                                        <div class="w-10 h-10 bg-danger-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                            <i class="fas fa-times-circle text-danger-600" aria-hidden="true"></i>
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <div class="flex items-center justify-between">
+                                                <p class="text-sm font-medium text-gray-800 truncate">PACS_IMAGE_MIGRATE</p>
+                                                <span class="text-xs bg-danger-50 text-danger-600 px-2 py-0.5 rounded-full">失败</span>
+                                            </div>
+                                            <p class="text-xs text-danger-600 mt-0.5">磁盘空间不足 · 已重试 2/3 次</p>
+                                        </div>
+                                        <button type="button" class="text-xs bg-danger-600 text-white px-2 py-1 rounded hover:bg-danger-700 transition-colors focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" data-action="showToast" data-args="重新启动任务...|info">重试</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 右侧：待办任务与系统状态 -->
+                    <div class="col-span-12 lg:col-span-4 space-y-6">
+                        <!-- 待办任务 -->
+                        <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 border border-gray-100 dark:border-gray-700">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-base font-bold text-gray-900 dark:text-gray-100">待办任务</h3>
+                                <a href="task-management.html" class="text-sm text-medical-600 hover:text-medical-700">查看全部</a>
+                            </div>
+                            <div class="space-y-2.5">
+                                <a href="task-management.html" class="flex items-center gap-3 p-2.5 bg-danger-50 rounded-xl border border-danger-100 hover:shadow-md transition-colors transition-shadow cursor-pointer focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none">
+                                    <div class="w-2 h-2 bg-danger-500 rounded-full flex-shrink-0"></div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-medium text-gray-800 truncate">HIS_ORDER 表字段映射审核</p>
+                                        <p class="text-xs text-danger-600 mt-0.5">逾期 1 天 · 高优先级</p>
+                                    </div>
+                                </a>
+                                <a href="task-management.html" class="flex items-center gap-3 p-2.5 bg-warning-50 rounded-xl border border-warning-100 hover:shadow-md transition-colors transition-shadow cursor-pointer focus-visible:ring-2 focus-visible:ring-warning-400 focus-visible:outline-none">
+                                    <div class="w-2 h-2 bg-warning-500 rounded-full flex-shrink-0"></div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-medium text-gray-800 truncate">LIS 检验项目字典映射</p>
+                                        <p class="text-xs text-warning-600 mt-0.5">剩余 2 天 · 中优先级</p>
+                                    </div>
+                                </a>
+                                <a href="task-management.html" class="flex items-center gap-3 p-2.5 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-700 hover:shadow-md transition-colors transition-shadow cursor-pointer focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:outline-none">
+                                    <div class="w-2 h-2 bg-gray-400 rounded-full flex-shrink-0"></div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-medium text-gray-800 truncate">PACS 影像数据质量检查</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">剩余 5 天 · 低优先级</p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Schema变更告警 -->
+                        <div class="bg-gradient-to-r from-danger-50 to-warning-50 dark:from-danger-900/20 dark:to-warning-900/20 rounded-xl p-4 border border-danger-200 dark:border-danger-700">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-9 h-9 bg-danger-100 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-code-branch text-danger-600" aria-hidden="true"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-gray-900 dark:text-gray-100">Schema变更告警</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">3 个数据源检测到变更</p>
+                                </div>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="flex items-center justify-between text-xs">
+                                    <span class="text-gray-700 dark:text-gray-300">HIS_主数据库</span>
+                                    <span class="text-danger-600 font-medium">新增字段</span>
+                                </div>
+                                <div class="flex items-center justify-between text-xs">
+                                    <span class="text-gray-700 dark:text-gray-300">LIS_检验数据库</span>
+                                    <span class="text-warning-600 font-medium">修改长度</span>
+                                </div>
+                                <div class="flex items-center justify-between text-xs">
+                                    <span class="text-gray-700 dark:text-gray-300">EMR_电子病历库</span>
+                                    <span class="text-warning-600 font-medium">删除字段</span>
+                                </div>
+                            </div>
+                            <button type="button" class="w-full mt-3 py-2 bg-danger-600 text-white rounded-xl text-xs font-medium hover:bg-danger-700 transition-colors focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" data-action="showToast" data-args="正在分析Schema变更影响...|info">
+                                查看影响分析
+                            </button>
+                        </div>
+
+                        <!-- 系统健康度 + 数据质量概览 合并 -->
+                        <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 border border-gray-100 dark:border-gray-700">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-base font-bold text-gray-900 dark:text-gray-100">系统健康度</h3>
+                                <span class="text-xs bg-success-50 text-success-700 px-2 py-0.5 rounded-full">92%</span>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2 mb-4">
+                                <div class="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                    <span class="w-2 h-2 bg-success-500 rounded-full"></span>
+                                    <span class="text-xs text-gray-600 dark:text-gray-300">数据源连接</span>
+                                </div>
+                                <div class="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                    <span class="w-2 h-2 bg-success-500 rounded-full"></span>
+                                    <span class="text-xs text-gray-600 dark:text-gray-300">ETL 任务</span>
+                                </div>
+                                <div class="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                    <span class="w-2 h-2 bg-success-500 rounded-full"></span>
+                                    <span class="text-xs text-gray-600 dark:text-gray-300">AI 服务</span>
+                                </div>
+                                <div class="flex items-center gap-2 p-2 bg-warning-50 dark:bg-yellow-900/20 rounded-lg">
+                                    <span class="w-2 h-2 bg-warning-500 rounded-full"></span>
+                                    <span class="text-xs text-warning-600">存储 78%</span>
+                                </div>
+                            </div>
+                            <div class="border-t border-gray-100 dark:border-gray-700 pt-3">
+                                <p class="text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">数据质量维度</p>
+                                <div class="space-y-2">
+                                    <div>
+                                        <div class="flex items-center justify-between text-xs mb-1">
+                                            <span class="text-gray-500">完整性</span>
+                                            <span class="text-success-600 font-medium">98.5%</span>
+                                        </div>
+                                        <div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-1.5">
+                                            <div class="bg-success-500 h-1.5 rounded-full" style="width: 98.5%"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center justify-between text-xs mb-1">
+                                            <span class="text-gray-500">一致性</span>
+                                            <span class="text-warning-600 font-medium">94.2%</span>
+                                        </div>
+                                        <div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-1.5">
+                                            <div class="bg-warning-500 h-1.5 rounded-full" style="width: 94.2%"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center justify-between text-xs mb-1">
+                                            <span class="text-gray-500">准确性</span>
+                                            <span class="text-success-600 font-medium">96.8%</span>
+                                        </div>
+                                        <div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-1.5">
+                                            <div class="bg-success-500 h-1.5 rounded-full" style="width: 96.8%"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center justify-between text-xs mb-1">
+                                            <span class="text-gray-500">及时性</span>
+                                            <span class="text-success-600 font-medium">99.1%</span>
+                                        </div>
+                                        <div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-1.5">
+                                            <div class="bg-success-500 h-1.5 rounded-full" style="width: 99.1%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-3 pt-2 border-t border-gray-100 dark:border-gray-700 flex items-center justify-between text-xs">
+                                    <span class="text-gray-500">今日检查 2,456,789 条</span>
+                                    <span class="text-danger-600 font-medium">异常 1,247 条</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 快捷操作 -->
+                        <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 border border-gray-100 dark:border-gray-700">
+                            <h3 class="text-base font-bold text-gray-900 dark:text-gray-100 mb-3">快捷操作</h3>
+                            <div class="grid grid-cols-5 gap-2">
+                                <a href="datasource.html" class="flex flex-col items-center gap-1.5 p-2 bg-gray-50 dark:bg-gray-900 rounded-xl hover:bg-medical-50 transition-colors group focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none">
+                                    <i class="fas fa-database text-medical-600 text-base group-hover:scale-110 transition-transform" aria-hidden="true"></i>
+                                    <span class="text-xs font-medium text-gray-700">数据源</span>
+                                </a>
+                                <a href="field-mapping.html" class="flex flex-col items-center gap-1.5 p-2 bg-gray-50 dark:bg-gray-900 rounded-xl hover:bg-medical-50 transition-colors group focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none">
+                                    <i class="fas fa-project-diagram text-medical-600 text-base group-hover:scale-110 transition-transform" aria-hidden="true"></i>
+                                    <span class="text-xs font-medium text-gray-700">字段映射</span>
+                                </a>
+                                <a href="sql-developer.html" class="flex flex-col items-center gap-1.5 p-2 bg-gray-50 dark:bg-gray-900 rounded-xl hover:bg-medical-50 transition-colors group focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none">
+                                    <i class="fas fa-code text-medical-600 text-base group-hover:scale-110 transition-transform" aria-hidden="true"></i>
+                                    <span class="text-xs font-medium text-gray-700">SQL开发</span>
+                                </a>
+                                <a href="script-generator.html" class="flex flex-col items-center gap-1.5 p-2 bg-gray-50 dark:bg-gray-900 rounded-xl hover:bg-medical-50 transition-colors group focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none">
+                                    <i class="fas fa-file-code text-medical-600 text-base group-hover:scale-110 transition-transform" aria-hidden="true"></i>
+                                    <span class="text-xs font-medium text-gray-700">生成脚本</span>
+                                </a>
+                                <a href="data-quality.html" class="flex flex-col items-center gap-1.5 p-2 bg-gray-50 dark:bg-gray-900 rounded-xl hover:bg-medical-50 transition-colors group focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none">
+                                    <i class="fas fa-clipboard-check text-medical-600 text-base group-hover:scale-110 transition-transform" aria-hidden="true"></i>
+                                    <span class="text-xs font-medium text-gray-700">数据质量</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+    // 动态欢迎语与日期
+    (function() {
+        const now = new Date();
+        const hour = now.getHours();
+        const greeting = hour < 12 ? '早上好' : hour < 18 ? '下午好' : '晚上好';
+        const dateStr = now.getFullYear() + '年' + (now.getMonth() + 1) + '月' + now.getDate() + '日';
+        const weekdays = ['日', '一', '二', '三', '四', '五', '六'];
+        const titleEl = document.querySelector('h2');
+        if (titleEl) titleEl.innerHTML = greeting + '，张工程师 <span class="inline-block animate-pulse-slow">👋</span>';
+        const dateEl = document.getElementById('welcome-date');
+        if (dateEl) dateEl.innerHTML = '今天是 ' + dateStr + ' 星期' + weekdays[now.getDay()] + '，您有 <span class="text-medical-600 font-semibold">5</span> 个待处理任务';
+    })();
+
+    function exportDailyReport() {
+        // 异步模拟报表生成，让 loading 态对用户可见
+        MediData.btnLoading.show('btn-export-report', '生成中...');
+        setTimeout(function() {
+            doExportReport();
+            MediData.btnLoading.hide('btn-export-report');
+            showToast('日报已导出', 'success');
+        }, 900);
+    }
+
+    function doExportReport() {
+        const now = new Date();
+        const dateStr = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+        const report = [
+            '=== MediData AI 医疗数据治理日报 ===',
+            '导出时间: ' + dateStr,
+            '',
+            '--- 数据源状态 ---',
+            '已接入数据源: 24',
+            '正常运行: 22',
+            '告警: 2',
+            '',
+            '--- 字段映射进度 ---',
+            'HIS 系统数据采集: 85% (425/500)',
+            'LIS 检验系统对接: 62% (186/300)',
+            'PACS 影像数据迁移: 38% (76/200)',
+            '标准表字段映射总计: 1,247 (完成率 78.5%)',
+            '',
+            '--- ETL任务执行情况 ---',
+            'ETL脚本任务总数: 89',
+            '成功: 67',
+            '运行中: 15',
+            '失败: 7',
+            '',
+            '--- 数据质量监控 ---',
+            '质量评分: 96.2%',
+            '完整性: 98.5%',
+            '一致性: 94.2%',
+            '准确性: 96.8%',
+            '及时性: 99.1%',
+            '今日检查记录: 2,456,789 条',
+            '异常记录: 1,247 条 (0.05%)',
+            '',
+            '--- AI智能推荐 ---',
+            'AI推荐次数: 2,456',
+            '采纳率: 87.3%',
+            '节省工时: 约320h',
+            '',
+            '--- 待办任务 ---',
+            '1. HIS_ORDER 表字段映射审核 (逾期1天, 高优先级)',
+            '2. LIS 检验项目字典映射 (剩余2天, 中优先级)',
+            '3. PACS 影像数据质量检查 (剩余5天, 低优先级)'
+        ].join('\n');
+
+        const blob = new Blob([report], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'MediData_日报_' + dateStr + '.txt';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
+    // 时间维度联动：切换时更新三个项目进度（演示数据）
+    var PROGRESS_SNAPSHOTS = {
+        '本周': [
+            { pct: 12, desc: '本周新增 60 / 500 个字段映射 · 进度符合预期' },
+            { pct: 8,  desc: '本周新增 24 / 300 个字段映射 · 进度符合预期' },
+            { pct: 5,  desc: '本周新增 10 / 200 个字段映射 · 略有滞后' }
+        ],
+        '本月': [
+            { pct: 85, desc: '已完成 425 / 500 个字段映射 · 预计剩余 3 天' },
+            { pct: 62, desc: '已完成 186 / 300 个字段映射 · 预计剩余 7 天' },
+            { pct: 38, desc: '已完成 76 / 200 个字段映射 · 预计剩余 14 天' }
+        ],
+        '全部': [
+            { pct: 85, desc: '累计完成 425 / 500 个字段映射（含历史批次）' },
+            { pct: 62, desc: '累计完成 186 / 300 个字段映射（含历史批次）' },
+            { pct: 38, desc: '累计完成 76 / 200 个字段映射（含历史批次）' }
+        ]
+    };
+
+    function switchTimeDimension(btn) {
+        const siblings = btn.parentElement.querySelectorAll('button');
+        siblings.forEach(function(b) {
+            b.className = 'text-xs text-gray-500 dark:text-gray-400 hover:text-medical-600 px-2 py-1 rounded hover:bg-medical-50 transition-colors focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none';
+            b.setAttribute('aria-pressed', 'false');
+        });
+        btn.className = 'text-xs text-medical-600 bg-medical-50 px-2 py-1 rounded font-medium focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none';
+        btn.setAttribute('aria-pressed', 'true');
+
+        const data = PROGRESS_SNAPSHOTS[btn.textContent.trim()];
+        if (!data) return;
+        document.querySelectorAll('[data-progress-item]').forEach(function(block, i) {
+            const snap = data[i];
+            if (!snap) return;
+            const pctEl = block.querySelector('.text-sm.font-bold');
+            const barEl = block.querySelector('.rounded-full[style*="width"]');
+            const descEl = block.querySelector('p.text-xs');
+            if (pctEl) pctEl.textContent = snap.pct + '%';
+            if (barEl) barEl.style.width = snap.pct + '%';
+            if (descEl) descEl.textContent = snap.desc;
+        });
+    }
+
+    // 注册 data-action 处理器（页面级函数）
+    if (window.MediData && MediData.registerAction) {
+        MediData.registerAction('exportDailyReport', function() { exportDailyReport(); });
+        MediData.registerAction('switchTimeDimension', function(el) { switchTimeDimension(el); });
+    }
+    </script>
+</body>
+</html>

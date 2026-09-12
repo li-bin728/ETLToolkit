@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0d9488">
+    <meta name="description" content="数据质量管理 - 内置规则库、自动检测、AI 质量分析与质量报告">
+    <title>数据质量管理 - MediData AI</title>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="stylesheet" href="components/tailwind.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="components/common.css">
+    <script src="components/common.js" defer></script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+    <a href="#main-content" class="skip-link">跳转到主内容</a>
+    <div class="flex h-screen overflow-hidden">
+        <!-- 侧边栏 -->
+        <aside id="sidebar" class="w-64 gradient-bg text-white flex flex-col flex-shrink-0"></aside>
+
+        <!-- 主内容区 -->
+        <main id="main-content" class="flex-1 flex flex-col overflow-hidden" role="main">
+            <!-- 顶部导航 -->
+            <header id="header" class="glass-effect border-b border-gray-200 dark:border-gray-700 px-6 py-4 flex items-center justify-between flex-shrink-0 z-10"></header>
+
+            <!-- 面包屑 -->
+            <div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-2">
+                <nav id="breadcrumb" class="breadcrumb"></nav>
+            </div>
+
+            <!-- 页面标题栏 -->
+            <div class="px-6 py-3 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between flex-shrink-0">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 bg-medical-50 dark:bg-medical-900/30 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-clipboard-check text-medical-600"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-bold text-gray-900 dark:text-gray-100">数据质量管理</h2>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">内置规则库 · 自动检测 · AI 分析与质量报告</p>
+                    </div>
+                </div>
+                <div class="flex gap-2">
+                    <button class="px-3 py-1.5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-xs font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors flex items-center gap-1.5" onclick="gotoTab('tabReportsBtn')">
+                        <i class="fas fa-file-alt"></i> 质量报告
+                    </button>
+                    <button id="aiAnalyzeBtn" class="px-3 py-1.5 bg-medical-600 text-white rounded-xl text-xs font-medium hover:bg-medical-700 transition-colors flex items-center gap-1.5 shadow-md shadow-medical-600/20" onclick="aiAnalyze()">
+                        <i class="fas fa-robot"></i> AI 质量分析
+                    </button>
+                </div>
+            </div>
+
+            <!-- 页面内容 -->
+            <div class="flex-1 overflow-y-auto p-6">
+                <!-- 统计卡片（与全站内页规范一致：数值居左、彩色图标居右、底部补充行） -->
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 stats-grid gap-4 mb-6" data-reveal>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-2xl font-bold text-success-600">96.2<span class="text-base">%</span></p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">综合质量评分</p>
+                            </div>
+                            <div class="w-10 h-10 bg-success-50 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-star text-success-600"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-3">
+                            <span class="text-success-600 font-medium">+0.8</span> 较上周 · 评级优秀
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-2xl font-bold text-gray-900 dark:text-gray-100">86</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">监控规则</p>
+                            </div>
+                            <div class="w-10 h-10 bg-warning-50 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-list-check text-warning-600"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-3">
+                            <span class="text-warning-600 font-medium">78</span> 条启用中
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-2xl font-bold text-gray-900 dark:text-gray-100">245.6万</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">今日检测记录</p>
+                            </div>
+                            <div class="w-10 h-10 bg-primary-50 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-magnifying-glass text-primary-600"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-3">
+                            覆盖 <span class="text-primary-600 font-medium">24</span> 个数据源
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-2xl font-bold text-gray-900 dark:text-gray-100">1,247</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">异常记录</p>
+                            </div>
+                            <div class="w-10 h-10 bg-danger-50 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-exclamation-triangle text-danger-600"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-3">
+                            占比 <span class="text-danger-600 font-medium">0.05%</span>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-2xl font-bold text-medical-600" id="pendingIssuesStat">8</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">待处理问题</p>
+                            </div>
+                            <div class="w-10 h-10 bg-medical-50 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-tasks text-medical-600"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-3">
+                            <span class="text-danger-600 font-medium">3</span> 个高优先级
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 导航 -->
+                <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden" data-reveal>
+                    <div class="border-b border-gray-200 dark:border-gray-700 px-4 flex items-center gap-1 overflow-x-auto scrollbar-thin">
+                        <button id="tabOverviewBtn" class="tab-btn active px-4 py-3 text-sm font-medium text-medical-600 whitespace-nowrap" onclick="switchTab(this, 'tabOverview')">
+                            <i class="fas fa-chart-pie mr-1.5" aria-hidden="true"></i>质量概览
+                        </button>
+                        <button id="tabRulesBtn" class="tab-btn px-4 py-3 text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 whitespace-nowrap" onclick="switchTab(this, 'tabRules')">
+                            <i class="fas fa-list-check mr-1.5" aria-hidden="true"></i>规则库管理
+                        </button>
+                        <button id="tabReportsBtn" class="tab-btn px-4 py-3 text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 whitespace-nowrap" onclick="switchTab(this, 'tabReports')">
+                            <i class="fas fa-file-alt mr-1.5" aria-hidden="true"></i>质量报告
+                        </button>
+                    </div>
+
+                    <!-- ============ Tab 1：质量概览 ============ -->
+                    <div id="tabOverview" class="tab-content p-6 space-y-6">
+                        <!-- 评分环 + 维度 + 趋势 -->
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                            <!-- 综合评分环 -->
+                            <div class="border border-gray-100 dark:border-gray-700 rounded-xl p-5 flex flex-col items-center justify-center">
+                                <p class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4 self-start">综合质量评分</p>
+                                <div class="quality-score-ring quality-score-excellent my-2">
+                                    <svg width="120" height="120" viewBox="0 0 120 120" aria-hidden="true">
+                                        <circle cx="60" cy="60" r="48" fill="none" stroke="currentColor" stroke-width="10" opacity="0.1"></circle>
+                                        <circle id="scoreRing" cx="60" cy="60" r="48" fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="round"
+                                                stroke-dasharray="301.6" stroke-dashoffset="301.6" style="transition: stroke-dashoffset 1.2s ease;"></circle>
+                                    </svg>
+                                    <div class="score-text quality-score-excellent">96.2</div>
+                                </div>
+                                <div class="mt-3 flex items-center gap-2">
+                                    <span class="text-xs bg-success-50 text-success-700 px-2.5 py-1 rounded-full font-medium">评级：优秀</span>
+                                    <span class="text-xs text-gray-400">环比 <i class="fas fa-arrow-up text-success-500"></i> 0.8</span>
+                                </div>
+                                <p class="text-xs text-gray-400 mt-2 text-center">今日检测 2,456,789 条 · 覆盖 24 个数据源</p>
+                            </div>
+
+                            <!-- 六维评估 -->
+                            <div class="border border-gray-100 dark:border-gray-700 rounded-xl p-5">
+                                <p class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">质量维度评估</p>
+                                <div class="space-y-3">
+                                    <div>
+                                        <div class="flex items-center justify-between text-xs mb-1"><span class="text-gray-500">完整性</span><span class="font-medium text-success-600">98.5%</span></div>
+                                        <div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-2"><div class="bg-success-500 h-2 rounded-full transition-[width] duration-700" style="width:98.5%"></div></div>
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center justify-between text-xs mb-1"><span class="text-gray-500">一致性</span><span class="font-medium text-warning-600">94.2%</span></div>
+                                        <div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-2"><div class="bg-warning-500 h-2 rounded-full transition-[width] duration-700" style="width:94.2%"></div></div>
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center justify-between text-xs mb-1"><span class="text-gray-500">准确性</span><span class="font-medium text-primary-600">96.8%</span></div>
+                                        <div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-2"><div class="bg-primary-500 h-2 rounded-full transition-[width] duration-700" style="width:96.8%"></div></div>
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center justify-between text-xs mb-1"><span class="text-gray-500">及时性</span><span class="font-medium text-success-600">99.1%</span></div>
+                                        <div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-2"><div class="bg-success-500 h-2 rounded-full transition-[width] duration-700" style="width:99.1%"></div></div>
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center justify-between text-xs mb-1"><span class="text-gray-500">唯一性</span><span class="font-medium text-primary-600">97.3%</span></div>
+                                        <div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-2"><div class="bg-primary-500 h-2 rounded-full transition-[width] duration-700" style="width:97.3%"></div></div>
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center justify-between text-xs mb-1"><span class="text-gray-500">有效性</span><span class="font-medium text-warning-600">95.6%</span></div>
+                                        <div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-2"><div class="bg-warning-500 h-2 rounded-full transition-[width] duration-700" style="width:95.6%"></div></div>
+                                    </div>
+                                </div>
+                                <p class="text-xs text-gray-400 mt-4"><i class="fas fa-circle-info mr-1"></i>一致性、有效性低于目标线 95%，建议优先整改</p>
+                            </div>
+
+                            <!-- 近7日趋势 -->
+                            <div class="border border-gray-100 dark:border-gray-700 rounded-xl p-5 flex flex-col">
+                                <div class="flex items-center justify-between mb-4">
+                                    <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">近 7 日评分趋势</p>
+                                    <span class="text-xs text-gray-400">基线 90 分</span>
+                                </div>
+                                <div class="flex-1 flex items-end justify-between gap-2 h-40" aria-label="近7日质量评分柱状图">
+                                    <div class="flex-1 flex flex-col items-center gap-1 h-full justify-end" title="08-18：95.1分"><span class="text-[10px] text-gray-400">95.1</span><div class="w-full max-w-[36px] bg-medical-200 dark:bg-medical-800 rounded-t-md" style="height:51%"></div><span class="text-[10px] text-gray-400">一</span></div>
+                                    <div class="flex-1 flex flex-col items-center gap-1 h-full justify-end" title="08-19：95.4分"><span class="text-[10px] text-gray-400">95.4</span><div class="w-full max-w-[36px] bg-medical-300 dark:bg-medical-800 rounded-t-md" style="height:54%"></div><span class="text-[10px] text-gray-400">二</span></div>
+                                    <div class="flex-1 flex flex-col items-center gap-1 h-full justify-end" title="08-20：95.3分"><span class="text-[10px] text-gray-400">95.3</span><div class="w-full max-w-[36px] bg-medical-300 dark:bg-medical-800 rounded-t-md" style="height:53%"></div><span class="text-[10px] text-gray-400">三</span></div>
+                                    <div class="flex-1 flex flex-col items-center gap-1 h-full justify-end" title="08-21：95.8分"><span class="text-[10px] text-gray-400">95.8</span><div class="w-full max-w-[36px] bg-medical-400 dark:bg-medical-700 rounded-t-md" style="height:58%"></div><span class="text-[10px] text-gray-400">四</span></div>
+                                    <div class="flex-1 flex flex-col items-center gap-1 h-full justify-end" title="08-22：96.0分"><span class="text-[10px] text-gray-400">96.0</span><div class="w-full max-w-[36px] bg-medical-500 dark:bg-medical-700 rounded-t-md" style="height:60%"></div><span class="text-[10px] text-gray-400">五</span></div>
+                                    <div class="flex-1 flex flex-col items-center gap-1 h-full justify-end" title="08-23：96.0分"><span class="text-[10px] text-gray-400">96.0</span><div class="w-full max-w-[36px] bg-medical-500 dark:bg-medical-700 rounded-t-md" style="height:60%"></div><span class="text-[10px] text-gray-400">六</span></div>
+                                    <div class="flex-1 flex flex-col items-center gap-1 h-full justify-end" title="08-24：96.2分"><span class="text-[10px] font-bold text-medical-600">96.2</span><div class="w-full max-w-[36px] bg-medical-600 rounded-t-md shadow-md shadow-medical-600/30" style="height:62%"></div><span class="text-[10px] text-gray-400">日</span></div>
+                                </div>
+                                <p class="text-xs text-gray-400 mt-3"><i class="fas fa-arrow-trend-up text-success-500 mr-1"></i>连续 7 天稳步提升，累计 +1.1 分</p>
+                            </div>
+                        </div>
+
+                        <!-- AI 质量分析横幅 -->
+                        <div id="aiQualityBanner" class="suggestion-card s-primary">
+                            <div class="flex items-start gap-3">
+                                <div class="w-9 h-9 bg-gradient-to-br from-medical-500 to-medical-700 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <i class="fas fa-robot text-white text-sm" aria-hidden="true"></i>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center gap-2 flex-wrap">
+                                        <p class="font-semibold text-gray-900 dark:text-gray-100 text-sm">AI 质量根因分析</p>
+                                        <span class="text-[10px] bg-medical-100 dark:bg-medical-900/40 text-medical-700 dark:text-medical-300 px-2 py-0.5 rounded-full">置信度 91%</span>
+                                        <span class="text-xs text-gray-400">基于近 7 日异常记录聚类分析</span>
+                                    </div>
+                                    <ul class="text-sm mt-1.5 space-y-1 list-none" style="color:var(--text-secondary)">
+                                        <li>1. <b>PACS_IMAGE.report_date</b> 存在 5 种日期写法（含 <code>20260801</code>/<code>2026-08-01</code>/<code>01/08/2026</code>）— 建议启用「日期格式校验」规则并统一为 ISO 8601；</li>
+                                        <li>2. <b>LIS_TEST_RESULT.unit</b> 混用 mg/dL 与 mmol/L（涉及 2 个科室）— 建议增加值域校验并配置单位换算字典映射；</li>
+                                        <li>3. <b>HIS_ORDER.order_id</b> 检出 12 条重复主键，疑似接口重发 — 建议启用唯一性检测并在 ETL 目标端改用 UPSERT。</li>
+                                    </ul>
+                                    <div class="flex gap-2 mt-3">
+                                        <button class="px-3 py-1.5 bg-medical-600 text-white rounded-lg text-xs font-medium hover:bg-medical-700 transition-colors" onclick="applyAiSuggestions()"><i class="fas fa-wand-magic-sparkles mr-1"></i>一键创建建议规则</button>
+                                        <button class="px-3 py-1.5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-xs font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors" data-action="showToast" data-args="完整分析报告可在「质量报告」页查看|info">查看分析详情</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 表质量排名 -->
+                        <div class="border border-gray-100 dark:border-gray-700 rounded-xl overflow-hidden">
+                            <div class="px-5 py-3.5 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between">
+                                <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">核心表质量排名</p>
+                                <button class="text-xs text-medical-600 hover:text-medical-700 font-medium"$1</button>
+                            </div>
+                            <div class="overflow-x-auto scrollbar-thin">
+                                <table class="w-full text-sm sticky-head">
+                                    <thead>
+                                        <tr class="text-left text-xs text-gray-400 border-b border-gray-100 dark:border-gray-700">
+                                            <th class="py-3 px-5 font-medium">数据表</th>
+                                            <th class="py-3 px-4 font-medium">所属系统</th>
+                                            <th class="py-3 px-4 font-medium w-44">质量评分</th>
+                                            <th class="py-3 px-4 font-medium">主要问题</th>
+                                            <th class="py-3 px-4 font-medium text-right">今日异常</th>
+                                            <th class="py-3 px-4 font-medium text-center">趋势</th>
+                                            <th class="py-3 px-5 font-medium text-right">操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-50 dark:divide-gray-700" id="rankTableBody">
+                                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                                            <td class="py-3 px-5 font-medium text-gray-800 dark:text-gray-200">PAT_PATIENT_INFO</td>
+                                            <td class="py-3 px-4"><span class="text-xs px-2 py-0.5 rounded-md font-medium bg-medical-50 dark:bg-medical-900/40 text-medical-700 dark:text-medical-300">HIS</span></td>
+                                            <td class="py-3 px-4"><div class="flex items-center gap-2"><div class="confidence-bar flex-1"><div class="confidence-bar-fill high" style="width:98.2%"></div></div><span class="text-xs font-semibold text-success-600">98.2</span></div></td>
+                                            <td class="py-3 px-4 text-xs" style="color:var(--text-secondary)">无明显问题</td>
+                                            <td class="py-3 px-4 text-right text-xs">2</td>
+                                            <td class="py-3 px-4 text-center"><i class="fas fa-minus text-gray-300" title="稳定"></i></td>
+                                            <td class="py-3 px-5 text-right"><button class="text-xs text-medical-600 hover:text-medical-700 font-medium"$1>详情</button><button class="text-xs text-gray-400 hover:text-medical-600 font-medium transition-colors"$1</button></td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                                            <td class="py-3 px-5 font-medium text-gray-800 dark:text-gray-200">HIS_ORDER</td>
+                                            <td class="py-3 px-4"><span class="text-xs px-2 py-0.5 rounded-md font-medium bg-medical-50 dark:bg-medical-900/40 text-medical-700 dark:text-medical-300">HIS</span></td>
+                                            <td class="py-3 px-4"><div class="flex items-center gap-2"><div class="confidence-bar flex-1"><div class="confidence-bar-fill high" style="width:96.5%"></div></div><span class="text-xs font-semibold text-success-600">96.5</span></div></td>
+                                            <td class="py-3 px-4 text-xs" style="color:var(--text-secondary)">偶发重复主键（接口重发）</td>
+                                            <td class="py-3 px-4 text-right text-xs">12</td>
+                                            <td class="py-3 px-4 text-center"><i class="fas fa-arrow-up text-success-500" title="上升"></i></td>
+                                            <td class="py-3 px-5 text-right"><button class="text-xs text-medical-600 hover:text-medical-700 font-medium"$1>详情</button><button class="text-xs text-gray-400 hover:text-medical-600 font-medium transition-colors"$1</button></td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                                            <td class="py-3 px-5 font-medium text-gray-800 dark:text-gray-200">LIS_TEST_RESULT</td>
+                                            <td class="py-3 px-4"><span class="text-xs px-2 py-0.5 rounded-md font-medium bg-primary-50 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300">LIS</span></td>
+                                            <td class="py-3 px-4"><div class="flex items-center gap-2"><div class="confidence-bar flex-1"><div class="confidence-bar-fill medium" style="width:93.8%"></div></div><span class="text-xs font-semibold text-warning-600">93.8</span></div></td>
+                                            <td class="py-3 px-4 text-xs" style="color:var(--text-secondary)">单位字段混用 mg/dL 与 mmol/L</td>
+                                            <td class="py-3 px-4 text-right text-xs text-warning-600 font-medium">86</td>
+                                            <td class="py-3 px-4 text-center"><i class="fas fa-arrow-down text-danger-500" title="下降"></i></td>
+                                            <td class="py-3 px-5 text-right"><button class="text-xs text-medical-600 hover:text-medical-700 font-medium"$1>详情</button><button class="text-xs text-gray-400 hover:text-medical-600 font-medium transition-colors"$1</button></td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                                            <td class="py-3 px-5 font-medium text-gray-800 dark:text-gray-200">PACS_IMAGE</td>
+                                            <td class="py-3 px-4"><span class="text-xs px-2 py-0.5 rounded-md font-medium bg-warning-50 dark:bg-warning-900/40 text-warning-700 dark:text-warning-400">PACS</span></td>
+                                            <td class="py-3 px-4"><div class="flex items-center gap-2"><div class="confidence-bar flex-1"><div class="confidence-bar-fill low" style="width:88.4%"></div></div><span class="text-xs font-semibold text-danger-600">88.4</span></div></td>
+                                            <td class="py-3 px-4 text-xs" style="color:var(--text-secondary)">影像日期格式不一致（5 种写法）</td>
+                                            <td class="py-3 px-4 text-right text-xs text-danger-600 font-semibold">342</td>
+                                            <td class="py-3 px-4 text-center"><i class="fas fa-arrow-down text-danger-500" title="下降"></i></td>
+                                            <td class="py-3 px-5 text-right"><button class="text-xs text-medical-600 hover:text-medical-700 font-medium"$1>详情</button><button class="text-xs text-gray-400 hover:text-medical-600 font-medium transition-colors"$1</button></td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                                            <td class="py-3 px-5 font-medium text-gray-800 dark:text-gray-200">EMR_DOCUMENT</td>
+                                            <td class="py-3 px-4"><span class="text-xs px-2 py-0.5 rounded-md font-medium bg-success-50 dark:bg-success-900/40 text-success-700 dark:text-success-400">EMR</span></td>
+                                            <td class="py-3 px-4"><div class="flex items-center gap-2"><div class="confidence-bar flex-1"><div class="confidence-bar-fill high" style="width:97.1%"></div></div><span class="text-xs font-semibold text-success-600">97.1</span></div></td>
+                                            <td class="py-3 px-4 text-xs" style="color:var(--text-secondary)">文档类型偶发空值</td>
+                                            <td class="py-3 px-4 text-right text-xs">18</td>
+                                            <td class="py-3 px-4 text-center"><i class="fas fa-minus text-gray-300" title="稳定"></i></td>
+                                            <td class="py-3 px-5 text-right"><button class="text-xs text-medical-600 hover:text-medical-700 font-medium"$1>详情</button><button class="text-xs text-gray-400 hover:text-medical-600 font-medium transition-colors"$1</button></td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                                            <td class="py-3 px-5 font-medium text-gray-800 dark:text-gray-200">PACE_LAB_ITEM</td>
+                                            <td class="py-3 px-4"><span class="text-xs px-2 py-0.5 rounded-md font-medium bg-purple-50 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300">PACE</span></td>
+                                            <td class="py-3 px-4"><div class="flex items-center gap-2"><div class="confidence-bar flex-1"><div class="confidence-bar-fill high" style="width:95.9%"></div></div><span class="text-xs font-semibold text-success-600">95.9</span></div></td>
+                                            <td class="py-3 px-4 text-xs" style="color:var(--text-secondary)">项目编码与标准库未完全对齐</td>
+                                            <td class="py-3 px-4 text-right text-xs">25</td>
+                                            <td class="py-3 px-4 text-center"><i class="fas fa-arrow-up text-success-500" title="上升"></i></td>
+                                            <td class="py-3 px-5 text-right"><button class="text-xs text-medical-600 hover:text-medical-700 font-medium"$1>详情</button><button class="text-xs text-gray-400 hover:text-medical-600 font-medium transition-colors"$1</button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- 异常记录明细 -->
+                        <div class="border border-gray-100 dark:border-gray-700 rounded-xl overflow-hidden">
+                            <div class="px-5 py-3.5 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between">
+                                <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">最新异常记录 <span class="text-xs text-gray-400 font-normal ml-1">按检测时间倒序</span></p>
+                                <button class="text-xs text-gray-400 hover:text-medical-600" data-action="showToast" data-args="异常记录导出开发中|info"><i class="fas fa-download mr-1"></i>导出</button>
+                            </div>
+                            <div class="overflow-x-auto scrollbar-thin">
+                                <table class="w-full text-sm sticky-head">
+                                    <thead>
+                                        <tr class="text-left text-xs text-gray-400 border-b border-gray-100 dark:border-gray-700">
+                                            <th class="py-3 px-5 font-medium">检测时间</th>
+                                            <th class="py-3 px-4 font-medium">表.字段</th>
+                                            <th class="py-3 px-4 font-medium">规则类型</th>
+                                            <th class="py-3 px-4 font-medium">问题描述</th>
+                                            <th class="py-3 px-4 font-medium">严重等级</th>
+                                            <th class="py-3 px-4 font-medium">状态</th>
+                                            <th class="py-3 px-5 font-medium text-right">操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-50 dark:divide-gray-700" id="anomalyTableBody">
+                                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                                            <td class="py-3 px-5 text-xs text-gray-400 whitespace-nowrap">今天 14:32</td>
+                                            <td class="py-3 px-4 font-mono text-xs">PACS_IMAGE.report_date</td>
+                                            <td class="py-3 px-4 whitespace-nowrap"><span class="text-xs px-2 py-0.5 rounded-full whitespace-nowrap bg-gray-100 dark:bg-gray-700" style="color:var(--text-secondary)">有效性</span></td>
+                                            <td class="py-3 px-4 text-xs" style="color:var(--text-secondary)">日期格式 "01/08/2026" 不符合 yyyy-MM-dd</td>
+                                            <td class="py-3 px-4 whitespace-nowrap"><span class="text-xs px-2 py-0.5 rounded-full whitespace-nowrap bg-danger-50 text-danger-700 font-medium">高</span></td>
+                                            <td class="py-3 px-4 anom-status"><span class="text-xs px-2 py-0.5 rounded-full bg-danger-50 text-danger-700">待处理</span></td>
+                                            <td class="py-3 px-5 text-right"><button class="text-xs text-medical-600 hover:text-medical-700 font-medium anom-fix" onclick="resolveAnomaly(this)">处理</button></td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                                            <td class="py-3 px-5 text-xs text-gray-400 whitespace-nowrap">今天 13:05</td>
+                                            <td class="py-3 px-4 font-mono text-xs">HIS_ORDER.order_id</td>
+                                            <td class="py-3 px-4 whitespace-nowrap"><span class="text-xs px-2 py-0.5 rounded-full whitespace-nowrap bg-danger-50 text-danger-700">唯一性</span></td>
+                                            <td class="py-3 px-4 text-xs" style="color:var(--text-secondary)">检出重复主键 ORD202608240013（出现 2 次）</td>
+                                            <td class="py-3 px-4 whitespace-nowrap"><span class="text-xs px-2 py-0.5 rounded-full whitespace-nowrap bg-danger-50 text-danger-700 font-medium">高</span></td>
+                                            <td class="py-3 px-4 anom-status"><span class="text-xs px-2 py-0.5 rounded-full bg-primary-50 text-primary-700">处理中</span></td>
+                                            <td class="py-3 px-5 text-right"><span class="text-xs text-gray-300 cursor-not-allowed">处理中</span></td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                                            <td class="py-3 px-5 text-xs text-gray-400 whitespace-nowrap">今天 11:47</td>
+                                            <td class="py-3 px-4 font-mono text-xs">LIS_TEST_RESULT.unit</td>
+                                            <td class="py-3 px-4 whitespace-nowrap"><span class="text-xs px-2 py-0.5 rounded-full whitespace-nowrap bg-warning-50 text-warning-700">一致性</span></td>
+                                            <td class="py-3 px-4 text-xs" style="color:var(--text-secondary)">血糖结果单位 mmol/L 与 mg/dL 混用（样本 42 条）</td>
+                                            <td class="py-3 px-4 whitespace-nowrap"><span class="text-xs px-2 py-0.5 rounded-full whitespace-nowrap bg-warning-50 text-warning-700 font-medium">中</span></td>
+                                            <td class="py-3 px-4 anom-status"><span class="text-xs px-2 py-0.5 rounded-full bg-danger-50 text-danger-700">待处理</span></td>
+                                            <td class="py-3 px-5 text-right"><button class="text-xs text-medical-600 hover:text-medical-700 font-medium anom-fix" onclick="resolveAnomaly(this)">处理</button></td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                                            <td class="py-3 px-5 text-xs text-gray-400 whitespace-nowrap">今天 10:20</td>
+                                            <td class="py-3 px-4 font-mono text-xs">EMR_DOCUMENT.doc_type</td>
+                                            <td class="py-3 px-4 whitespace-nowrap"><span class="text-xs px-2 py-0.5 rounded-full whitespace-nowrap bg-success-50 text-success-700">完整性</span></td>
+                                            <td class="py-3 px-4 text-xs" style="color:var(--text-secondary)">文档类型空值 6 条（出院小结）</td>
+                                            <td class="py-3 px-4 whitespace-nowrap"><span class="text-xs px-2 py-0.5 rounded-full whitespace-nowrap bg-warning-50 text-warning-700 font-medium">中</span></td>
+                                            <td class="py-3 px-4 anom-status"><span class="text-xs px-2 py-0.5 rounded-full bg-success-50 text-success-700">已解决</span></td>
+                                            <td class="py-3 px-5 text-right"><span class="text-xs text-gray-300 cursor-not-allowed">已解决</span></td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                                            <td class="py-3 px-5 text-xs text-gray-400 whitespace-nowrap">昨天 22:10</td>
+                                            <td class="py-3 px-4 font-mono text-xs">PAT_PATIENT_INFO.phone</td>
+                                            <td class="py-3 px-4 whitespace-nowrap"><span class="text-xs px-2 py-0.5 rounded-full whitespace-nowrap bg-gray-100 dark:bg-gray-700" style="color:var(--text-secondary)">有效性</span></td>
+                                            <td class="py-3 px-4 text-xs" style="color:var(--text-secondary)">手机号格式非法 3 条（已触发脱敏告警）</td>
+                                            <td class="py-3 px-4 whitespace-nowrap"><span class="text-xs px-2 py-0.5 rounded-full whitespace-nowrap bg-gray-100 dark:bg-gray-700" style="color:var(--text-secondary)">低</span></td>
+                                            <td class="py-3 px-4 anom-status"><span class="text-xs px-2 py-0.5 rounded-full bg-success-50 text-success-700">已解决</span></td>
+                                            <td class="py-3 px-5 text-right"><span class="text-xs text-gray-300 cursor-not-allowed">已解决</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ============ Tab 2：规则库管理 ============ -->
+                    <div id="tabRules" class="tab-content hidden p-6 space-y-6">
+                        <!-- 内置规则模板 -->
+                        <div>
+                            <p class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">内置规则模板 <span class="text-xs text-gray-400 font-normal ml-1">点击快速启用，自动套用阈值与调度配置</span></p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+                                <div class="dict-card border border-gray-100 dark:border-gray-700 rounded-xl p-4">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <div class="w-9 h-9 bg-success-50 rounded-lg flex items-center justify-center"><i class="fas fa-check-circle text-success-600"></i></div>
+                                        <span class="text-[10px] text-gray-400">已被 32 条规则引用</span>
+                                    </div>
+                                    <p class="text-sm font-semibold text-gray-800 dark:text-gray-200">非空校验</p>
+                                    <p class="text-xs mt-1" style="color:var(--text-secondary)">关键字段空值率检测，适用于患者主索引等必填字段</p>
+                                    <button class="mt-3 w-full py-1.5 bg-success-50 dark:bg-success-900/30 text-success-700 dark:text-success-400 rounded-lg text-xs font-medium hover:bg-success-100 dark:hover:bg-success-900/60 transition-colors" onclick="quickAddRule('非空校验','完整性','空值率 &lt; 0.1%')"><i class="fas fa-bolt mr-1"></i>快速启用</button>
+                                </div>
+                                <div class="dict-card border border-gray-100 dark:border-gray-700 rounded-xl p-4 relative">
+                                    <span class="absolute -top-2 right-3 text-[10px] bg-gradient-to-r from-medical-500 to-medical-600 text-white px-2 py-0.5 rounded-full shadow"><i class="fas fa-robot mr-0.5"></i>AI 推荐</span>
+                                    <div class="flex items-center justify-between mb-2">
+                                        <div class="w-9 h-9 bg-warning-50 rounded-lg flex items-center justify-center"><i class="fas fa-calendar-check text-warning-600"></i></div>
+                                        <span class="text-[10px] text-gray-400">已被 21 条规则引用</span>
+                                    </div>
+                                    <p class="text-sm font-semibold text-gray-800 dark:text-gray-200">日期格式校验</p>
+                                    <p class="text-xs mt-1" style="color:var(--text-secondary)">识别多种日期写法并校验是否符合目标格式规范</p>
+                                    <button class="mt-3 w-full py-1.5 bg-warning-50 dark:bg-warning-900/30 text-warning-700 dark:text-warning-400 rounded-lg text-xs font-medium hover:bg-warning-100 dark:hover:bg-warning-900/60 transition-colors" onclick="quickAddRule('日期格式校验','有效性','符合 yyyy-MM-dd')"> <i class="fas fa-bolt mr-1"></i>快速启用</button>
+                                </div>
+                                <div class="dict-card border border-gray-100 dark:border-gray-700 rounded-xl p-4">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <div class="w-9 h-9 bg-primary-50 rounded-lg flex items-center justify-center"><i class="fas fa-sliders-h text-primary-600"></i></div>
+                                        <span class="text-[10px] text-gray-400">已被 18 条规则引用</span>
+                                    </div>
+                                    <p class="text-sm font-semibold text-gray-800 dark:text-gray-200">值域校验</p>
+                                    <p class="text-xs mt-1" style="color:var(--text-secondary)">枚举值或数值区间校验，如性别代码、医嘱金额范围</p>
+                                    <button class="mt-3 w-full py-1.5 bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400 rounded-lg text-xs font-medium hover:bg-primary-100 dark:hover:bg-primary-900/60 transition-colors" onclick="quickAddRule('值域校验','准确性','取值在标准字典域内')"><i class="fas fa-bolt mr-1"></i>快速启用</button>
+                                </div>
+                                <div class="dict-card border border-gray-100 dark:border-gray-700 rounded-xl p-4 relative">
+                                    <span class="absolute -top-2 right-3 text-[10px] bg-gradient-to-r from-medical-500 to-medical-600 text-white px-2 py-0.5 rounded-full shadow"><i class="fas fa-robot mr-0.5"></i>AI 推荐</span>
+                                    <div class="flex items-center justify-between mb-2">
+                                        <div class="w-9 h-9 bg-danger-50 rounded-lg flex items-center justify-center"><i class="fas fa-clone text-danger-600"></i></div>
+                                        <span class="text-[10px] text-gray-400">已被 15 条规则引用</span>
+                                    </div>
+                                    <p class="text-sm font-semibold text-gray-800 dark:text-gray-200">重复记录检测</p>
+                                    <p class="text-xs mt-1" style="color:var(--text-secondary)">主键或业务键重复检测，防范接口重发导致的脏数据</p>
+                                    <button class="mt-3 w-full py-1.5 bg-danger-50 dark:bg-danger-900/30 text-danger-700 dark:text-danger-400 rounded-lg text-xs font-medium hover:bg-danger-100 dark:hover:bg-danger-900/60 transition-colors" onclick="quickAddRule('重复记录检测','唯一性','重复记录数 = 0')"><i class="fas fa-bolt mr-1"></i>快速启用</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 筛选栏 -->
+                        <div class="flex flex-wrap items-center gap-3">
+                            <div class="relative flex-1 min-w-[200px] max-w-xs">
+                                <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-300 text-sm"></i>
+                                <input type="text" id="ruleSearchInput" placeholder="搜索规则名称..." oninput="filterRuleTable()" class="w-full pl-9 pr-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus" aria-label="搜索规则名称">
+                            </div>
+                            <div class="flex items-center gap-1 flex-wrap" role="group" aria-label="规则类型筛选">
+                                <button class="filter-btn active text-xs px-3 py-1.5 rounded-full border border-gray-200 dark:border-gray-600" onclick="setRuleTypeFilter(this,'all')">全部</button>
+                                <button class="filter-btn text-xs px-3 py-1.5 rounded-full border border-gray-200 dark:border-gray-600" onclick="setRuleTypeFilter(this,'完整性')">完整性</button>
+                                <button class="filter-btn text-xs px-3 py-1.5 rounded-full border border-gray-200 dark:border-gray-600" onclick="setRuleTypeFilter(this,'一致性')">一致性</button>
+                                <button class="filter-btn text-xs px-3 py-1.5 rounded-full border border-gray-200 dark:border-gray-600" onclick="setRuleTypeFilter(this,'准确性')">准确性</button>
+                                <button class="filter-btn text-xs px-3 py-1.5 rounded-full border border-gray-200 dark:border-gray-600" onclick="setRuleTypeFilter(this,'及时性')">及时性</button>
+                                <button class="filter-btn text-xs px-3 py-1.5 rounded-full border border-gray-200 dark:border-gray-600" onclick="setRuleTypeFilter(this,'唯一性')">唯一性</button>
+                                <button class="filter-btn text-xs px-3 py-1.5 rounded-full border border-gray-200 dark:border-gray-600" onclick="setRuleTypeFilter(this,'有效性')">有效性</button>
+                            </div>
+                            <button class="ml-auto px-4 py-2 bg-medical-600 text-white rounded-xl text-sm font-medium hover:bg-medical-700 transition-colors flex items-center gap-2 shadow-md shadow-medical-600/20" data-action="openModal" data-args="ruleModal">
+                                <i class="fas fa-plus"></i> 新建规则
+                            </button>
+                        </div>
+
+                        <!-- 规则表格 -->
+                        <div class="border border-gray-100 dark:border-gray-700 rounded-xl overflow-hidden">
+                            <div class="overflow-x-auto scrollbar-thin">
+                                <table class="w-full text-sm sticky-head min-w-[960px]">
+                                    <thead>
+                                        <tr class="text-left text-xs text-gray-400 border-b border-gray-100 dark:border-gray-700 bg-gray-50/60 dark:bg-gray-900/40">
+                                            <th class="py-3 px-5 font-medium">规则名称</th>
+                                            <th class="py-3 px-4 font-medium whitespace-nowrap">类型</th>
+                                            <th class="py-3 px-4 font-medium">适用对象</th>
+                                            <th class="py-3 px-4 font-medium">阈值 / 参数</th>
+                                            <th class="py-3 px-4 font-medium">严重等级</th>
+                                            <th class="py-3 px-4 font-medium">调度周期</th>
+                                            <th class="py-3 px-4 font-medium">状态</th>
+                                            <th class="py-3 px-5 font-medium text-right">操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-50 dark:divide-gray-700" id="rulesTableBody">
+                                        <tr data-rule data-name="必填字段非空校验" data-type="完整性" class="rule-row hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                                            <td class="py-3 px-5"><p class="font-medium text-gray-800 dark:text-gray-200">必填字段非空校验</p><p class="text-xs text-gray-400">患者主索引核心字段完整性保障</p></td>
+                                            <td class="py-3 px-4 whitespace-nowrap"><span class="text-xs px-2 py-0.5 rounded-full whitespace-nowrap bg-success-50 text-success-700">完整性</span></td>
+                                            <td class="py-3 px-4"><div class="flex items-center gap-2 flex-wrap"><span class="text-xs px-2 py-0.5 rounded-md font-medium bg-medical-50 dark:bg-medical-900/40 text-medical-700 dark:text-medical-300">HIS</span> <code class="font-mono text-xs px-2 py-0.5 rounded-md bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 max-w-[220px] truncate inline-block align-middle">PAT_PATIENT_INFO.*</code></div></td>
+                                            <td class="py-3 px-4 text-xs" style="color:var(--text-secondary)">空值率 &lt; 0.1%</td>
+                                            <td class="py-3 px-4 whitespace-nowrap"><span class="text-xs px-2 py-0.5 rounded-full whitespace-nowrap bg-danger-50 text-danger-700 font-medium">高</span></td>
+                                            <td class="py-3 px-4 text-xs whitespace-nowrap" style="color:var(--text-secondary)">每小时</td>
+                                            <td class="py-3 px-4"><label><input type="checkbox" class="toggle-switch" checked onchange="toggleRuleStatus(this)" aria-label="启停规则"></label></td>
+                                            <td class="py-3 px-5 text-right whitespace-nowrap"><button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑" data-action="showToast" data-args="规则编辑开发中|info"><i class="fas fa-edit text-xs"></i></button>
+                                            <button type="button" class="text-danger-600 hover:text-danger-700 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除" onclick="deleteRuleRow(this)"><i class="fas fa-trash-alt text-xs"></i></button></td>
+                                        </tr>
+                                        <tr data-rule data-name="出生日期格式校验" data-type="有效性" class="rule-row hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                                            <td class="py-3 px-5"><p class="font-medium text-gray-800 dark:text-gray-200">出生日期格式校验 <span class="text-[10px] bg-gradient-to-r from-medical-500 to-medical-600 text-white px-1.5 py-0.5 rounded-full ml-1">AI推荐</span></p><p class="text-xs text-gray-400">统一为 yyyy-MM-dd（ISO 8601）</p></td>
+                                            <td class="py-3 px-4 whitespace-nowrap"><span class="text-xs px-2 py-0.5 rounded-full whitespace-nowrap bg-gray-100 dark:bg-gray-700" style="color:var(--text-secondary)">有效性</span></td>
+                                            <td class="py-3 px-4"><div class="flex items-center gap-2 flex-wrap"><span class="text-xs px-2 py-0.5 rounded-md font-medium bg-warning-50 dark:bg-warning-900/40 text-warning-700 dark:text-warning-400">PACS</span> <code class="font-mono text-xs px-2 py-0.5 rounded-md bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 max-w-[220px] truncate inline-block align-middle">PACS_IMAGE.report_date</code></div></td>
+                                            <td class="py-3 px-4 text-xs" style="color:var(--text-secondary)">符合 yyyy-MM-dd</td>
+                                            <td class="py-3 px-4 whitespace-nowrap"><span class="text-xs px-2 py-0.5 rounded-full whitespace-nowrap bg-warning-50 text-warning-700 font-medium">中</span></td>
+                                            <td class="py-3 px-4 text-xs whitespace-nowrap" style="color:var(--text-secondary)">每日 06:00</td>
+                                            <td class="py-3 px-4"><label><input type="checkbox" class="toggle-switch" checked onchange="toggleRuleStatus(this)" aria-label="启停规则"></label></td>
+                                            <td class="py-3 px-5 text-right whitespace-nowrap"><button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑" data-action="showToast" data-args="规则编辑开发中|info"><i class="fas fa-edit text-xs"></i></button>
+                                            <button type="button" class="text-danger-600 hover:text-danger-700 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除" onclick="deleteRuleRow(this)"><i class="fas fa-trash-alt text-xs"></i></button></td>
+                                        </tr>
+                                        <tr data-rule data-name="性别代码值域校验" data-type="一致性" class="rule-row hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                                            <td class="py-3 px-5"><p class="font-medium text-gray-800 dark:text-gray-200">性别代码值域校验</p><p class="text-xs text-gray-400">转换后性别必须属于标准字典 M/F/U</p></td>
+                                            <td class="py-3 px-4 whitespace-nowrap"><span class="text-xs px-2 py-0.5 rounded-full whitespace-nowrap bg-warning-50 text-warning-700">一致性</span></td>
+                                            <td class="py-3 px-4"><div class="flex items-center gap-2 flex-wrap"><span class="text-xs px-2 py-0.5 rounded-md font-medium bg-medical-50 dark:bg-medical-900/40 text-medical-700 dark:text-medical-300">HIS</span> <code class="font-mono text-xs px-2 py-0.5 rounded-md bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 max-w-[220px] truncate inline-block align-middle">PAT_PATIENT_INFO.gender</code></div></td>
+                                            <td class="py-3 px-4 text-xs" style="color:var(--text-secondary)">IN ('M','F','U')</td>
+                                            <td class="py-3 px-4 whitespace-nowrap"><span class="text-xs px-2 py-0.5 rounded-full whitespace-nowrap bg-danger-50 text-danger-700 font-medium">高</span></td>
+                                            <td class="py-3 px-4 text-xs whitespace-nowrap" style="color:var(--text-secondary)">每日 06:00</td>
+                                            <td class="py-3 px-4"><label><input type="checkbox" class="toggle-switch" checked onchange="toggleRuleStatus(this)" aria-label="启停规则"></label></td>
+                                            <td class="py-3 px-5 text-right whitespace-nowrap"><button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑" data-action="showToast" data-args="规则编辑开发中|info"><i class="fas fa-edit text-xs"></i></button>
+                                            <button type="button" class="text-danger-600 hover:text-danger-700 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除" onclick="deleteRuleRow(this)"><i class="fas fa-trash-alt text-xs"></i></button></td>
+                                        </tr>
+                                        <tr data-rule data-name="患者主键唯一性检测" data-type="唯一性" class="rule-row hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                                            <td class="py-3 px-5"><p class="font-medium text-gray-800 dark:text-gray-200">患者主键唯一性检测</p><p class="text-xs text-gray-400">防范接口重发导致的主键重复</p></td>
+                                            <td class="py-3 px-4 whitespace-nowrap"><span class="text-xs px-2 py-0.5 rounded-full whitespace-nowrap bg-danger-50 text-danger-700">唯一性</span></td>
+                                            <td class="py-3 px-4"><div class="flex items-center gap-2 flex-wrap"><span class="text-xs px-2 py-0.5 rounded-md font-medium bg-medical-50 dark:bg-medical-900/40 text-medical-700 dark:text-medical-300">HIS</span> <code class="font-mono text-xs px-2 py-0.5 rounded-md bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 max-w-[220px] truncate inline-block align-middle">HIS_ORDER.order_id</code></div></td>
+                                            <td class="py-3 px-4 text-xs" style="color:var(--text-secondary)">重复记录数 = 0</td>
+                                            <td class="py-3 px-4 whitespace-nowrap"><span class="text-xs px-2 py-0.5 rounded-full whitespace-nowrap bg-danger-50 text-danger-700 font-medium">高</span></td>
+                                            <td class="py-3 px-4 text-xs whitespace-nowrap" style="color:var(--text-secondary)">每小时</td>
+                                            <td class="py-3 px-4"><label><input type="checkbox" class="toggle-switch" checked onchange="toggleRuleStatus(this)" aria-label="启停规则"></label></td>
+                                            <td class="py-3 px-5 text-right whitespace-nowrap"><button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑" data-action="showToast" data-args="规则编辑开发中|info"><i class="fas fa-edit text-xs"></i></button>
+                                            <button type="button" class="text-danger-600 hover:text-danger-700 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除" onclick="deleteRuleRow(this)"><i class="fas fa-trash-alt text-xs"></i></button></td>
+                                        </tr>
+                                        <tr data-rule data-name="检验单位一致性校验" data-type="一致性" class="rule-row hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                                            <td class="py-3 px-5"><p class="font-medium text-gray-800 dark:text-gray-200">检验单位一致性校验</p><p class="text-xs text-gray-400">mg/dL 与 mmol/L 混用检测</p></td>
+                                            <td class="py-3 px-4 whitespace-nowrap"><span class="text-xs px-2 py-0.5 rounded-full whitespace-nowrap bg-warning-50 text-warning-700">一致性</span></td>
+                                            <td class="py-3 px-4"><div class="flex items-center gap-2 flex-wrap"><span class="text-xs px-2 py-0.5 rounded-md font-medium bg-primary-50 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300">LIS</span> <code class="font-mono text-xs px-2 py-0.5 rounded-md bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 max-w-[220px] truncate inline-block align-middle">LIS_TEST_RESULT.unit</code></div></td>
+                                            <td class="py-3 px-4 text-xs" style="color:var(--text-secondary)">单位 ∈ 项目标准单位域</td>
+                                            <td class="py-3 px-4 whitespace-nowrap"><span class="text-xs px-2 py-0.5 rounded-full whitespace-nowrap bg-warning-50 text-warning-700 font-medium">中</span></td>
+                                            <td class="py-3 px-4 text-xs whitespace-nowrap" style="color:var(--text-secondary)">每日 06:00</td>
+                                            <td class="py-3 px-4"><label><input type="checkbox" class="toggle-switch" checked onchange="toggleRuleStatus(this)" aria-label="启停规则"></label></td>
+                                            <td class="py-3 px-5 text-right whitespace-nowrap"><button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑" data-action="showToast" data-args="规则编辑开发中|info"><i class="fas fa-edit text-xs"></i></button>
+                                            <button type="button" class="text-danger-600 hover:text-danger-700 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除" onclick="deleteRuleRow(this)"><i class="fas fa-trash-alt text-xs"></i></button></td>
+                                        </tr>
+                                        <tr data-rule data-name="医嘱金额值域校验" data-type="准确性" class="rule-row hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                                            <td class="py-3 px-5"><p class="font-medium text-gray-800 dark:text-gray-200">医嘱金额值域校验</p><p class="text-xs text-gray-400">拦截负值与超限异常金额</p></td>
+                                            <td class="py-3 px-4 whitespace-nowrap"><span class="text-xs px-2 py-0.5 rounded-full whitespace-nowrap bg-primary-50 text-primary-700">准确性</span></td>
+                                            <td class="py-3 px-4"><div class="flex items-center gap-2 flex-wrap"><span class="text-xs px-2 py-0.5 rounded-md font-medium bg-medical-50 dark:bg-medical-900/40 text-medical-700 dark:text-medical-300">HIS</span> <code class="font-mono text-xs px-2 py-0.5 rounded-md bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 max-w-[220px] truncate inline-block align-middle">HIS_ORDER.amount</code></div></td>
+                                            <td class="py-3 px-4 text-xs" style="color:var(--text-secondary)">0 ≤ amount ≤ 1,000,000</td>
+                                            <td class="py-3 px-4 whitespace-nowrap"><span class="text-xs px-2 py-0.5 rounded-full whitespace-nowrap bg-danger-50 text-danger-700 font-medium">高</span></td>
+                                            <td class="py-3 px-4 text-xs whitespace-nowrap" style="color:var(--text-secondary)">每日 06:00</td>
+                                            <td class="py-3 px-4"><label><input type="checkbox" class="toggle-switch" checked onchange="toggleRuleStatus(this)" aria-label="启停规则"></label></td>
+                                            <td class="py-3 px-5 text-right whitespace-nowrap"><button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑" data-action="showToast" data-args="规则编辑开发中|info"><i class="fas fa-edit text-xs"></i></button>
+                                            <button type="button" class="text-danger-600 hover:text-danger-700 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除" onclick="deleteRuleRow(this)"><i class="fas fa-trash-alt text-xs"></i></button></td>
+                                        </tr>
+                                        <tr data-rule data-name="影像报告时效性检测" data-type="及时性" class="rule-row hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                                            <td class="py-3 px-5"><p class="font-medium text-gray-800 dark:text-gray-200">影像报告时效性检测</p><p class="text-xs text-gray-400">检查完成到报告出具超时监控</p></td>
+                                            <td class="py-3 px-4 whitespace-nowrap"><span class="text-xs px-2 py-0.5 rounded-full whitespace-nowrap bg-medical-50 dark:bg-medical-900/40 text-medical-700 dark:text-medical-300">及时性</span></td>
+                                            <td class="py-3 px-4"><div class="flex items-center gap-2 flex-wrap"><span class="text-xs px-2 py-0.5 rounded-md font-medium bg-warning-50 dark:bg-warning-900/40 text-warning-700 dark:text-warning-400">PACS</span> <code class="font-mono text-xs px-2 py-0.5 rounded-md bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 max-w-[220px] truncate inline-block align-middle">PACS_REPORT.*</code></div></td>
+                                            <td class="py-3 px-4 text-xs" style="color:var(--text-secondary)">出具时长 ≤ 24h 占比 ≥ 98%</td>
+                                            <td class="py-3 px-4 whitespace-nowrap"><span class="text-xs px-2 py-0.5 rounded-full whitespace-nowrap bg-warning-50 text-warning-700 font-medium">中</span></td>
+                                            <td class="py-3 px-4 text-xs whitespace-nowrap" style="color:var(--text-secondary)">每周一 09:00</td>
+                                            <td class="py-3 px-4"><label><input type="checkbox" class="toggle-switch" onchange="toggleRuleStatus(this)" aria-label="启停规则"></label></td>
+                                            <td class="py-3 px-5 text-right whitespace-nowrap"><button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑" data-action="showToast" data-args="规则编辑开发中|info"><i class="fas fa-edit text-xs"></i></button>
+                                            <button type="button" class="text-danger-600 hover:text-danger-700 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除" onclick="deleteRuleRow(this)"><i class="fas fa-trash-alt text-xs"></i></button></td>
+                                        </tr>
+                                        <tr data-rule data-name="诊断编码有效性校验" data-type="有效性" class="rule-row hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                                            <td class="py-3 px-5"><p class="font-medium text-gray-800 dark:text-gray-200">诊断编码有效性校验</p><p class="text-xs text-gray-400">对照 ICD-10 标准编码库匹配</p></td>
+                                            <td class="py-3 px-4 whitespace-nowrap"><span class="text-xs px-2 py-0.5 rounded-full whitespace-nowrap bg-gray-100 dark:bg-gray-700" style="color:var(--text-secondary)">有效性</span></td>
+                                            <td class="py-3 px-4"><div class="flex items-center gap-2 flex-wrap"><span class="text-xs px-2 py-0.5 rounded-md font-medium bg-success-50 dark:bg-success-900/40 text-success-700 dark:text-success-400">EMR</span> <code class="font-mono text-xs px-2 py-0.5 rounded-md bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 max-w-[220px] truncate inline-block align-middle">EMR_DIAGNOSIS.icd_code</code></div></td>
+                                            <td class="py-3 px-4 text-xs" style="color:var(--text-secondary)">编码库匹配率 ≥ 99%</td>
+                                            <td class="py-3 px-4 whitespace-nowrap"><span class="text-xs px-2 py-0.5 rounded-full whitespace-nowrap bg-warning-50 text-warning-700 font-medium">中</span></td>
+                                            <td class="py-3 px-4 text-xs whitespace-nowrap" style="color:var(--text-secondary)">每周一 09:00</td>
+                                            <td class="py-3 px-4"><label><input type="checkbox" class="toggle-switch" onchange="toggleRuleStatus(this)" aria-label="启停规则"></label></td>
+                                            <td class="py-3 px-5 text-right whitespace-nowrap"><button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑" data-action="showToast" data-args="规则编辑开发中|info"><i class="fas fa-edit text-xs"></i></button>
+                                            <button type="button" class="text-danger-600 hover:text-danger-700 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除" onclick="deleteRuleRow(this)"><i class="fas fa-trash-alt text-xs"></i></button></td>
+                                        </tr>
+                                        <tr data-rule data-name="检验报告必填完整性" data-type="完整性" class="rule-row hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                                            <td class="py-3 px-5"><p class="font-medium text-gray-800 dark:text-gray-200">检验报告必填完整性</p><p class="text-xs text-gray-400">9 个必填字段联合空值检测</p></td>
+                                            <td class="py-3 px-4 whitespace-nowrap"><span class="text-xs px-2 py-0.5 rounded-full whitespace-nowrap bg-success-50 text-success-700">完整性</span></td>
+                                            <td class="py-3 px-4"><div class="flex items-center gap-2 flex-wrap"><span class="text-xs px-2 py-0.5 rounded-md font-medium bg-primary-50 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300">LIS</span> <code class="font-mono text-xs px-2 py-0.5 rounded-md bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 max-w-[220px] truncate inline-block align-middle">LIS_TEST_RESULT.*</code></div></td>
+                                            <td class="py-3 px-4 text-xs" style="color:var(--text-secondary)">空值率 &lt; 0.5%</td>
+                                            <td class="py-3 px-4 whitespace-nowrap"><span class="text-xs px-2 py-0.5 rounded-full whitespace-nowrap bg-warning-50 text-warning-700 font-medium">中</span></td>
+                                            <td class="py-3 px-4 text-xs whitespace-nowrap" style="color:var(--text-secondary)">每日 06:00</td>
+                                            <td class="py-3 px-4"><label><input type="checkbox" class="toggle-switch" checked onchange="toggleRuleStatus(this)" aria-label="启停规则"></label></td>
+                                            <td class="py-3 px-5 text-right whitespace-nowrap"><button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑" data-action="showToast" data-args="规则编辑开发中|info"><i class="fas fa-edit text-xs"></i></button>
+                                            <button type="button" class="text-danger-600 hover:text-danger-700 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除" onclick="deleteRuleRow(this)"><i class="fas fa-trash-alt text-xs"></i></button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ============ Tab 3：质量报告 ============ -->
+                    <div id="tabReports" class="tab-content hidden p-6">
+                        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+                            <!-- 报告列表 -->
+                            <div class="xl:col-span-2 border border-gray-100 dark:border-gray-700 rounded-xl overflow-hidden self-start">
+                                <div class="px-5 py-3.5 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between">
+                                    <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">质量报告列表</p>
+                                    <button class="text-xs px-3 py-1.5 bg-medical-600 text-white rounded-lg font-medium hover:bg-medical-700 transition-colors" onclick="generateReportNow()"><i class="fas fa-plus mr-1"></i>立即生成报告</button>
+                                </div>
+                                <div class="overflow-x-auto scrollbar-thin">
+                                    <table class="w-full text-sm sticky-head">
+                                        <thead>
+                                            <tr class="text-left text-xs text-gray-400 border-b border-gray-100 dark:border-gray-700">
+                                                <th class="py-3 px-5 font-medium">报告名称</th>
+                                                <th class="py-3 px-4 font-medium">检测范围</th>
+                                                <th class="py-3 px-4 font-medium">综合评分</th>
+                                                <th class="py-3 px-4 font-medium text-right">发现问题</th>
+                                                <th class="py-3 px-4 font-medium">生成时间</th>
+                                                <th class="py-3 px-5 font-medium text-right">操作</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="divide-y divide-gray-50 dark:divide-gray-700" id="reportTableBody">
+                                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors" data-report data-title="数据质量日报 · 2026-08-24" data-score="96.2" data-scope="全量（24 个数据源）" data-issues="1,247">
+                                                <td class="py-3 px-5 font-medium text-gray-800 dark:text-gray-200">数据质量日报 · 2026-08-24</td>
+                                                <td class="py-3 px-4 text-xs" style="color:var(--text-secondary)">全量 · 24 个数据源</td>
+                                                <td class="py-3 px-4 whitespace-nowrap"><span class="text-xs px-2 py-0.5 rounded-full whitespace-nowrap bg-success-50 text-success-700 font-semibold">96.2</span></td>
+                                                <td class="py-3 px-4 text-right text-xs">1,247</td>
+                                                <td class="py-3 px-4 text-xs text-gray-400 whitespace-nowrap">今天 06:00 · 系统自动</td>
+                                                <td class="py-3 px-5 text-right whitespace-nowrap"><button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="查看" onclick="openReportModal(this)"><i class="fas fa-eye text-xs"></i></button>
+                                        <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="下载" onclick="downloadReport(this)"><i class="fas fa-download text-xs"></i></button>
+                                        <button type="button" class="text-danger-600 hover:text-danger-700 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除" onclick="deleteReportRow(this)"><i class="fas fa-trash-alt text-xs"></i></button></td>
+                                            </tr>
+                                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors" data-report data-title="数据质量日报 · 2026-08-23" data-score="96.0" data-scope="全量（24 个数据源）" data-issues="1,392">
+                                                <td class="py-3 px-5 font-medium text-gray-800 dark:text-gray-200">数据质量日报 · 2026-08-23</td>
+                                                <td class="py-3 px-4 text-xs" style="color:var(--text-secondary)">全量 · 24 个数据源</td>
+                                                <td class="py-3 px-4 whitespace-nowrap"><span class="text-xs px-2 py-0.5 rounded-full whitespace-nowrap bg-success-50 text-success-700 font-semibold">96.0</span></td>
+                                                <td class="py-3 px-4 text-right text-xs">1,392</td>
+                                                <td class="py-3 px-4 text-xs text-gray-400 whitespace-nowrap">昨天 06:00 · 系统自动</td>
+                                                <td class="py-3 px-5 text-right whitespace-nowrap"><button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="查看" onclick="openReportModal(this)"><i class="fas fa-eye text-xs"></i></button>
+                                        <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="下载" onclick="downloadReport(this)"><i class="fas fa-download text-xs"></i></button>
+                                        <button type="button" class="text-danger-600 hover:text-danger-700 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除" onclick="deleteReportRow(this)"><i class="fas fa-trash-alt text-xs"></i></button></td>
+                                            </tr>
+                                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors" data-report data-title="HIS 医嘱专项检查报告 · 第34周" data-score="97.4" data-scope="HIS 医嘱域" data-issues="156">
+                                                <td class="py-3 px-5 font-medium text-gray-800 dark:text-gray-200">HIS 医嘱专项检查报告 · 第34周</td>
+                                                <td class="py-3 px-4 text-xs" style="color:var(--text-secondary)">HIS 医嘱域 · 6 张核心表</td>
+                                                <td class="py-3 px-4 whitespace-nowrap"><span class="text-xs px-2 py-0.5 rounded-full whitespace-nowrap bg-success-50 text-success-700 font-semibold">97.4</span></td>
+                                                <td class="py-3 px-4 text-right text-xs">156</td>
+                                                <td class="py-3 px-4 text-xs text-gray-400 whitespace-nowrap">08-17 09:00 · 张工程师</td>
+                                                <td class="py-3 px-5 text-right whitespace-nowrap"><button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="查看" onclick="openReportModal(this)"><i class="fas fa-eye text-xs"></i></button>
+                                        <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="下载" onclick="downloadReport(this)"><i class="fas fa-download text-xs"></i></button>
+                                        <button type="button" class="text-danger-600 hover:text-danger-700 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除" onclick="deleteReportRow(this)"><i class="fas fa-trash-alt text-xs"></i></button></td>
+                                            </tr>
+                                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors" data-report data-title="LIS 检验数据质量月报 · 2026-07" data-score="93.9" data-scope="LIS 检验域" data-issues="2,891">
+                                                <td class="py-3 px-5 font-medium text-gray-800 dark:text-gray-200">LIS 检验数据质量月报 · 2026-07</td>
+                                                <td class="py-3 px-4 text-xs" style="color:var(--text-secondary)">LIS 检验域 · 12 张核心表</td>
+                                                <td class="py-3 px-4 whitespace-nowrap"><span class="text-xs px-2 py-0.5 rounded-full whitespace-nowrap bg-warning-50 text-warning-700 font-semibold">93.9</span></td>
+                                                <td class="py-3 px-4 text-right text-xs">2,891</td>
+                                                <td class="py-3 px-4 text-xs text-gray-400 whitespace-nowrap">08-01 06:00 · 系统自动</td>
+                                                <td class="py-3 px-5 text-right whitespace-nowrap"><button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="查看" onclick="openReportModal(this)"><i class="fas fa-eye text-xs"></i></button>
+                                        <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="下载" onclick="downloadReport(this)"><i class="fas fa-download text-xs"></i></button>
+                                        <button type="button" class="text-danger-600 hover:text-danger-700 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除" onclick="deleteReportRow(this)"><i class="fas fa-trash-alt text-xs"></i></button></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- 定时检测配置 -->
+                            <div class="border border-gray-100 dark:border-gray-700 rounded-xl p-5 self-start">
+                                <p class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4"><i class="fas fa-clock text-medical-600 mr-1.5"></i>定时检测配置</p>
+                                <div class="space-y-4">
+                                    <div class="flex items-center justify-between gap-3">
+                                        <div>
+                                            <p class="text-sm font-medium text-gray-800 dark:text-gray-200">每日全量检测</p>
+                                            <p class="text-xs text-gray-400">每天 06:00 自动执行全部启用规则</p>
+                                        </div>
+                                        <label><input type="checkbox" class="toggle-switch" checked onchange="showToast(this.checked?'已开启每日全量检测':'已关闭每日全量检测', this.checked?'success':'warning')" aria-label="每日全量检测开关"></label>
+                                    </div>
+                                    <div class="flex items-center justify-between gap-3 pt-3 border-t border-gray-100 dark:border-gray-700">
+                                        <div>
+                                            <p class="text-sm font-medium text-gray-800 dark:text-gray-200">每周质量周报</p>
+                                            <p class="text-xs text-gray-400">每周一 09:00 汇总生成并发送</p>
+                                        </div>
+                                        <label><input type="checkbox" class="toggle-switch" checked onchange="showToast(this.checked?'已开启质量周报':'已关闭质量周报', this.checked?'success':'warning')" aria-label="质量周报开关"></label>
+                                    </div>
+                                    <div class="flex items-center justify-between gap-3 pt-3 border-t border-gray-100 dark:border-gray-700">
+                                        <div>
+                                            <p class="text-sm font-medium text-gray-800 dark:text-gray-200">AI 自动归因分析</p>
+                                            <p class="text-xs text-gray-400">报告生成后自动附加根因分析与建议</p>
+                                        </div>
+                                        <label><input type="checkbox" class="toggle-switch" onchange="showToast(this.checked?'已开启 AI 归因分析':'已关闭 AI 归因分析', this.checked?'success':'warning')" aria-label="AI归因开关"></label>
+                                    </div>
+                                    <div class="pt-3 border-t border-gray-100 dark:border-gray-700">
+                                        <p class="text-xs font-medium text-gray-600 dark:text-gray-300 mb-2">报告推送渠道</p>
+                                        <div class="flex flex-wrap gap-2">
+                                            <label class="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-full cursor-pointer"><input type="checkbox" checked class="accent-medical-600">邮件</label>
+                                            <label class="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-full cursor-pointer"><input type="checkbox" checked class="accent-medical-600">站内信</label>
+                                            <label class="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-full cursor-pointer"><input type="checkbox" class="accent-medical-600">钉钉</label>
+                                        </div>
+                                    </div>
+                                    <button class="w-full py-2 bg-medical-600 text-white rounded-xl text-sm font-medium hover:bg-medical-700 transition-colors" onclick="showToast('定时检测配置已保存','success')">保存配置</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 新建/编辑规则模态框 -->
+    <div id="ruleModal" class="modal fixed inset-0 z-50 items-center justify-center bg-black/50">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-lg mx-4 shadow-2xl flex flex-col max-h-[90vh]">
+            <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between flex-shrink-0">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-medical-50 dark:bg-medical-900/30 rounded-xl flex items-center justify-center"><i class="fas fa-list-check text-medical-600" aria-hidden="true"></i></div>
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">新建质量规则</h3>
+                </div>
+                <button type="button" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:outline-none" data-action="closeModal" data-args="ruleModal" aria-label="关闭"><i class="fas fa-times" aria-hidden="true"></i></button>
+            </div>
+            <form id="ruleForm" class="px-6 py-5 space-y-4 flex-1 overflow-y-auto scrollbar-thin" onsubmit="event.preventDefault(); saveRule();">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="ruleNameInput" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">规则名称 <span class="text-danger-500">*</span></label>
+                        <input type="text" id="ruleNameInput" required placeholder="例如：住院号格式校验" class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus">
+                    </div>
+                    <div>
+                        <label for="ruleTypeSelect" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">规则类型 <span class="text-danger-500">*</span></label>
+                        <select id="ruleTypeSelect" required class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus">
+                            <option value="">请选择</option>
+                            <option>完整性</option><option>一致性</option><option>准确性</option>
+                            <option>及时性</option><option>唯一性</option><option>有效性</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="ruleSourceSelect" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">目标系统</label>
+                        <select id="ruleSourceSelect" class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus">
+                            <option>HIS</option><option>LIS</option><option>PACS</option><option>EMR</option><option>PACE</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="ruleTargetInput" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">目标对象 <span class="text-danger-500">*</span></label>
+                        <input type="text" id="ruleTargetInput" required placeholder="表名.字段 或 表名.*" class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm font-mono form-control-focus">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="ruleThresholdInput" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">阈值 / 参数</label>
+                        <input type="text" id="ruleThresholdInput" placeholder="例如：空值率 < 0.1%" class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus">
+                    </div>
+                    <div>
+                        <label for="ruleSeveritySelect" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">严重等级</label>
+                        <select id="ruleSeveritySelect" class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus">
+                            <option>高</option><option selected>中</option><option>低</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="ruleScheduleSelect" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">调度周期</label>
+                        <select id="ruleScheduleSelect" class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus">
+                            <option>每 15 分钟</option><option>每小时</option><option selected>每日 06:00</option><option>每周一 09:00</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="ruleNotifySelect" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">告警通知</label>
+                        <select id="ruleNotifySelect" class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus">
+                            <option>站内信 + 邮件</option><option>仅站内信</option><option>钉钉群机器人</option><option>不通知</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label for="ruleDescInput" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">规则说明</label>
+                    <textarea id="ruleDescInput" rows="2" placeholder="描述规则的治理意图与处置口径..." class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus resize-none"></textarea>
+                </div>
+            </form>
+            <div class="px-6 py-4 border-t border-gray-100 dark:border-gray-700 flex justify-end gap-3 flex-shrink-0">
+                <button class="px-4 py-2.5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors" data-action="closeModal" data-args="ruleModal">取消</button>
+                <button class="px-4 py-2.5 bg-medical-600 text-white rounded-xl text-sm font-medium hover:bg-medical-700 transition-colors" onclick="saveRule()">保存规则</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 报告详情模态框 -->
+    <div id="reportDetailModal" class="modal fixed inset-0 z-50 items-center justify-center bg-black/50">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-4xl mx-4 shadow-2xl flex flex-col max-h-[90vh]">
+            <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between flex-shrink-0">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-medical-50 dark:bg-medical-900/30 rounded-xl flex items-center justify-center"><i class="fas fa-file-alt text-medical-600" aria-hidden="true"></i></div>
+                    <div>
+                        <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100" id="reportDetailTitle">数据质量报告</h3>
+                        <p class="text-xs text-gray-400" id="reportDetailMeta">生成时间 --</p>
+                    </div>
+                </div>
+                <button type="button" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:outline-none" data-action="closeModal" data-args="reportDetailModal" aria-label="关闭"><i class="fas fa-times" aria-hidden="true"></i></button>
+            </div>
+            <div class="px-6 py-5 space-y-5 flex-1 overflow-y-auto scrollbar-thin">
+                <!-- 总评 -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="rounded-xl p-4 bg-success-50 dark:bg-success-900/20 text-center">
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">综合评分</p>
+                        <p class="text-2xl font-bold quality-score-excellent" id="reportDetailScore">96.2</p>
+                        <p class="text-[10px] text-gray-400 mt-0.5">评级 优秀</p>
+                    </div>
+                    <div class="rounded-xl p-4 bg-gray-50 dark:bg-gray-900 text-center">
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">检测记录</p>
+                        <p class="text-2xl font-bold text-gray-800 dark:text-gray-200">245.6万</p>
+                        <p class="text-[10px] text-gray-400 mt-0.5">覆盖 24 数据源</p>
+                    </div>
+                    <div class="rounded-xl p-4 bg-gray-50 dark:bg-gray-900 text-center">
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">发现问题</p>
+                        <p class="text-2xl font-bold text-gray-800 dark:text-gray-200" id="reportDetailIssues">1,247</p>
+                        <p class="text-[10px] text-gray-400 mt-0.5">高 12 · 中 38 · 低 1197</p>
+                    </div>
+                    <div class="rounded-xl p-4 bg-gray-50 dark:bg-gray-900 text-center">
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">已闭环整改</p>
+                        <p class="text-2xl font-bold text-gray-800 dark:text-gray-200">87.3%</p>
+                        <p class="text-[10px] text-gray-400 mt-0.5">环比 +2.1%</p>
+                    </div>
+                </div>
+                <!-- 维度明细 -->
+                <div class="grid grid-cols-2 md:grid-cols-6 gap-3">
+                    <div><p class="text-xs text-gray-400 mb-1">完整性</p><div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-1.5"><div class="bg-success-500 h-1.5 rounded-full" style="width:98.5%"></div></div><p class="text-[10px] mt-1 text-success-600 font-medium">98.5%</p></div>
+                    <div><p class="text-xs text-gray-400 mb-1">一致性</p><div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-1.5"><div class="bg-warning-500 h-1.5 rounded-full" style="width:94.2%"></div></div><p class="text-[10px] mt-1 text-warning-600 font-medium">94.2%</p></div>
+                    <div><p class="text-xs text-gray-400 mb-1">准确性</p><div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-1.5"><div class="bg-primary-500 h-1.5 rounded-full" style="width:96.8%"></div></div><p class="text-[10px] mt-1 text-primary-600 font-medium">96.8%</p></div>
+                    <div><p class="text-xs text-gray-400 mb-1">及时性</p><div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-1.5"><div class="bg-success-500 h-1.5 rounded-full" style="width:99.1%"></div></div><p class="text-[10px] mt-1 text-success-600 font-medium">99.1%</p></div>
+                    <div><p class="text-xs text-gray-400 mb-1">唯一性</p><div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-1.5"><div class="bg-primary-500 h-1.5 rounded-full" style="width:97.3%"></div></div><p class="text-[10px] mt-1 text-primary-600 font-medium">97.3%</p></div>
+                    <div><p class="text-xs text-gray-400 mb-1">有效性</p><div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-1.5"><div class="bg-warning-500 h-1.5 rounded-full" style="width:95.6%"></div></div><p class="text-[10px] mt-1 text-warning-600 font-medium">95.6%</p></div>
+                </div>
+                <!-- 重点问题 -->
+                <div class="border border-gray-100 dark:border-gray-700 rounded-xl overflow-hidden">
+                    <p class="px-4 py-2.5 text-xs font-semibold text-gray-600 dark:text-gray-300 bg-gray-50/60 dark:bg-gray-900/40 border-b border-gray-100 dark:border-gray-700">重点问题 TOP 3</p>
+                    <table class="w-full text-sm">
+                        <tbody class="divide-y divide-gray-50 dark:divide-gray-700">
+                            <tr><td class="py-2.5 px-4 font-mono text-xs w-56">PACS_IMAGE.report_date</td><td class="py-2.5 px-4 text-xs" style="color:var(--text-secondary)">日期格式不一致（5 种写法），异常 342 条</td><td class="py-2.5 px-4 text-right"><span class="text-xs px-2 py-0.5 rounded-full bg-danger-50 text-danger-700 font-medium">高</span></td></tr>
+                            <tr><td class="py-2.5 px-4 font-mono text-xs">LIS_TEST_RESULT.unit</td><td class="py-2.5 px-4 text-xs" style="color:var(--text-secondary)">单位字段混用，异常 86 条，涉及 2 个科室</td><td class="py-2.5 px-4 text-right"><span class="text-xs px-2 py-0.5 rounded-full bg-warning-50 text-warning-700 font-medium">中</span></td></tr>
+                            <tr><td class="py-2.5 px-4 font-mono text-xs">HIS_ORDER.order_id</td><td class="py-2.5 px-4 text-xs" style="color:var(--text-secondary)">重复主键 12 条，疑似接口重发</td><td class="py-2.5 px-4 text-right"><span class="text-xs px-2 py-0.5 rounded-full bg-danger-50 text-danger-700 font-medium">高</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- AI 建议 -->
+                <div class="suggestion-card s-info">
+                    <div class="flex items-start gap-3">
+                        <div class="w-8 h-8 bg-gradient-to-br from-medical-500 to-medical-700 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5"><i class="fas fa-robot text-white text-xs" aria-hidden="true"></i></div>
+                        <div>
+                            <p class="text-sm font-semibold text-gray-900 dark:text-gray-100">AI 整改建议</p>
+                            <ol class="text-xs mt-1 space-y-1 list-decimal pl-4" style="color:var(--text-secondary)">
+                                <li>在 ETL 清洗层对 report_date 增加 TO_DATE 兜底与多格式解析，历史数据执行一次性刷数脚本；</li>
+                                <li>将检验单位纳入标准字典管理，转换时按项目类别自动换算为 SI 单位；</li>
+                                <li>HIS 接口侧开启幂等控制，目标端 Table Output 改为 UPSERT 模式。</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-xs text-gray-400 leading-relaxed">结论：本期整体质量稳中向好，综合评分 96.2 达标。一致性、有效性两个维度仍低于 95% 目标线，主要瓶颈集中在 PACS 影像日期与 LIS 检验单位两类历史遗留问题，建议纳入本周整改计划并跟踪闭环。</p>
+            </div>
+            <div class="px-6 py-4 border-t border-gray-100 dark:border-gray-700 flex justify-between items-center flex-shrink-0">
+                <span class="text-xs text-gray-400"><i class="fas fa-shield-alt mr-1"></i>本报告符合《医疗健康数据治理规范》留痕要求，已归档审计日志</span>
+                <div class="flex gap-3">
+                    <button class="px-4 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors" data-action="showToast" data-args="PDF 导出为演示功能|info">导出 PDF</button>
+                    <button class="px-4 py-2 bg-medical-600 text-white rounded-xl text-sm font-medium hover:bg-medical-700 transition-colors" data-action="closeModal" data-args="reportDetailModal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // ===== 本地工具 =====
+    function switchTab(btn, tabId) {
+        document.querySelectorAll('.tab-btn').forEach(function(t) {
+            t.classList.remove('active', 'text-medical-600');
+            t.classList.add('text-gray-500', 'dark:text-gray-400');
+        });
+        btn.classList.add('active', 'text-medical-600');
+        btn.classList.remove('text-gray-500', 'dark:text-gray-400');
+        document.querySelectorAll('.tab-content').forEach(function(c) { c.classList.add('hidden'); });
+        document.getElementById(tabId).classList.remove('hidden');
+    }
+
+    function gotoTab(btnId) {
+        var btn = document.getElementById(btnId);
+        if (btn) btn.click();
+    }
+
+    // ===== 评分环动画 =====
+    window.addEventListener('load', function() {
+        setTimeout(function() {
+            // r=48 → 周长 301.6；96.2% → 偏移 11.5
+            document.getElementById('scoreRing').style.strokeDashoffset = '11.5';
+        }, 150);
+    });
+
+    // ===== 规则类型徽章配色 =====
+    var TYPE_BADGE = {
+        '完整性': 'bg-success-50 text-success-700',
+        '一致性': 'bg-warning-50 text-warning-700',
+        '准确性': 'bg-primary-50 text-primary-700',
+        '及时性': 'bg-medical-50 dark:bg-medical-900/40 text-medical-700 dark:text-medical-300',
+        '唯一性': 'bg-danger-50 text-danger-700',
+        '有效性': 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
+    };
+    var SYSTEM_BADGE = {
+        HIS: 'bg-medical-50 dark:bg-medical-900/40 text-medical-700 dark:text-medical-300',
+        LIS: 'bg-primary-50 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300',
+        PACS: 'bg-warning-50 dark:bg-warning-900/40 text-warning-700 dark:text-warning-400',
+        EMR: 'bg-success-50 dark:bg-success-900/40 text-success-700 dark:text-success-400',
+        PACE: 'bg-purple-50 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300'
+    };
+    var SEVERITY_BADGE = { '高': 'bg-danger-50 text-danger-700 font-medium', '中': 'bg-warning-50 text-warning-700 font-medium', '低': 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400' };
+
+    function escapeHtml(s) {
+        return String(s == null ? '' : s).replace(/[&<>"']/g, function(c) {
+            return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+        });
+    }
+
+    function buildRuleRow(opts) {
+        var tr = document.createElement('tr');
+        tr.setAttribute('data-rule', '');
+        tr.setAttribute('data-name', opts.name);
+        tr.setAttribute('data-type', opts.type);
+        tr.className = 'rule-row hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors';
+        tr.innerHTML =
+            '<td class="py-3 px-5"><p class="font-medium text-gray-800 dark:text-gray-200">' + escapeHtml(opts.name) +
+            (opts.ai ? ' <span class="text-[10px] bg-gradient-to-r from-medical-500 to-medical-600 text-white px-1.5 py-0.5 rounded-full ml-1">AI推荐</span>' : '') +
+            '</p><p class="text-xs text-gray-400">' + escapeHtml(opts.desc || '新建质量规则') + '</p></td>' +
+            '<td class="py-3 px-4 whitespace-nowrap"><span class="text-xs px-2 py-0.5 rounded-full whitespace-nowrap ' + (TYPE_BADGE[opts.type] || TYPE_BADGE['有效性']) + '">' + escapeHtml(opts.type) + '</span></td>' +
+            '<td class="py-3 px-4"><div class="flex items-center gap-2 flex-wrap">' +
+            '<span class="text-xs px-2 py-0.5 rounded-md font-medium ' + (SYSTEM_BADGE[opts.source] || '') + '">' + escapeHtml(opts.source || 'HIS') + '</span>' +
+            '<code class="font-mono text-xs px-2 py-0.5 rounded-md bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 max-w-[220px] truncate inline-block align-middle">' + escapeHtml(opts.target || '-') + '</code></div></td>' +
+            '<td class="py-3 px-4 text-xs" style="color:var(--text-secondary)">' + escapeHtml(opts.threshold || '-') + '</td>' +
+            '<td class="py-3 px-4 whitespace-nowrap"><span class="text-xs px-2 py-0.5 rounded-full whitespace-nowrap ' + (SEVERITY_BADGE[opts.severity] || SEVERITY_BADGE['中']) + '">' + escapeHtml(opts.severity || '中') + '</span></td>' +
+            '<td class="py-3 px-4 text-xs whitespace-nowrap" style="color:var(--text-secondary)">' + escapeHtml(opts.schedule || '每日 06:00') + '</td>' +
+            '<td class="py-3 px-4"><label><input type="checkbox" class="toggle-switch" checked onchange="toggleRuleStatus(this)" aria-label="启停规则"></label></td>' +
+            '<td class="py-3 px-5 text-right whitespace-nowrap">' +
+            '<button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑" data-action="showToast" data-args="规则编辑开发中|info"><i class="fas fa-edit text-xs"></i></button>' +
+            '<button type="button" class="text-danger-600 hover:text-danger-700 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除" onclick="deleteRuleRow(this)"><i class="fas fa-trash-alt text-xs"></i></button>' +
+            '</td>';
+        return tr;
+    }
+
+    // ===== 新建规则 =====
+    function saveRule() {
+        var name = document.getElementById('ruleNameInput').value.trim();
+        var type = document.getElementById('ruleTypeSelect').value;
+        var target = document.getElementById('ruleTargetInput').value.trim();
+        if (!name || !type || !target) {
+            showToast('请填写规则名称、类型与目标对象', 'warning');
+            return;
+        }
+        var row = buildRuleRow({
+            name: name,
+            type: type,
+            target: target,
+            source: document.getElementById('ruleSourceSelect').value,
+            threshold: document.getElementById('ruleThresholdInput').value.trim() || '-',
+            severity: document.getElementById('ruleSeveritySelect').value,
+            schedule: document.getElementById('ruleScheduleSelect').value,
+            desc: document.getElementById('ruleDescInput').value.trim()
+        });
+        document.getElementById('rulesTableBody').insertBefore(row, document.getElementById('rulesTableBody').firstChild);
+        closeModal('ruleModal');
+        document.getElementById('ruleForm').reset();
+        showToast('质量规则「' + name + '」已创建并启用', 'success');
+    }
+
+    // ===== 快速启用模板 =====
+    function quickAddRule(name, type, threshold) {
+        var tbody = document.getElementById('rulesTableBody');
+        var exists = Array.prototype.some.call(tbody.querySelectorAll('[data-name]'), function(r) {
+            return r.getAttribute('data-name') === name;
+        });
+        if (exists) {
+            showToast('规则「' + name + '」已存在，无需重复启用', 'warning');
+            return;
+        }
+        var row = buildRuleRow({ name: name + '（内置模板）', type: type, target: '按向导选择', threshold: threshold, severity: '中', schedule: '每日 06:00', desc: '由内置规则模板快速启用' });
+        tbody.insertBefore(row, tbody.firstChild);
+        showToast('已启用模板「' + name + '」，请在规则列表完善适用对象', 'success');
+    }
+
+    // ===== AI 建议一键创建规则 =====
+    function applyAiSuggestions() {
+        var tbody = document.getElementById('rulesTableBody');
+        var suggestions = [
+            { name: '影像报告日期多格式解析校验', type: '有效性', target: 'PACS_IMAGE.report_date', threshold: '仅接受 yyyy-MM-dd', severity: '高', schedule: '每小时', desc: '来源：AI 质量根因分析' },
+            { name: '检验单位域一致性校验', type: '一致性', target: 'LIS_TEST_RESULT.unit', threshold: '单位 ∈ 项目标准单位域', severity: '中', schedule: '每日 06:00', desc: '来源：AI 质量根因分析' }
+        ];
+        var created = 0;
+        suggestions.forEach(function(s) {
+            var exists = Array.prototype.some.call(tbody.querySelectorAll('[data-name]'), function(r) {
+                return r.getAttribute('data-name') === s.name;
+            });
+            if (!exists) {
+                tbody.insertBefore(buildRuleRow({
+                    name: s.name, type: s.type, target: s.target, threshold: s.threshold,
+                    severity: s.severity, schedule: s.schedule, desc: s.desc, ai: true
+                }), tbody.firstChild);
+                created++;
+            }
+        });
+        if (created > 0) {
+            showToast('AI 建议：已创建 ' + created + ' 条规则，请前往规则库确认', 'success');
+            gotoTab('tabRulesBtn');
+        } else {
+            showToast('AI 建议的规则均已存在', 'info');
+        }
+    }
+
+    // ===== AI 质量分析 =====
+    function aiAnalyze() {
+        MediData.btnLoading.show('aiAnalyzeBtn', 'AI 分析中...');
+        setTimeout(function() {
+            MediData.btnLoading.hide('aiAnalyzeBtn');
+            showToast('AI 质量分析完成：发现 3 类共性问题，可一键创建建议规则', 'success', 4000);
+            var banner = document.getElementById('aiQualityBanner');
+            banner.classList.remove('s-primary');
+            banner.classList.add('s-warning');
+        }, 1800);
+    }
+
+    // ===== 规则筛选 =====
+    var _ruleTypeFilter = 'all';
+    function setRuleTypeFilter(btn, type) {
+        document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        _ruleTypeFilter = type;
+        filterRuleTable();
+    }
+    function filterRuleTable() {
+        var kw = (document.getElementById('ruleSearchInput').value || '').trim().toLowerCase();
+        document.querySelectorAll('#rulesTableBody [data-rule]').forEach(function(row) {
+            var name = (row.getAttribute('data-name') || '').toLowerCase();
+            var type = row.getAttribute('data-type') || '';
+            var okType = _ruleTypeFilter === 'all' || type === _ruleTypeFilter;
+            var okKw = !kw || name.indexOf(kw) !== -1;
+            row.style.display = okType && okKw ? '' : 'none';
+        });
+    }
+
+    // ===== 规则启停 / 删除 =====
+    function toggleRuleStatus(input) {
+        showToast(input.checked ? '规则已启用' : '规则已停用', input.checked ? 'success' : 'warning');
+    }
+    function deleteRuleRow(btn) {
+        var row = btn.closest('tr');
+        var name = row.getAttribute('data-name') || '该规则';
+        showConfirm({
+            title: '删除质量规则',
+            message: '确定删除规则「' + name + '」吗？删除后相关检测任务将停止调度。',
+            type: 'danger',
+            onConfirm: function() {
+                row.remove();
+                showToast('规则已删除', 'success');
+            }
+        });
+    }
+
+    // ===== 异常处理闭环 =====
+    function resolveAnomaly(btn) {
+        var row = btn.closest('tr');
+        var statusCell = row.querySelector('.anom-status');
+        statusCell.innerHTML = '<span class="text-xs px-2 py-0.5 rounded-full bg-success-50 text-success-700">已解决</span>';
+        btn.outerHTML = '<span class="text-xs text-gray-300 cursor-not-allowed">已解决</span>';
+        var stat = document.getElementById('pendingIssuesStat');
+        var n = parseInt(stat.textContent, 10);
+        if (!isNaN(n) && n > 0) stat.textContent = n - 1;
+        showToast('异常已标记解决，整改动作已记入审计日志', 'success');
+    }
+
+    // ===== 报告 =====
+    function generateReportNow() {
+        showToast('正在汇总今日检测结果...', 'info');
+        setTimeout(function() {
+            var now = new Date();
+            var pad = function(x) { return String(x).padStart(2, '0'); };
+            var dateStr = now.getFullYear() + '-' + pad(now.getMonth() + 1) + '-' + pad(now.getDate());
+            var timeStr = pad(now.getHours()) + ':' + pad(now.getMinutes());
+            var tbody = document.getElementById('reportTableBody');
+            var exists = Array.prototype.some.call(tbody.querySelectorAll('[data-title]'), function(r) {
+                return r.getAttribute('data-title').indexOf(dateStr) !== -1;
+            });
+            if (exists) {
+                showToast('今日报告已存在，可直接查看', 'warning');
+                return;
+            }
+            var tr = document.createElement('tr');
+            tr.className = 'hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors';
+            tr.setAttribute('data-report', '');
+            tr.setAttribute('data-title', '数据质量日报 · ' + dateStr);
+            tr.setAttribute('data-score', '96.2');
+            tr.setAttribute('data-scope', '全量（24 个数据源）');
+            tr.setAttribute('data-issues', '1,247');
+            tr.innerHTML =
+                '<td class="py-3 px-5 font-medium text-gray-800 dark:text-gray-200">数据质量日报 · ' + dateStr + '</td>' +
+                '<td class="py-3 px-4 text-xs" style="color:var(--text-secondary)">全量 · 24 个数据源</td>' +
+                '<td class="py-3 px-4 whitespace-nowrap"><span class="text-xs px-2 py-0.5 rounded-full whitespace-nowrap bg-success-50 text-success-700 font-semibold">96.2</span></td>' +
+                '<td class="py-3 px-4 text-right text-xs">1,247</td>' +
+                '<td class="py-3 px-4 text-xs text-gray-400 whitespace-nowrap">今天 ' + timeStr + ' · 手动生成</td>' +
+                '<td class="py-3 px-5 text-right whitespace-nowrap">' +
+                '<button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="查看" onclick="openReportModal(this)"><i class="fas fa-eye text-xs"></i></button>' +
+                '<button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="下载" onclick="downloadReport(this)"><i class="fas fa-download text-xs"></i></button>' +
+                '<button type="button" class="text-danger-600 hover:text-danger-700 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除" onclick="deleteReportRow(this)"><i class="fas fa-trash-alt text-xs"></i></button>' +
+                '</td>';
+            tbody.insertBefore(tr, tbody.firstChild);
+            showToast('质量日报已生成', 'success');
+        }, 1600);
+    }
+
+    function openReportModal(btn) {
+        var row = btn.closest('[data-report]');
+        if (!row) return;
+        document.getElementById('reportDetailTitle').textContent = row.getAttribute('data-title') || '数据质量报告';
+        var scope = row.getAttribute('data-scope') || '';
+        document.getElementById('reportDetailMeta').textContent = '检测范围：' + scope + ' · 符合《医疗健康数据治理规范》';
+        document.getElementById('reportDetailScore').textContent = row.getAttribute('data-score') || '-';
+        document.getElementById('reportDetailIssues').textContent = row.getAttribute('data-issues') || '-';
+        openModal('reportDetailModal');
+    }
+
+    function downloadReport(btn) {
+        var row = btn.closest('[data-report]');
+        var title = row ? row.getAttribute('data-title') : '质量报告';
+        var lines = [
+            '=== MediData AI 数据质量报告 ===',
+            '报告名称: ' + title,
+            '综合评分: ' + (row ? row.getAttribute('data-score') : '-'),
+            '检测范围: ' + (row ? row.getAttribute('data-scope') : '-'),
+            '发现问题: ' + (row ? row.getAttribute('data-issues') : '-'),
+            '',
+            '重点问题:',
+            '1. PACS_IMAGE.report_date 日期格式不一致（异常 342 条）',
+            '2. LIS_TEST_RESULT.unit 单位混用（异常 86 条）',
+            '3. HIS_ORDER.order_id 重复主键（12 条）',
+            '',
+            'AI 整改建议见平台「数据质量管理 - 质量报告」页。'
+        ];
+        var blob = new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = title + '.txt';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast('报告已下载', 'success');
+    }
+
+    function deleteReportRow(btn) {
+        var row = btn.closest('tr');
+        showConfirm({
+            title: '删除质量报告',
+            message: '确定删除「' + (row.getAttribute('data-title') || '') + '」吗？已归档的审计记录不受影响。',
+            type: 'danger',
+            onConfirm: function() {
+                row.remove();
+                showToast('报告已删除', 'success');
+            }
+        });
+    }
+    </script>
+</body>
+</html>

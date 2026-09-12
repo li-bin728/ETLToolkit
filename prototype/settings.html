@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0d9488">
+    <meta name="description" content="系统设置 - 基本设置、AI 模型配置、数据源模板、安全合规、通知、团队、版本与集成管理">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="系统设置 - MediData AI">
+    <meta property="og:description" content="基本设置、AI 模型配置、数据源模板、安全合规等系统管理">
+    <title>系统设置 - MediData AI</title>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="stylesheet" href="components/tailwind.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="components/common.css">
+    <script src="components/common.js" defer></script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+    <a href="#main-content" class="skip-link">跳转到主内容</a>
+    <div class="flex h-screen overflow-hidden">
+        <aside id="sidebar" class="w-64 gradient-bg text-white flex flex-col flex-shrink-0"></aside>
+
+        <main id="main-content" class="flex-1 flex flex-col overflow-hidden" role="main">
+            <header id="header" class="glass-effect border-b border-gray-200 dark:border-gray-700 px-6 py-4 flex items-center justify-between flex-shrink-0 z-10"></header>
+
+            <div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-2">
+                <nav id="breadcrumb" class="breadcrumb"></nav>
+            </div>
+
+            <div class="flex-1 overflow-hidden flex">
+                <div class="w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 overflow-y-auto scrollbar-thin flex-shrink-0">
+                    <div class="p-4">
+                        <nav class="space-y-1">
+                            <button type="button" id="menu-basic" class="setting-menu w-full text-left active" aria-current="page" onclick="switchSettingMenu('basic')">
+                                <i class="fas fa-sliders-h w-5 text-center" aria-hidden="true"></i>
+                                基本设置
+                            </button>
+                            <button type="button" id="menu-ai" class="setting-menu w-full text-left" onclick="switchSettingMenu('ai')">
+                                <i class="fas fa-robot w-5 text-center" aria-hidden="true"></i>
+                                AI 模型配置
+                            </button>
+                            <button type="button" id="menu-datasource" class="setting-menu w-full text-left" onclick="switchSettingMenu('datasource')">
+                                <i class="fas fa-database w-5 text-center" aria-hidden="true"></i>
+                                数据源模板
+                            </button>
+                            <button type="button" id="menu-security" class="setting-menu w-full text-left" onclick="switchSettingMenu('security')">
+                                <i class="fas fa-shield-alt w-5 text-center" aria-hidden="true"></i>
+                                安全与合规
+                            </button>
+                            <button type="button" id="menu-notify" class="setting-menu w-full text-left" onclick="switchSettingMenu('notify')">
+                                <i class="fas fa-bell w-5 text-center" aria-hidden="true"></i>
+                                通知设置
+                            </button>
+                            <button type="button" id="menu-team" class="setting-menu w-full text-left" onclick="switchSettingMenu('team')">
+                                <i class="fas fa-users w-5 text-center" aria-hidden="true"></i>
+                                团队管理
+                            </button>
+                            <button type="button" id="menu-version" class="setting-menu w-full text-left" onclick="switchSettingMenu('version')">
+                                <i class="fas fa-code-branch w-5 text-center" aria-hidden="true"></i>
+                                版本管理
+                            </button>
+                            <button type="button" id="menu-integration" class="setting-menu w-full text-left" onclick="switchSettingMenu('integration')">
+                                <i class="fas fa-plug w-5 text-center" aria-hidden="true"></i>
+                                集成配置
+                            </button>
+                        </nav>
+                    </div>
+                </div>
+
+                <div class="flex-1 overflow-y-auto p-6">
+                    <!-- 基本设置 -->
+                    <div id="page-basic" class="setting-page">
+                        <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">基本设置</h2>
+                        <div class="max-w-2xl space-y-6">
+                            <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-6">
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">项目信息</h3>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label for="project_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">项目名称</label>
+                                        <input type="text" id="project_name" name="project_name" value="XX市人民医院数据中心建设项目"
+                                               class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus">
+                                        <span class="field-error text-xs text-red-500 mt-1 hidden"></span>
+                                    </div>
+                                    <div>
+                                        <label for="project_code" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">项目编号</label>
+                                        <input type="text" id="project_code" name="project_code" value="MED-DATA-2026-001"
+                                               class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus">
+                                        <span class="field-error text-xs text-red-500 mt-1 hidden"></span>
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label for="project_leader" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">项目负责人</label>
+                                            <input type="text" id="project_leader" name="project_leader" value="张工程师"
+                                                   class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus">
+                                            <span class="field-error text-xs text-red-500 mt-1 hidden"></span>
+                                        </div>
+                                        <div>
+                                            <label for="contact_phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">联系电话</label>
+                                            <input type="text" id="contact_phone" name="contact_phone" value="138-0000-0000"
+                                                   class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus">
+                                            <span class="field-error text-xs text-red-500 mt-1 hidden"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-6">
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">数据治理规范</h3>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label for="standard_version" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">标准库版本</label>
+                                        <select id="standard_version" name="standard_version" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus">
+                                            <option>v2.3.1 (当前)</option>
+                                            <option>v2.3.0</option>
+                                            <option>v2.2.0</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="naming_convention" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">命名规范</label>
+                                        <select id="naming_convention" name="naming_convention" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus">
+                                            <option>医疗行业标准 (WS/T 305)</option>
+                                            <option>医院自定义规范</option>
+                                        </select>
+                                    </div>
+                                    <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-xl">
+                                        <div>
+                                            <p class="text-sm font-medium text-gray-800 dark:text-gray-200">自动敏感数据识别</p>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400">自动标记身份证号、手机号等敏感字段</p>
+                                        </div>
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" checked class="sr-only peer" aria-label="自动敏感数据识别">
+                                            <div class="w-11 h-6 bg-gray-200 peer-focus:focus-visible:ring-2 peer-focus:focus-visible:ring-medical-500 peer-focus:focus-visible:ring-offset-2 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-[transform,colors] peer-checked:bg-medical-600"></div>
+                                        </label>
+                                    </div>
+                                    <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-xl">
+                                        <div>
+                                            <p class="text-sm font-medium text-gray-800 dark:text-gray-200">数据脱敏默认开启</p>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400">预览时自动脱敏敏感字段</p>
+                                        </div>
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" checked class="sr-only peer" aria-label="数据脱敏默认开启">
+                                            <div class="w-11 h-6 bg-gray-200 peer-focus:focus-visible:ring-2 peer-focus:focus-visible:ring-medical-500 peer-focus:focus-visible:ring-offset-2 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-[transform,colors] peer-checked:bg-medical-600"></div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-6">
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">AI 助手配置</h3>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label for="ai_model" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">AI 模型</label>
+                                        <select id="ai_model" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus">
+                                            <option>GPT-4 (推荐)</option>
+                                            <option>文心一言</option>
+                                            <option>通义千问</option>
+                                            <option>Claude 3</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="confidence_range" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">置信度阈值</label>
+                                        <div class="flex items-center gap-4">
+                                            <input id="confidence_range" type="range" min="50" max="100" value="80" class="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" oninput="document.getElementById('confidenceVal').textContent=this.value+'%'" aria-label="置信度阈值">
+                                            <span id="confidenceVal" class="text-sm font-medium text-gray-700 dark:text-gray-300 w-12">80%</span>
+                                        </div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">低于此阈值的 AI 推荐将标记为待确认</p>
+                                    </div>
+                                    <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-xl">
+                                        <div>
+                                            <p class="text-sm font-medium text-gray-800 dark:text-gray-200">自动学习优化</p>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400">根据人工修正持续优化 AI 推荐准确率</p>
+                                        </div>
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" checked class="sr-only peer" aria-label="自动学习优化">
+                                            <div class="w-11 h-6 bg-gray-200 peer-focus:focus-visible:ring-2 peer-focus:focus-visible:ring-medical-500 peer-focus:focus-visible:ring-offset-2 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-[transform,colors] peer-checked:bg-medical-600"></div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-end gap-3">
+                                <button class="px-6 py-2.5 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-colors btn-transition" data-action="showToast" data-args="设置已重置|warning">重置</button>
+                                <button class="px-6 py-2.5 bg-medical-600 text-white text-sm font-medium rounded-xl hover:bg-medical-700 transition-colors shadow-md shadow-medical-600/20 btn-transition" data-action="showToast" data-args="设置保存成功|success">保存设置</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI模型配置 -->
+                    <div id="page-ai" class="setting-page" style="display:none">
+                        <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">AI 模型配置</h2>
+                        <div class="max-w-2xl space-y-6">
+                            <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-6">
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">模型选择</h3>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label for="ai_model_select" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">AI 模型</label>
+                                        <select id="ai_model_select" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus">
+                                            <option>GPT-4</option>
+                                            <option>文心一言</option>
+                                            <option>通义千问</option>
+                                            <option>Claude 3</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="api_key" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">API Key</label>
+                                        <input type="password" id="api_key" name="api_key" value="sk-xxxxxxxxxxxx" placeholder="请输入 API Key"
+                                               class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus">
+                                        <span class="field-error text-xs text-red-500 mt-1 hidden"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-6">
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">模型参数</h3>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label for="temperature_range" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">温度 (Temperature)</label>
+                                        <div class="flex items-center gap-4">
+                                            <input id="temperature_range" type="range" min="0" max="100" value="70" class="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" oninput="document.getElementById('tempVal').textContent=(this.value/100).toFixed(2)" aria-label="温度">
+                                            <span id="tempVal" class="text-sm font-medium text-gray-700 dark:text-gray-300 w-12">0.70</span>
+                                        </div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">值越高输出越随机，越低越确定</p>
+                                    </div>
+                                    <div>
+                                        <label for="max_tokens" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">最大 Token 数</label>
+                                        <input type="number" id="max_tokens" name="max_tokens" value="4096" min="1" max="128000" placeholder="请输入最大 Token 数"
+                                               class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus">
+                                        <span class="field-error text-xs text-red-500 mt-1 hidden"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-end gap-3">
+                                <button class="px-6 py-2.5 bg-medical-600 text-white text-sm font-medium rounded-xl hover:bg-medical-700 transition-colors shadow-md shadow-medical-600/20 btn-transition" onclick="showToast('正在测试连接...', 'info'); setTimeout(()=>showToast('连接成功', 'success'), 1500)">测试连接</button>
+                                <button class="px-6 py-2.5 bg-medical-600 text-white text-sm font-medium rounded-xl hover:bg-medical-700 transition-colors shadow-md shadow-medical-600/20 btn-transition" data-action="showToast" data-args="AI 模型配置已保存|success">保存设置</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 数据源模板 -->
+                    <div id="page-datasource" class="setting-page" style="display:none">
+                        <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">数据源模板</h2>
+                        <div class="grid grid-cols-2 gap-4 max-w-3xl">
+                            <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-6">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div class="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-database text-red-600" aria-hidden="true"></i>
+                                    </div>
+                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Oracle</h3>
+                                </div>
+                                <div class="space-y-2 text-sm">
+                                    <div class="flex justify-between"><span class="text-gray-500 dark:text-gray-400">默认端口</span><span class="text-gray-800 dark:text-gray-200">1521</span></div>
+                                    <div class="flex justify-between"><span class="text-gray-500 dark:text-gray-400">字符集</span><span class="text-gray-800 dark:text-gray-200">AL32UTF8</span></div>
+                                    <div class="flex justify-between"><span class="text-gray-500 dark:text-gray-400">驱动类</span><span class="text-gray-800 dark:text-gray-200">oracle.jdbc.OracleDriver</span></div>
+                                </div>
+                            </div>
+                            <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-6">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div class="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-database text-blue-600" aria-hidden="true"></i>
+                                    </div>
+                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">MySQL</h3>
+                                </div>
+                                <div class="space-y-2 text-sm">
+                                    <div class="flex justify-between"><span class="text-gray-500 dark:text-gray-400">默认端口</span><span class="text-gray-800 dark:text-gray-200">3306</span></div>
+                                    <div class="flex justify-between"><span class="text-gray-500 dark:text-gray-400">字符集</span><span class="text-gray-800 dark:text-gray-200">utf8mb4</span></div>
+                                    <div class="flex justify-between"><span class="text-gray-500 dark:text-gray-400">驱动类</span><span class="text-gray-800 dark:text-gray-200">com.mysql.cj.jdbc.Driver</span></div>
+                                </div>
+                            </div>
+                            <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-6">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div class="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-database text-purple-600" aria-hidden="true"></i>
+                                    </div>
+                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">SQL Server</h3>
+                                </div>
+                                <div class="space-y-2 text-sm">
+                                    <div class="flex justify-between"><span class="text-gray-500 dark:text-gray-400">默认端口</span><span class="text-gray-800 dark:text-gray-200">1433</span></div>
+                                    <div class="flex justify-between"><span class="text-gray-500 dark:text-gray-400">字符集</span><span class="text-gray-800 dark:text-gray-200">UTF-8</span></div>
+                                    <div class="flex justify-between"><span class="text-gray-500 dark:text-gray-400">驱动类</span><span class="text-gray-800 dark:text-gray-200">com.microsoft.sqlserver.jdbc.SQLServerDriver</span></div>
+                                </div>
+                            </div>
+                            <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-6">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div class="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-database text-green-600" aria-hidden="true"></i>
+                                    </div>
+                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">PostgreSQL</h3>
+                                </div>
+                                <div class="space-y-2 text-sm">
+                                    <div class="flex justify-between"><span class="text-gray-500 dark:text-gray-400">默认端口</span><span class="text-gray-800 dark:text-gray-200">5432</span></div>
+                                    <div class="flex justify-between"><span class="text-gray-500 dark:text-gray-400">字符集</span><span class="text-gray-800 dark:text-gray-200">UTF-8</span></div>
+                                    <div class="flex justify-between"><span class="text-gray-500 dark:text-gray-400">驱动类</span><span class="text-gray-800 dark:text-gray-200">org.postgresql.Driver</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 安全与合规 -->
+                    <div id="page-security" class="setting-page" style="display:none">
+                        <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">安全与合规</h2>
+                        <div class="max-w-2xl space-y-6">
+                            <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-6">
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">数据脱敏</h3>
+                                <div class="space-y-4">
+                                    <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-xl">
+                                        <div>
+                                            <p class="text-sm font-medium text-gray-800 dark:text-gray-200">数据脱敏规则</p>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400">启用后自动对敏感数据进行脱敏处理</p>
+                                        </div>
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" checked class="sr-only peer" aria-label="数据脱敏规则">
+                                            <div class="w-11 h-6 bg-gray-200 peer-focus:focus-visible:ring-2 peer-focus:focus-visible:ring-medical-500 peer-focus:focus-visible:ring-offset-2 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-[transform,colors] peer-checked:bg-medical-600"></div>
+                                        </label>
+                                    </div>
+                                    <div>
+                                        <label for="sensitive_rules" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">敏感字段识别规则</label>
+                                        <textarea id="sensitive_rules" rows="4" name="sensitive_rules" placeholder="每行一条正则表达式，如：&#10;^\d{17}[\dXx]$  # 身份证号&#10;^1[3-9]\d{9}$  # 手机号"
+                                                  class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus font-mono">^\d{17}[\dXx]$
+^1[3-9]\d{9}$
+^\d{6,}$</textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-6">
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">访问控制</h3>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label for="access_policy" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">访问控制策略</label>
+                                        <select id="access_policy" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus">
+                                            <option>基于角色的访问控制 (RBAC)</option>
+                                            <option>基于属性的访问控制 (ABAC)</option>
+                                            <option>自主访问控制 (DAC)</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="audit_log_days" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">审计日志保留天数</label>
+                                        <input type="number" id="audit_log_days" name="audit_log_days" value="180" min="30" max="3650" placeholder="请输入保留天数"
+                                               class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus">
+                                        <span class="field-error text-xs text-red-500 mt-1 hidden"></span>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">最小30天，最大3650天</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-end gap-3">
+                                <button class="px-6 py-2.5 bg-medical-600 text-white text-sm font-medium rounded-xl hover:bg-medical-700 transition-colors shadow-md shadow-medical-600/20 btn-transition" data-action="showToast" data-args="安全设置已保存|success">保存设置</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 通知设置 -->
+                    <div id="page-notify" class="setting-page" style="display:none">
+                        <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">通知设置</h2>
+                        <div class="max-w-2xl space-y-6">
+                            <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-6">
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">邮件通知</h3>
+                                <div class="space-y-4">
+                                    <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-xl">
+                                        <div>
+                                            <p class="text-sm font-medium text-gray-800 dark:text-gray-200">邮件通知</p>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400">启用后系统将通过邮件发送通知</p>
+                                        </div>
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" checked class="sr-only peer" aria-label="邮件通知">
+                                            <div class="w-11 h-6 bg-gray-200 peer-focus:focus-visible:ring-2 peer-focus:focus-visible:ring-medical-500 peer-focus:focus-visible:ring-offset-2 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-[transform,colors] peer-checked:bg-medical-600"></div>
+                                        </label>
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label for="smtp_server" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">SMTP 服务器</label>
+                                            <input type="text" id="smtp_server" name="smtp_server" value="smtp.example.com" placeholder="SMTP 服务器地址"
+                                                   class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus">
+                                            <span class="field-error text-xs text-red-500 mt-1 hidden"></span>
+                                        </div>
+                                        <div>
+                                            <label for="smtp_port" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">端口</label>
+                                            <input type="number" id="smtp_port" name="smtp_port" value="465" placeholder="端口号"
+                                                   class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus">
+                                            <span class="field-error text-xs text-red-500 mt-1 hidden"></span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label for="smtp_username" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">用户名</label>
+                                        <input type="text" id="smtp_username" name="smtp_username" value="notify@hospital.com" placeholder="SMTP 用户名"
+                                               class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus">
+                                        <span class="field-error text-xs text-red-500 mt-1 hidden"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-6">
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">告警通知</h3>
+                                <div class="space-y-4">
+                                    <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-xl">
+                                        <div>
+                                            <p class="text-sm font-medium text-gray-800 dark:text-gray-200">告警通知</p>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400">启用后在异常情况下发送告警</p>
+                                        </div>
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" checked class="sr-only peer" aria-label="告警通知">
+                                            <div class="w-11 h-6 bg-gray-200 peer-focus:focus-visible:ring-2 peer-focus:focus-visible:ring-medical-500 peer-focus:focus-visible:ring-offset-2 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-[transform,colors] peer-checked:bg-medical-600"></div>
+                                        </label>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">通知方式</label>
+                                        <div class="flex gap-6 mt-2">
+                                            <label class="flex items-center gap-2 cursor-pointer">
+                                                <input type="checkbox" checked class="w-4 h-4 text-medical-600 border-gray-300 rounded focus:ring-medical-500" aria-label="邮件通知方式">
+                                                <span class="text-sm text-gray-700 dark:text-gray-300">邮件</span>
+                                            </label>
+                                            <label class="flex items-center gap-2 cursor-pointer">
+                                                <input type="checkbox" checked class="w-4 h-4 text-medical-600 border-gray-300 rounded focus:ring-medical-500" aria-label="站内信通知方式">
+                                                <span class="text-sm text-gray-700 dark:text-gray-300">站内信</span>
+                                            </label>
+                                            <label class="flex items-center gap-2 cursor-pointer">
+                                                <input type="checkbox" class="w-4 h-4 text-medical-600 border-gray-300 rounded focus:ring-medical-500" aria-label="钉钉通知方式">
+                                                <span class="text-sm text-gray-700 dark:text-gray-300">钉钉</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-end gap-3">
+                                <button class="px-6 py-2.5 bg-medical-600 text-white text-sm font-medium rounded-xl hover:bg-medical-700 transition-colors shadow-md shadow-medical-600/20 btn-transition" data-action="showToast" data-args="通知设置已保存|success">保存设置</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 团队管理 -->
+                    <div id="page-team" class="setting-page" style="display:none">
+                        <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">团队管理</h2>
+                        <div class="max-w-3xl space-y-6">
+                            <div class="flex items-center justify-between">
+                                <p class="text-sm text-gray-500 dark:text-gray-400">团队成员 3 人</p>
+                                <button class="px-4 py-2 bg-medical-600 text-white text-sm font-medium rounded-xl hover:bg-medical-700 transition-colors flex items-center gap-2 shadow-md shadow-medical-600/20" data-action="showToast" data-args="邀请链接已复制到剪贴板|success">
+                                    <i class="fas fa-plus" aria-hidden="true"></i> 邀请成员
+                                </button>
+                            </div>
+                            <div class="space-y-3">
+                                <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-4 flex items-center justify-between">
+                                    <div class="flex items-center gap-3">
+                                        <img loading="lazy" src="https://ui-avatars.com/api/?name=Admin&background=dc2626&color=fff&size=40" class="w-10 h-10 rounded-full" alt="系统管理员头像">
+                                        <div>
+                                            <p class="text-sm font-medium text-gray-900 dark:text-gray-100">系统管理员</p>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400">admin@hospital.com</p>
+                                        </div>
+                                    </div>
+                                    <select class="px-3 py-1.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus" aria-label="系统管理员角色">
+                                        <option selected>管理员</option>
+                                        <option>工程师</option>
+                                        <option>观察者</option>
+                                    </select>
+                                </div>
+                                <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-4 flex items-center justify-between">
+                                    <div class="flex items-center gap-3">
+                                        <img loading="lazy" src="https://ui-avatars.com/api/?name=Zhang&background=0d9488&color=fff&size=40" class="w-10 h-10 rounded-full" alt="张工程师头像">
+                                        <div>
+                                            <p class="text-sm font-medium text-gray-900 dark:text-gray-100">张工程师</p>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400">zhang@hospital.com</p>
+                                        </div>
+                                    </div>
+                                    <select class="px-3 py-1.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus" aria-label="张工程师角色">
+                                        <option>管理员</option>
+                                        <option selected>工程师</option>
+                                        <option>观察者</option>
+                                    </select>
+                                </div>
+                                <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-4 flex items-center justify-between">
+                                    <div class="flex items-center gap-3">
+                                        <img loading="lazy" src="https://ui-avatars.com/api/?name=Li&background=2563eb&color=fff&size=40" class="w-10 h-10 rounded-full" alt="李工程师头像">
+                                        <div>
+                                            <p class="text-sm font-medium text-gray-900 dark:text-gray-100">李工程师</p>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400">li@hospital.com</p>
+                                        </div>
+                                    </div>
+                                    <select class="px-3 py-1.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus" aria-label="李工程师角色">
+                                        <option>管理员</option>
+                                        <option>工程师</option>
+                                        <option selected>观察者</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 版本管理 -->
+                    <div id="page-version" class="setting-page" style="display:none">
+                        <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">版本管理</h2>
+                        <div class="max-w-2xl space-y-4">
+                            <div class="bg-white dark:bg-gray-800 rounded-xl border-2 border-medical-500 p-6">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="flex items-center gap-3">
+                                        <span class="px-2 py-1 bg-medical-50 text-medical-700 text-xs font-medium rounded-full">当前版本</span>
+                                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">v2.3.1</h3>
+                                    </div>
+                                    <span class="text-xs text-gray-500 dark:text-gray-400">2026-04-28</span>
+                                </div>
+                                <p class="text-sm text-gray-600 dark:text-gray-300">修复数据映射规则引擎性能问题，新增批量审核功能，优化 AI 模型响应速度</p>
+                            </div>
+                            <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-6">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="flex items-center gap-3">
+                                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">v2.3.0</h3>
+                                    </div>
+                                    <div class="flex items-center gap-3">
+                                        <span class="text-xs text-gray-500 dark:text-gray-400">2026-03-15</span>
+                                        <button class="px-3 py-1 text-xs text-medical-600 border border-medical-200 rounded-xl hover:bg-medical-50 transition-colors" data-action="showToast" data-args="正在回滚至 v2.3.0...|warning">回滚</button>
+                                    </div>
+                                </div>
+                                <p class="text-sm text-gray-600 dark:text-gray-300">新增数据质量评估模块，支持自定义脱敏规则，优化审计日志查询性能</p>
+                            </div>
+                            <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-6">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="flex items-center gap-3">
+                                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">v2.2.0</h3>
+                                    </div>
+                                    <div class="flex items-center gap-3">
+                                        <span class="text-xs text-gray-500 dark:text-gray-400">2026-02-01</span>
+                                        <button class="px-3 py-1 text-xs text-medical-600 border border-medical-200 rounded-xl hover:bg-medical-50 transition-colors" data-action="showToast" data-args="正在回滚至 v2.2.0...|warning">回滚</button>
+                                    </div>
+                                </div>
+                                <p class="text-sm text-gray-600 dark:text-gray-300">新增 AI 智能映射功能，支持多数据源并行处理，优化前端交互体验</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 集成配置 -->
+                    <div id="page-integration" class="setting-page" style="display:none">
+                        <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">集成配置</h2>
+                        <div class="max-w-2xl space-y-4">
+                            <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-6">
+                                <div class="flex items-center justify-between mb-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-comment-dots text-blue-600" aria-hidden="true"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-sm font-semibold text-gray-900 dark:text-gray-100">钉钉</h3>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400">接收告警和任务通知</p>
+                                        </div>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" checked class="sr-only peer" aria-label="钉钉集成">
+                                        <div class="w-11 h-6 bg-gray-200 peer-focus:focus-visible:ring-2 peer-focus:focus-visible:ring-medical-500 peer-focus:focus-visible:ring-offset-2 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-[transform,colors] peer-checked:bg-medical-600"></div>
+                                    </label>
+                                </div>
+                                <div>
+                                    <label for="dingtalk_webhook" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Webhook URL</label>
+                                    <input type="text" id="dingtalk_webhook" name="dingtalk_webhook" value="https://oapi.dingtalk.com/robot/send?access_token=xxx" placeholder="请输入 Webhook URL"
+                                           class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus font-mono">
+                                    <span class="field-error text-xs text-red-500 mt-1 hidden"></span>
+                                </div>
+                            </div>
+                            <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-6">
+                                <div class="flex items-center justify-between mb-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center">
+                                            <i class="fab fa-weixin text-green-600" aria-hidden="true"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-sm font-semibold text-gray-900 dark:text-gray-100">企业微信</h3>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400">接收告警和任务通知</p>
+                                        </div>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" class="sr-only peer" aria-label="企业微信集成">
+                                        <div class="w-11 h-6 bg-gray-200 peer-focus:focus-visible:ring-2 peer-focus:focus-visible:ring-medical-500 peer-focus:focus-visible:ring-offset-2 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-[transform,colors] peer-checked:bg-medical-600"></div>
+                                    </label>
+                                </div>
+                                <div>
+                                    <label for="wecom_webhook" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Webhook URL</label>
+                                    <input type="text" id="wecom_webhook" name="wecom_webhook" placeholder="请输入 Webhook URL"
+                                           class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus font-mono">
+                                    <span class="field-error text-xs text-red-500 mt-1 hidden"></span>
+                                </div>
+                            </div>
+                            <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-6">
+                                <div class="flex items-center justify-between mb-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 bg-indigo-50 rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-paper-plane text-indigo-600" aria-hidden="true"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-sm font-semibold text-gray-900 dark:text-gray-100">飞书</h3>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400">接收告警和任务通知</p>
+                                        </div>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" class="sr-only peer" aria-label="飞书集成">
+                                        <div class="w-11 h-6 bg-gray-200 peer-focus:focus-visible:ring-2 peer-focus:focus-visible:ring-medical-500 peer-focus:focus-visible:ring-offset-2 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-[transform,colors] peer-checked:bg-medical-600"></div>
+                                    </label>
+                                </div>
+                                <div>
+                                    <label for="feishu_webhook" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Webhook URL</label>
+                                    <input type="text" id="feishu_webhook" name="feishu_webhook" placeholder="请输入 Webhook URL"
+                                           class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus font-mono">
+                                    <span class="field-error text-xs text-red-500 mt-1 hidden"></span>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-end gap-3">
+                                <button class="px-6 py-2.5 bg-medical-600 text-white text-sm font-medium rounded-xl hover:bg-medical-700 transition-colors shadow-md shadow-medical-600/20 btn-transition" data-action="showToast" data-args="集成配置已保存|success">保存设置</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // 菜单激活态统一走 common.css 的 .setting-menu.active 组件样式（含暗色适配与左侧指示条）
+        function switchSettingMenu(menuId) {
+            document.querySelectorAll('.setting-menu').forEach(function(item) {
+                item.classList.remove('active');
+                item.removeAttribute('aria-current');
+            });
+            var activeMenu = document.getElementById('menu-' + menuId);
+            activeMenu.classList.add('active');
+            activeMenu.setAttribute('aria-current', 'page');
+
+            document.querySelectorAll('.setting-page').forEach(function(page) {
+                page.style.display = 'none';
+            });
+            document.getElementById('page-' + menuId).style.display = 'block';
+        }
+    </script>
+</body>
+</html>

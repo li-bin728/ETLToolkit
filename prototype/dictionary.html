@@ -1,0 +1,1460 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0d9488">
+    <meta name="description" content="字典映射 - 标准字典维护与源系统字典值的智能映射管理">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="字典映射 - MediData AI">
+    <meta property="og:description" content="标准字典维护与源系统字典值的智能映射管理">
+    <title>字典映射 - MediData AI</title>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="stylesheet" href="components/tailwind.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="components/common.css">
+    <script src="components/common.js" defer></script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+    <a href="#main-content" class="skip-link">跳转到主内容</a>
+    <div class="flex h-screen overflow-hidden">
+        <aside id="sidebar" class="w-64 gradient-bg text-white flex flex-col flex-shrink-0"></aside>
+        <main id="main-content" class="flex-1 flex flex-col overflow-hidden" role="main">
+            <header id="header" class="glass-effect border-b border-gray-200 dark:border-gray-700 px-6 py-4 flex items-center justify-between flex-shrink-0 z-10"></header>
+            <div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-2">
+                <nav id="breadcrumb" class="breadcrumb"></nav>
+            </div>
+            <div class="flex-1 overflow-hidden p-6 flex flex-col">
+                <!-- 页面标题 -->
+                <div class="flex items-center justify-between mb-6 flex-shrink-0">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">字典映射</h2>
+                        <p class="text-gray-500 dark:text-gray-400 mt-1">标准字典维护与源系统字典值的智能映射管理</p>
+                    </div>
+                    <div class="flex gap-3">
+                        <button id="aiDictMatchBtn" class="px-4 py-2.5 bg-white dark:bg-gray-700 border border-medical-200 dark:border-medical-800 rounded-xl text-sm font-medium text-medical-700 dark:text-medical-300 hover:bg-medical-50 dark:hover:bg-medical-900/30 transition-colors flex items-center gap-2 btn-transition" onclick="aiMatchDictionary()">
+                            <i class="fas fa-robot"></i> AI 智能匹配
+                        </button>
+                        <button class="px-4 py-2.5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors flex items-center gap-2 btn-transition" data-action="openModal" data-args="sqlCollectModal">
+                            <i class="fas fa-database"></i> SQL 采集
+                        </button>
+                        <button class="px-4 py-2.5 bg-medical-600 text-white rounded-xl text-sm font-medium hover:bg-medical-700 transition-colors flex items-center gap-2 shadow-md shadow-medical-600/20 btn-transition" data-action="openModal" data-args="addDictModal">
+                            <i class="fas fa-plus"></i> 新增字典
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 统计卡片 -->
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 stats-grid gap-4 mb-6">
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-2xl font-bold text-gray-900 dark:text-gray-100">3</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">字典分类</p>
+                            </div>
+                            <div class="w-10 h-10 bg-medical-50 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-sitemap text-medical-600"></i>
+                            </div>
+                            
+</div>
+                            <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-3">树版本 v1.2</div>
+                            
+                    </div>
+                            
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-2xl font-bold text-gray-900 dark:text-gray-100">7</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">标准字典</p>
+                            </div>
+                            
+                            <div class="w-10 h-10 bg-primary-50 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-book text-primary-600"></i>
+                            </div>
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+</div>
+                            <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-3">全部已发布</div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-2xl font-bold text-gray-900 dark:text-gray-100">156</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">标准值项</p>
+                            </div>
+                            <div class="w-10 h-10 bg-warning-50 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-list text-warning-600"></i>
+                            </div>
+</div>
+                            <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-3">含三系统映射芯片</div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-2xl font-bold text-gray-900 dark:text-gray-100">12</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">源系统映射</p>
+                            </div>
+                            <div class="w-10 h-10 bg-success-50 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-database text-success-600"></i>
+                            </div>
+</div>
+                            <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-3">覆盖 HIS / EMR / LIS</div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-2xl font-bold text-medical-600">85.7%</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">映射完成度</p>
+                            </div>
+                            <div class="w-10 h-10 bg-medical-50 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-check-double text-medical-600"></i>
+                            </div>
+</div>
+                            <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-3"><span class="text-warning-600 font-medium">2 项</span> 待审核</div>
+                    </div>
+                </div>
+
+                <!-- 主内容区 -->
+                <div class="grid grid-cols-12 gap-5 flex-1 min-h-0">
+                    <!-- 左侧：字典分类树 -->
+                    <div class="col-span-12 lg:col-span-3 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 flex flex-col overflow-hidden">
+                        <div class="p-3 border-b border-gray-100 dark:border-gray-700 flex-shrink-0">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">字典分类</span>
+                                <span class="text-xs bg-medical-50 text-medical-600 px-2 py-0.5 rounded-full">v1.2</span>
+                            </div>
+                            <div class="relative mb-2">
+                                <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                                <input type="text" id="dictSearch" placeholder="搜索字典..."
+                                       class="w-full pl-8 pr-3 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm form-control-focus focus:bg-white dark:focus:bg-gray-600 transition-all"
+                                       oninput="filterDictTree(this.value)">
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button class="flex-1 py-2 bg-medical-600 text-white rounded-xl text-xs font-medium hover:bg-medical-700 transition-colors flex items-center justify-center gap-1.5" data-action="openModal" data-args="addDictModal">
+                                    <i class="fas fa-plus"></i> 新建字典
+                                </button>
+                                <button class="flex-shrink-0 w-9 h-9 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-medical-600 hover:bg-medical-50 dark:hover:bg-gray-600 rounded-xl text-sm font-medium transition-colors flex items-center justify-center" title="新增分类" aria-label="新增分类" onclick="openAddCategoryModal()">
+                                    <i class="fas fa-folder-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="flex-1 overflow-y-auto p-2 scrollbar-thin" id="dictTree">
+                            <!-- 基础信息类 -->
+                            <div class="mb-1" data-category-node>
+                                <div tabindex="0" role="treeitem" class="std-tree-item flex items-center gap-2 px-3 py-2 rounded-lg" onclick="toggleTreeNode(this, event)">
+                                    <i class="fas fa-chevron-right std-tree-arrow text-gray-400 text-xs flex-shrink-0"></i>
+                                    <i class="fas fa-folder text-medical-600 text-sm flex-shrink-0"></i>
+                                    <span class="text-sm font-medium text-gray-800 dark:text-gray-200 flex-1 min-w-0 truncate">基础信息类</span>
+                                    <span class="text-xs text-gray-400 flex-shrink-0">3字典</span>
+                                    <div class="flex items-center gap-0.5 flex-shrink-0">
+                                        <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors flex-shrink-0 w-5 h-5 flex items-center justify-center rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑分类" aria-label="编辑基础信息类" onclick="event.stopPropagation(); editCategory(this, '基础信息类');"><i class="fas fa-edit text-xs" aria-hidden="true"></i></button>
+                                        <button type="button" class="text-danger-600 hover:text-danger-700 transition-colors flex-shrink-0 w-5 h-5 flex items-center justify-center rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除分类" aria-label="删除基础信息类" onclick="event.stopPropagation(); deleteCategory(this, '基础信息类');"><i class="fas fa-trash-alt text-xs" aria-hidden="true"></i></button>
+                                    </div>
+                                </div>
+                                <div class="std-tree-children pl-4">
+                                    <div tabindex="0" role="treeitem" class="std-tree-item flex items-center gap-2 px-3 py-1.5 rounded-lg active" onclick="selectDictItem(this, '性别代码', '患者性别标准字典，对应源系统各类性别编码', '已映射', '基础信息类')">
+                                        <i class="fas fa-book text-medical-500 text-xs"></i>
+                                        <span class="text-sm text-gray-700 dark:text-gray-300 flex-1">性别代码</span>
+                                        <span class="text-xs text-success-600">已映射</span>
+                                    </div>
+                                    <div tabindex="0" role="treeitem" class="std-tree-item flex items-center gap-2 px-3 py-1.5 rounded-lg" onclick="selectDictItem(this, '婚姻状况', '患者婚姻状况标准字典', '待审核', '基础信息类')">
+                                        <i class="fas fa-book text-gray-400 text-xs"></i>
+                                        <span class="text-sm text-gray-700 dark:text-gray-300 flex-1">婚姻状况</span>
+                                        <span class="text-xs text-warning-600">待审核</span>
+                                    </div>
+                                    <div tabindex="0" role="treeitem" class="std-tree-item flex items-center gap-2 px-3 py-1.5 rounded-lg" onclick="selectDictItem(this, '民族代码', '患者民族标准字典', '已映射', '基础信息类')">
+                                        <i class="fas fa-book text-gray-400 text-xs"></i>
+                                        <span class="text-sm text-gray-700 dark:text-gray-300 flex-1">民族代码</span>
+                                        <span class="text-xs text-success-600">已映射</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 临床业务类 -->
+                            <div class="mb-1" data-category-node>
+                                <div tabindex="0" role="treeitem" class="std-tree-item flex items-center gap-2 px-3 py-2 rounded-lg" onclick="toggleTreeNode(this, event)">
+                                    <i class="fas fa-chevron-right std-tree-arrow text-gray-400 text-xs flex-shrink-0"></i>
+                                    <i class="fas fa-folder text-primary-600 text-sm flex-shrink-0"></i>
+                                    <span class="text-sm font-medium text-gray-800 dark:text-gray-200 flex-1 min-w-0 truncate">临床业务类</span>
+                                    <span class="text-xs text-gray-400 flex-shrink-0">2字典</span>
+                                    <div class="flex items-center gap-0.5 flex-shrink-0">
+                                        <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors flex-shrink-0 w-5 h-5 flex items-center justify-center rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑分类" aria-label="编辑临床业务类" onclick="event.stopPropagation(); editCategory(this, '临床业务类');"><i class="fas fa-edit text-xs" aria-hidden="true"></i></button>
+                                        <button type="button" class="text-danger-600 hover:text-danger-700 transition-colors flex-shrink-0 w-5 h-5 flex items-center justify-center rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除分类" aria-label="删除临床业务类" onclick="event.stopPropagation(); deleteCategory(this, '临床业务类');"><i class="fas fa-trash-alt text-xs" aria-hidden="true"></i></button>
+                                    </div>
+                                </div>
+                                <div class="std-tree-children pl-4">
+                                    <div tabindex="0" role="treeitem" class="std-tree-item flex items-center gap-2 px-3 py-1.5 rounded-lg" onclick="selectDictItem(this, '诊断编码 (ICD-10)', '国际疾病分类标准编码字典', '已映射', '临床业务类')">
+                                        <i class="fas fa-book text-gray-400 text-xs"></i>
+                                        <span class="text-sm text-gray-700 dark:text-gray-300 flex-1">诊断编码 (ICD-10)</span>
+                                        <span class="text-xs text-success-600">已映射</span>
+                                    </div>
+                                    <div tabindex="0" role="treeitem" class="std-tree-item flex items-center gap-2 px-3 py-1.5 rounded-lg" onclick="selectDictItem(this, '手术编码 (ICD-9-CM)', '国际手术操作分类编码字典', '未映射', '临床业务类')">
+                                        <i class="fas fa-book text-gray-400 text-xs"></i>
+                                        <span class="text-sm text-gray-700 dark:text-gray-300 flex-1">手术编码 (ICD-9-CM)</span>
+                                        <span class="text-xs text-gray-500">未映射</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 检查检验类 -->
+                            <div class="mb-1" data-category-node>
+                                <div tabindex="0" role="treeitem" class="std-tree-item flex items-center gap-2 px-3 py-2 rounded-lg" onclick="toggleTreeNode(this, event)">
+                                    <i class="fas fa-chevron-right std-tree-arrow text-gray-400 text-xs flex-shrink-0"></i>
+                                    <i class="fas fa-folder text-warning-600 text-sm flex-shrink-0"></i>
+                                    <span class="text-sm font-medium text-gray-800 dark:text-gray-200 flex-1 min-w-0 truncate">检查检验类</span>
+                                    <span class="text-xs text-gray-400 flex-shrink-0">2字典</span>
+                                    <div class="flex items-center gap-0.5 flex-shrink-0">
+                                        <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors flex-shrink-0 w-5 h-5 flex items-center justify-center rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑分类" aria-label="编辑检查检验类" onclick="event.stopPropagation(); editCategory(this, '检查检验类');"><i class="fas fa-edit text-xs" aria-hidden="true"></i></button>
+                                        <button type="button" class="text-danger-600 hover:text-danger-700 transition-colors flex-shrink-0 w-5 h-5 flex items-center justify-center rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除分类" aria-label="删除检查检验类" onclick="event.stopPropagation(); deleteCategory(this, '检查检验类');"><i class="fas fa-trash-alt text-xs" aria-hidden="true"></i></button>
+                                    </div>
+                                </div>
+                                <div class="std-tree-children pl-4">
+                                    <div tabindex="0" role="treeitem" class="std-tree-item flex items-center gap-2 px-3 py-1.5 rounded-lg" onclick="selectDictItem(this, '检验项目代码', '检验项目标准编码字典', '待审核', '检查检验类')">
+                                        <i class="fas fa-book text-gray-400 text-xs"></i>
+                                        <span class="text-sm text-gray-700 dark:text-gray-300 flex-1">检验项目代码</span>
+                                        <span class="text-xs text-warning-600">待审核</span>
+                                    </div>
+                                    <div tabindex="0" role="treeitem" class="std-tree-item flex items-center gap-2 px-3 py-1.5 rounded-lg" onclick="selectDictItem(this, '检查项目代码', '检查项目标准编码字典', '已映射', '检查检验类')">
+                                        <i class="fas fa-book text-gray-400 text-xs"></i>
+                                        <span class="text-sm text-gray-700 dark:text-gray-300 flex-1">检查项目代码</span>
+                                        <span class="text-xs text-success-600">已映射</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 右侧：详情区 -->
+                    <div id="dictDetailPanel" class="col-span-12 lg:col-span-9 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 flex flex-col overflow-hidden">
+                        <!-- 表头信息 -->
+                        <div class="p-4 border-b border-gray-100 dark:border-gray-700 flex-shrink-0">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-primary-50 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-book text-primary-600"></i>
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center gap-2">
+                                            <h2 class="text-lg font-bold text-gray-900 dark:text-gray-100" id="dictTitle">性别代码</h2>
+                                            <span id="dictStatus" class="mapping-badge mapping-done"><i class="fas fa-check-circle"></i>已映射</span>
+                                            <span class="domain-tag domain-base">基础信息类</span>
+                                        </div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400" id="dictDesc">患者性别标准字典，对应源系统各类性别编码</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="stats-mini">
+                                        <i class="fas fa-list text-primary-600 text-xs"></i>
+                                        <span class="text-xs font-medium text-gray-700 dark:text-gray-300">4 标准项</span>
+                                    </span>
+                                    <span class="stats-mini">
+                                        <i class="fas fa-database text-medical-600 text-xs"></i>
+                                        <span class="text-xs font-medium text-gray-700 dark:text-gray-300">3 源系统</span>
+                                    </span>
+                                    <button class="px-3 py-1.5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-xl text-xs font-medium hover:bg-gray-50 transition-colors flex items-center gap-1.5" data-action="openModal" data-args="editDictModal">
+                                        <i class="fas fa-edit"></i> 编辑
+                                    </button>
+                                    <button class="px-3 py-1.5 bg-danger-600 text-white rounded-xl text-xs font-medium hover:bg-danger-700 transition-colors flex items-center gap-1.5" onclick="deleteDict()">
+                                        <i class="fas fa-trash-alt"></i> 删除字典
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tab 切换 -->
+                        <div class="px-4 border-b border-gray-100 dark:border-gray-700 flex-shrink-0">
+                            <div class="flex items-center justify-between">
+                                <div class="flex gap-1">
+                                    <button class="tab-btn active px-4 py-3 text-sm font-medium text-medical-600" onclick="switchTab(this, 'standardTab')">
+                                        <i class="fas fa-check-circle mr-1.5"></i>标准字典
+                                    </button>
+                                    <button class="tab-btn px-4 py-3 text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200" onclick="switchTab(this, 'sourceTab')">
+                                        <i class="fas fa-database mr-1.5"></i>源字典映射
+                                    </button>
+                                    <button class="tab-btn px-4 py-3 text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200" onclick="switchTab(this, 'historyTab')">
+                                        <i class="fas fa-history mr-1.5"></i>映射历史
+                                    </button>
+                                </div>
+                                <button id="addStdValueBtn" class="px-3 py-1.5 bg-medical-600 text-white rounded-xl text-xs font-medium hover:bg-medical-700 transition-colors flex items-center gap-1.5" data-action="openModal" data-args="addStdDictValueModal">
+                                    <i class="fas fa-plus"></i> 添加标准值
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 标准字典 Tab -->
+                        <div id="standardTab" class="flex-1 overflow-auto p-4 tab-content">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">标准值列表</span>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-sm">
+                                    <thead class="sticky-head">
+                                        <tr class="border-b border-gray-200 dark:border-gray-700">
+                                            <th class="text-left py-2 px-3 font-medium text-gray-500 dark:text-gray-400 text-xs">序号</th>
+                                            <th class="text-left py-2 px-3 font-medium text-gray-500 dark:text-gray-400 text-xs">标准代码</th>
+                                            <th class="text-left py-2 px-3 font-medium text-gray-500 dark:text-gray-400 text-xs">标准名称</th>
+                                            <th class="text-left py-2 px-3 font-medium text-gray-500 dark:text-gray-400 text-xs">说明</th>
+                                            <th class="text-left py-2 px-3 font-medium text-gray-500 dark:text-gray-400 text-xs">源系统映射</th>
+                                            <th class="text-left py-2 px-3 font-medium text-gray-500 dark:text-gray-400 text-xs">状态</th>
+                                            <th class="text-left py-2 px-3 font-medium text-gray-500 dark:text-gray-400 text-xs">操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="field-row border-b border-gray-100 dark:border-gray-800">
+                                            <td class="py-2.5 px-3 text-xs text-gray-400">1</td>
+                                            <td class="py-2.5 px-3"><span class="font-mono text-xs text-primary-600 font-medium">1</span></td>
+                                            <td class="py-2.5 px-3 text-xs text-gray-700 dark:text-gray-300">男性</td>
+                                            <td class="py-2.5 px-3 text-xs text-gray-500">生理性别为男性</td>
+                                            <td class="py-2.5 px-3">
+                                                <div class="flex flex-wrap gap-1">
+                                                    <span class="source-tag text-xs px-1.5 py-0.5 rounded">HIS: M</span>
+                                                    <span class="source-tag text-xs px-1.5 py-0.5 rounded">EMR: 男</span>
+                                                    <span class="source-tag text-xs px-1.5 py-0.5 rounded">LIS: 1</span>
+                                                </div>
+                                            </td>
+                                            <td class="py-2.5 px-3">
+                                                <span class="mapping-badge mapping-done"><i class="fas fa-check-circle"></i>已映射</span>
+                                            </td>
+                                            <td class="py-2.5 px-3 whitespace-nowrap">
+                                                <button class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑标准值" data-action="showToast" data-args="编辑标准值|info">
+                                                    <i class="fas fa-edit text-xs"></i>
+                                                </button>
+                                                <button class="text-danger-600 hover:text-danger-700 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除标准值" onclick="deleteStdDictValue(this)">
+                                                    <i class="fas fa-trash-alt text-xs"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr class="field-row border-b border-gray-100 dark:border-gray-800">
+                                            <td class="py-2.5 px-3 text-xs text-gray-400">2</td>
+                                            <td class="py-2.5 px-3"><span class="font-mono text-xs text-primary-600 font-medium">2</span></td>
+                                            <td class="py-2.5 px-3 text-xs text-gray-700 dark:text-gray-300">女性</td>
+                                            <td class="py-2.5 px-3 text-xs text-gray-500">生理性别为女性</td>
+                                            <td class="py-2.5 px-3">
+                                                <div class="flex flex-wrap gap-1">
+                                                    <span class="source-tag text-xs px-1.5 py-0.5 rounded">HIS: F</span>
+                                                    <span class="source-tag text-xs px-1.5 py-0.5 rounded">EMR: 女</span>
+                                                    <span class="source-tag text-xs px-1.5 py-0.5 rounded">LIS: 2</span>
+                                                </div>
+                                            </td>
+                                            <td class="py-2.5 px-3">
+                                                <span class="mapping-badge mapping-done"><i class="fas fa-check-circle"></i>已映射</span>
+                                            </td>
+                                            <td class="py-2.5 px-3 whitespace-nowrap">
+                                                <button class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑标准值" data-action="showToast" data-args="编辑标准值|info">
+                                                    <i class="fas fa-edit text-xs"></i>
+                                                </button>
+                                                <button class="text-danger-600 hover:text-danger-700 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除标准值" onclick="deleteStdDictValue(this)">
+                                                    <i class="fas fa-trash-alt text-xs"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr class="field-row border-b border-gray-100 dark:border-gray-800">
+                                            <td class="py-2.5 px-3 text-xs text-gray-400">3</td>
+                                            <td class="py-2.5 px-3"><span class="font-mono text-xs text-primary-600 font-medium">9</span></td>
+                                            <td class="py-2.5 px-3 text-xs text-gray-700 dark:text-gray-300">未知</td>
+                                            <td class="py-2.5 px-3 text-xs text-gray-500">性别未知或未说明</td>
+                                            <td class="py-2.5 px-3">
+                                                <div class="flex flex-wrap gap-1">
+                                                    <span class="source-tag text-xs px-1.5 py-0.5 rounded">HIS: U</span>
+                                                    <span class="source-tag text-xs px-1.5 py-0.5 rounded">EMR: 未知</span>
+                                                </div>
+                                            </td>
+                                            <td class="py-2.5 px-3">
+                                                <span class="mapping-badge mapping-done"><i class="fas fa-check-circle"></i>已映射</span>
+                                            </td>
+                                            <td class="py-2.5 px-3 whitespace-nowrap">
+                                                <button class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑标准值" data-action="showToast" data-args="编辑标准值|info">
+                                                    <i class="fas fa-edit text-xs"></i>
+                                                </button>
+                                                <button class="text-danger-600 hover:text-danger-700 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除标准值" onclick="deleteStdDictValue(this)">
+                                                    <i class="fas fa-trash-alt text-xs"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr class="field-row border-b border-gray-100 dark:border-gray-800">
+                                            <td class="py-2.5 px-3 text-xs text-gray-400">4</td>
+                                            <td class="py-2.5 px-3"><span class="font-mono text-xs text-primary-600 font-medium">0</span></td>
+                                            <td class="py-2.5 px-3 text-xs text-gray-700 dark:text-gray-300">未说明</td>
+                                            <td class="py-2.5 px-3 text-xs text-gray-500">患者未说明性别</td>
+                                            <td class="py-2.5 px-3">
+                                                <div class="flex flex-wrap gap-1">
+                                                    <span class="source-tag text-xs px-1.5 py-0.5 rounded">HIS: N</span>
+                                                </div>
+                                            </td>
+                                            <td class="py-2.5 px-3">
+                                                <span class="mapping-badge mapping-pending"><i class="fas fa-clock"></i>待审核</span>
+                                            </td>
+                                            <td class="py-2.5 px-3 whitespace-nowrap">
+                                                <button class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑标准值" data-action="showToast" data-args="编辑标准值|info">
+                                                    <i class="fas fa-edit text-xs"></i>
+                                                </button>
+                                                <button class="text-danger-600 hover:text-danger-700 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除标准值" onclick="deleteStdDictValue(this)">
+                                                    <i class="fas fa-trash-alt text-xs"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- 源字典映射 Tab -->
+                        <div id="sourceTab" class="flex-1 overflow-auto p-4 tab-content hidden">
+                            <div class="suggestion-card s-info mb-4" id="dictAiBanner">
+                                <div class="flex items-start gap-3">
+                                    <div class="w-9 h-9 bg-gradient-to-br from-medical-500 to-medical-700 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                                        <i class="fas fa-robot text-white text-sm" aria-hidden="true"></i>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <div class="flex items-center gap-2 flex-wrap">
+                                            <p class="font-semibold text-sm" style="color:var(--text-primary)">AI 字典匹配建议</p>
+                                            <span class="text-[10px] bg-medical-100 dark:bg-medical-900/40 text-medical-700 dark:text-medical-300 px-2 py-0.5 rounded-full">语义相似度 + 历史映射学习</span>
+                                        </div>
+                                        <p class="text-xs mt-1 leading-relaxed" style="color:var(--text-secondary)">检测到 <b>EMR_电子病历库</b> 存在 1 个未映射项：源值「未说明」与标准代码 <code class="font-mono">0（未说明）</code> 语义相似度 <b>96%</b>，建议自动建立映射；另有 1 条待审核项建议维持现状。确认后将同步更新映射完成度。</p>
+                                        <div class="flex gap-2 mt-2">
+                                            <button type="button" class="px-3 py-1.5 bg-medical-600 text-white rounded-lg text-xs font-medium hover:bg-medical-700 transition-colors focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" onclick="aiMatchDictionary()">
+                                                <i class="fas fa-wand-magic-sparkles mr-1"></i>一键应用建议
+                                            </button>
+                                            <button type="button" class="px-3 py-1.5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-xs font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors" onclick="document.getElementById('dictAiBanner').style.display='none';showToast('已忽略本轮 AI 建议','info')">忽略</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">源系统字典映射</span>
+                                <button class="px-3 py-1.5 bg-medical-600 text-white rounded-xl text-xs font-medium hover:bg-medical-700 transition-colors flex items-center gap-1.5" data-action="openModal" data-args="addSourceDictModal">
+                                    <i class="fas fa-plus"></i> 添加源字典
+                                </button>
+                            </div>
+                            <div class="space-y-4">
+                                <!-- HIS源字典 -->
+                                <div class="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+                                    <div class="px-4 py-3 bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                                        <div class="flex items-center gap-2">
+                                            <i class="fas fa-database text-medical-600 text-sm"></i>
+                                            <span class="text-sm font-medium text-gray-800 dark:text-gray-200">HIS_主数据库</span>
+                                            <span class="text-xs bg-success-50 text-success-600 px-2 py-0.5 rounded-full">4/4 已映射</span>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <button class="text-xs text-medical-600 hover:text-medical-700 font-medium" data-action="openModal" data-args="sqlCollectModal">
+                                                <i class="fas fa-code mr-1"></i>SQL采集
+                                            </button>
+                                            <button class="text-xs text-gray-500 hover:text-gray-700 dark:text-gray-400" data-action="showToast" data-args="导出HIS映射|info">
+                                                <i class="fas fa-download"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="p-4">
+                                        <table class="w-full text-sm">
+                                                <thead class="sticky-head">
+                                                    <tr class="border-b border-gray-100 dark:border-gray-700">
+                                                        <th class="text-left py-2 px-3 font-medium text-gray-500 text-xs">标准代码</th>
+                                                    <th class="text-left py-2 px-3 font-medium text-gray-500 text-xs">标准名称</th>
+                                                    <th class="text-left py-2 px-3 font-medium text-gray-500 text-xs">HIS源值</th>
+                                                    <th class="text-left py-2 px-3 font-medium text-gray-500 text-xs">状态</th>
+                                                    <th class="text-left py-2 px-3 font-medium text-gray-500 text-xs">操作</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr class="field-row border-b border-gray-50 dark:border-gray-800">
+                                                    <td class="py-2 px-3 text-xs font-mono text-primary-600">1</td>
+                                                    <td class="py-2 px-3 text-xs text-gray-700 dark:text-gray-300">男性</td>
+                                                    <td class="py-2 px-3 text-xs font-mono text-gray-600">M</td>
+                                                    <td class="py-2 px-3"><span class="mapping-badge mapping-done"><i class="fas fa-check-circle"></i>已确认</span></td>
+                                                    <td class="py-2 px-3">
+                                                        <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑" data-action="showToast" data-args="编辑映射|info"><i class="fas fa-edit text-xs" aria-hidden="true"></i></button>
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-row border-b border-gray-50 dark:border-gray-800">
+                                                    <td class="py-2 px-3 text-xs font-mono text-primary-600">2</td>
+                                                    <td class="py-2 px-3 text-xs text-gray-700 dark:text-gray-300">女性</td>
+                                                    <td class="py-2 px-3 text-xs font-mono text-gray-600">F</td>
+                                                    <td class="py-2 px-3"><span class="mapping-badge mapping-done"><i class="fas fa-check-circle"></i>已确认</span></td>
+                                                    <td class="py-2 px-3">
+                                                        <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑" data-action="showToast" data-args="编辑映射|info"><i class="fas fa-edit text-xs" aria-hidden="true"></i></button>
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-row border-b border-gray-50 dark:border-gray-800">
+                                                    <td class="py-2 px-3 text-xs font-mono text-primary-600">9</td>
+                                                    <td class="py-2 px-3 text-xs text-gray-700 dark:text-gray-300">未知</td>
+                                                    <td class="py-2 px-3 text-xs font-mono text-gray-600">U</td>
+                                                    <td class="py-2 px-3"><span class="mapping-badge mapping-done"><i class="fas fa-check-circle"></i>已确认</span></td>
+                                                    <td class="py-2 px-3">
+                                                        <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑" data-action="showToast" data-args="编辑映射|info"><i class="fas fa-edit text-xs" aria-hidden="true"></i></button>
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-row border-b border-gray-50 dark:border-gray-800">
+                                                    <td class="py-2 px-3 text-xs font-mono text-primary-600">0</td>
+                                                    <td class="py-2 px-3 text-xs text-gray-700 dark:text-gray-300">未说明</td>
+                                                    <td class="py-2 px-3 text-xs font-mono text-gray-600">N</td>
+                                                    <td class="py-2 px-3"><span class="mapping-badge mapping-pending"><i class="fas fa-clock"></i>待审核</span></td>
+                                                    <td class="py-2 px-3">
+                                                        <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑" data-action="showToast" data-args="编辑映射|info"><i class="fas fa-edit text-xs" aria-hidden="true"></i></button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- EMR源字典 -->
+                                <div class="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+                                    <div class="px-4 py-3 bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                                        <div class="flex items-center gap-2">
+                                            <i class="fas fa-database text-primary-600 text-sm"></i>
+                                            <span class="text-sm font-medium text-gray-800 dark:text-gray-200">EMR_电子病历库</span>
+                                            <span class="text-xs bg-warning-50 text-warning-600 px-2 py-0.5 rounded-full">3/4 待完善</span>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <button class="text-xs text-medical-600 hover:text-medical-700 font-medium" data-action="openModal" data-args="sqlCollectModal">
+                                                <i class="fas fa-code mr-1"></i>SQL采集
+                                            </button>
+                                            <button class="text-xs text-gray-500 hover:text-gray-700 dark:text-gray-400" data-action="showToast" data-args="导出EMR映射|info">
+                                                <i class="fas fa-download"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="p-4">
+                                        <table class="w-full text-sm">
+                                                <thead class="sticky-head">
+                                                    <tr class="border-b border-gray-100 dark:border-gray-700">
+                                                        <th class="text-left py-2 px-3 font-medium text-gray-500 text-xs">标准代码</th>
+                                                    <th class="text-left py-2 px-3 font-medium text-gray-500 text-xs">标准名称</th>
+                                                    <th class="text-left py-2 px-3 font-medium text-gray-500 text-xs">EMR源值</th>
+                                                    <th class="text-left py-2 px-3 font-medium text-gray-500 text-xs">状态</th>
+                                                    <th class="text-left py-2 px-3 font-medium text-gray-500 text-xs">操作</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr class="field-row border-b border-gray-50 dark:border-gray-800">
+                                                    <td class="py-2 px-3 text-xs font-mono text-primary-600">1</td>
+                                                    <td class="py-2 px-3 text-xs text-gray-700 dark:text-gray-300">男性</td>
+                                                    <td class="py-2 px-3 text-xs font-mono text-gray-600">男</td>
+                                                    <td class="py-2 px-3"><span class="mapping-badge mapping-done"><i class="fas fa-check-circle"></i>已确认</span></td>
+                                                    <td class="py-2 px-3">
+                                                        <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑" data-action="showToast" data-args="编辑映射|info"><i class="fas fa-edit text-xs" aria-hidden="true"></i></button>
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-row border-b border-gray-50 dark:border-gray-800">
+                                                    <td class="py-2 px-3 text-xs font-mono text-primary-600">2</td>
+                                                    <td class="py-2 px-3 text-xs text-gray-700 dark:text-gray-300">女性</td>
+                                                    <td class="py-2 px-3 text-xs font-mono text-gray-600">女</td>
+                                                    <td class="py-2 px-3"><span class="mapping-badge mapping-done"><i class="fas fa-check-circle"></i>已确认</span></td>
+                                                    <td class="py-2 px-3">
+                                                        <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑" data-action="showToast" data-args="编辑映射|info"><i class="fas fa-edit text-xs" aria-hidden="true"></i></button>
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-row border-b border-gray-50 dark:border-gray-800">
+                                                    <td class="py-2 px-3 text-xs font-mono text-primary-600">9</td>
+                                                    <td class="py-2 px-3 text-xs text-gray-700 dark:text-gray-300">未知</td>
+                                                    <td class="py-2 px-3 text-xs font-mono text-gray-600">未知</td>
+                                                    <td class="py-2 px-3"><span class="mapping-badge mapping-done"><i class="fas fa-check-circle"></i>已确认</span></td>
+                                                    <td class="py-2 px-3">
+                                                        <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑" data-action="showToast" data-args="编辑映射|info"><i class="fas fa-edit text-xs" aria-hidden="true"></i></button>
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-row border-b border-gray-50 dark:border-gray-800" id="emrUnmappedRow">
+                                                    <td class="py-2 px-3 text-xs font-mono text-primary-600">0</td>
+                                                    <td class="py-2 px-3 text-xs text-gray-700 dark:text-gray-300">未说明</td>
+                                                    <td class="py-2 px-3 text-xs font-mono text-gray-600">未说明</td>
+                                                    <td class="py-2 px-3"><span class="mapping-badge mapping-none"><i class="fas fa-minus-circle"></i>未映射</span></td>
+                                                    <td class="py-2 px-3 whitespace-nowrap">
+                                                        <span class="ai-recommend-badge mr-1.5" title="AI 语义匹配置信度">AI 96%</span>
+                                                        <button id="emrAiApplyBtn" class="text-medical-600 hover:text-medical-700 transition-colors text-xs font-medium" onclick="applyEmrSuggestion(this)">
+                                                            <i class="fas fa-check mr-1"></i>应用
+                                                        </button>
+                                                        <button class="text-gray-400 hover:text-gray-600 transition-colors text-xs ml-1" onclick="showToast('已忽略该条 AI 推荐','info')">忽略</button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 映射历史 Tab -->
+                        <div id="historyTab" class="flex-1 overflow-auto p-4 tab-content hidden">
+                            <div class="version-timeline space-y-6">
+                                <div class="relative">
+                                    <div class="version-dot bg-medical-500 top-1"></div>
+                                    <div class="ml-4">
+                                        <div class="flex items-center gap-2 mb-1">
+                                            <span class="text-sm font-bold text-gray-900 dark:text-gray-100">2026-05-04 14:30</span>
+                                            <span class="text-xs bg-medical-50 text-medical-600 px-2 py-0.5 rounded-full">最新</span>
+                                        </div>
+                                        <p class="text-xs text-gray-500 mb-2">张工程师</p>
+                                        <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 text-xs text-gray-700 dark:text-gray-300 space-y-1">
+                                            <p><span class="text-success-600 font-medium">[+]</span> 确认HIS系统性别映射关系（4项）</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="relative">
+                                    <div class="version-dot bg-gray-400 top-1"></div>
+                                    <div class="ml-4">
+                                        <div class="flex items-center gap-2 mb-1">
+                                            <span class="text-sm font-bold text-gray-900 dark:text-gray-100">2026-05-03 10:15</span>
+                                        </div>
+                                        <p class="text-xs text-gray-500 mb-2">李工程师</p>
+                                        <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 text-xs text-gray-700 dark:text-gray-300 space-y-1">
+                                            <p><span class="text-success-600 font-medium">[+]</span> 新增EMR系统性别代码映射（3项）</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="relative">
+                                    <div class="version-dot bg-gray-400 top-1"></div>
+                                    <div class="ml-4">
+                                        <div class="flex items-center gap-2 mb-1">
+                                            <span class="text-sm font-bold text-gray-900 dark:text-gray-100">2026-05-01 09:20</span>
+                                        </div>
+                                        <p class="text-xs text-gray-500 mb-2">张工程师</p>
+                                        <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 text-xs text-gray-700 dark:text-gray-300 space-y-1">
+                                            <p><span class="text-success-600 font-medium">[+]</span> 创建性别代码字典并初始化标准值（4项）</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 分类新增/编辑模态框 -->
+    <div id="categoryModal" class="modal fixed inset-0 z-50 items-center justify-center bg-black/50">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-md mx-4 shadow-2xl flex flex-col max-h-[90vh]">
+            <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between flex-shrink-0">
+                <div class="flex items-center gap-3"><div class="w-10 h-10 bg-medical-50 dark:bg-medical-900/30 rounded-xl flex items-center justify-center"><i class="fas fa-folder text-medical-600" aria-hidden="true"></i></div><h3 class="text-lg font-bold text-gray-900 dark:text-gray-100" id="categoryModalTitle">编辑分类</h3></div>
+                <button type="button" class="text-gray-400 hover:text-gray-600 dark:text-gray-400 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:outline-none" data-action="closeModal" data-args="categoryModal" aria-label="关闭"><i class="fas fa-times text-xs" aria-hidden="true"></i></button>
+            </div>
+            <form class="px-6 py-5 space-y-4 flex-1 overflow-y-auto scrollbar-thin" onsubmit="event.preventDefault(); saveCategory();">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">分类名称 <span class="text-danger-500">*</span></label>
+                    <input type="text" id="categoryNameInput" required placeholder="例如：基础信息类" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus">
+                </div>
+            </form>
+            <div class="px-6 py-4 border-t border-gray-100 dark:border-gray-700 flex justify-end gap-3 flex-shrink-0">
+                <button class="px-4 py-2.5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors" data-action="closeModal" data-args="categoryModal">取消</button>
+                <button class="px-4 py-2.5 bg-medical-600 text-white rounded-xl text-sm font-medium hover:bg-medical-700 transition-colors" onclick="saveCategory()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新建字典模态框 -->
+    <div id="addDictModal" class="modal fixed inset-0 z-50 items-center justify-center bg-black/50">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-lg mx-4 shadow-2xl flex flex-col max-h-[90vh]">
+            <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between flex-shrink-0">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-medical-50 dark:bg-medical-900/30 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-book-medical text-medical-600" aria-hidden="true"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">新建字典</h3>
+                </div>
+                <button class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors rounded p-1 focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" data-action="closeModal" data-args="addDictModal" aria-label="关闭"><i class="fas fa-times" aria-hidden="true"></i></button>
+            </div>
+            <form id="addDictForm" class="px-6 py-5 space-y-4 flex-1 overflow-y-auto scrollbar-thin" onsubmit="event.preventDefault(); handleAddDict();">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="newDictName" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">字典名称 <span class="text-danger-500">*</span></label>
+                        <input type="text" id="newDictName" placeholder="例如：性别代码" autocomplete="off" required class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus">
+                    </div>
+                    <div>
+                        <label for="newDictCategory" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">字典分类 <span class="text-danger-500">*</span></label>
+                        <select id="newDictCategory" required class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus">
+                            <option value="" disabled selected>请选择分类</option>
+                            <option value="基础信息类">基础信息类</option>
+                            <option value="临床业务类">临床业务类</option>
+                            <option value="检查检验类">检查检验类</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">标准代码 <span class="text-gray-400 font-normal text-xs">(每行一个，填写 code / name / 说明)</span></label>
+                    <div class="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+                        <div class="grid grid-cols-12 bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-700">
+                            <div class="col-span-2 py-1.5 px-2 text-xs font-medium text-gray-500 dark:text-gray-400">code</div>
+                            <div class="col-span-3 py-1.5 px-2 text-xs font-medium text-gray-500 dark:text-gray-400">name</div>
+                            <div class="col-span-6 py-1.5 px-2 text-xs font-medium text-gray-500 dark:text-gray-400">说明</div>
+                            <div class="col-span-1 py-1.5 px-2 text-xs font-medium text-gray-500 dark:text-gray-400 text-center">删</div>
+                        </div>
+                        <div id="newDictCodesRows" class="divide-y divide-gray-100 dark:divide-gray-700">
+                            <div class="grid grid-cols-12 group">
+                                <input type="text" placeholder="1" class="col-span-2 px-2 py-1.5 text-xs font-mono border-0 border-r border-gray-200 dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-medical-400">
+                                <input type="text" placeholder="男性" class="col-span-3 px-2 py-1.5 text-xs border-0 border-r border-gray-200 dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-medical-400">
+                                <input type="text" placeholder="生理性别为男性" class="col-span-6 px-2 py-1.5 text-xs border-0 border-r border-gray-200 dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-medical-400">
+                                <button type="button" class="col-span-1 text-gray-300 hover:text-danger-600 transition-colors flex items-center justify-center focus-visible:ring-1 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除此行" aria-label="删除此行" onclick="removeDictCodeRow(this)"><i class="fas fa-times text-xs" aria-hidden="true"></i></button>
+                            </div>
+                            <div class="grid grid-cols-12 group">
+                                <input type="text" placeholder="2" class="col-span-2 px-2 py-1.5 text-xs font-mono border-0 border-r border-gray-200 dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-medical-400">
+                                <input type="text" placeholder="女性" class="col-span-3 px-2 py-1.5 text-xs border-0 border-r border-gray-200 dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-medical-400">
+                                <input type="text" placeholder="生理性别为女性" class="col-span-6 px-2 py-1.5 text-xs border-0 border-r border-gray-200 dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-medical-400">
+                                <button type="button" class="col-span-1 text-gray-300 hover:text-danger-600 transition-colors flex items-center justify-center focus-visible:ring-1 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除此行" aria-label="删除此行" onclick="removeDictCodeRow(this)"><i class="fas fa-times text-xs" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="mt-2 text-xs text-medical-600 hover:text-medical-700 flex items-center gap-1 focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none rounded px-1.5 py-0.5" onclick="addDictCodeRow()">
+                        <i class="fas fa-plus"></i> 新增一行
+                    </button>
+                </div>
+                <div>
+                    <label for="newDictDesc" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">说明</label>
+                    <textarea id="newDictDesc" rows="2" placeholder="例如：患者性别标准字典，对应源系统各类性别编码" class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus resize-none"></textarea>
+                </div>
+            </form>
+            <div class="px-6 py-4 border-t border-gray-100 dark:border-gray-700 flex justify-end gap-3 flex-shrink-0">
+                <button type="button" class="px-4 py-2.5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors" data-action="closeModal" data-args="addDictModal">取消</button>
+                <button type="submit" id="addDictSubmit" form="addDictForm" class="px-4 py-2.5 bg-medical-600 text-white rounded-xl text-sm font-medium hover:bg-medical-700 transition-colors shadow-md shadow-medical-600/20">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 编辑字典模态框 -->
+    <div id="editDictModal" class="modal fixed inset-0 z-50 items-center justify-center bg-black/50">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-lg mx-4 shadow-2xl flex flex-col max-h-[90vh]">
+            <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between flex-shrink-0">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-medical-50 dark:bg-medical-900/30 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-book-medical text-medical-600" aria-hidden="true"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">编辑字典</h3>
+                </div>
+                <button class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors rounded p-1 focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" data-action="closeModal" data-args="editDictModal" aria-label="关闭"><i class="fas fa-times" aria-hidden="true"></i></button>
+            </div>
+            <form id="editDictForm" class="px-6 py-5 space-y-4 flex-1 overflow-y-auto scrollbar-thin" onsubmit="event.preventDefault(); handleEditDict();">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="editDictName" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">字典名称 <span class="text-danger-500">*</span></label>
+                        <input type="text" id="editDictName" value="性别代码" autocomplete="off" required class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus">
+                    </div>
+                    <div>
+                        <label for="editDictCategory" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">字典分类 <span class="text-danger-500">*</span></label>
+                        <select id="editDictCategory" required class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus">
+                            <option value="基础信息类" selected>基础信息类</option>
+                            <option value="临床业务类">临床业务类</option>
+                            <option value="检查检验类">检查检验类</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">标准代码 <span class="text-gray-400 font-normal text-xs">(每行一个，填写 code / name / 说明)</span></label>
+                    <div class="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+                        <div class="grid grid-cols-12 bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-700">
+                            <div class="col-span-2 py-1.5 px-2 text-xs font-medium text-gray-500 dark:text-gray-400">code</div>
+                            <div class="col-span-3 py-1.5 px-2 text-xs font-medium text-gray-500 dark:text-gray-400">name</div>
+                            <div class="col-span-6 py-1.5 px-2 text-xs font-medium text-gray-500 dark:text-gray-400">说明</div>
+                            <div class="col-span-1 py-1.5 px-2 text-xs font-medium text-gray-500 dark:text-gray-400 text-center">删</div>
+                        </div>
+                        <div id="editDictCodesRows" class="divide-y divide-gray-100 dark:divide-gray-700">
+                            <div class="grid grid-cols-12 group">
+                                <input type="text" value="1" class="col-span-2 px-2 py-1.5 text-xs font-mono border-0 border-r border-gray-200 dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-medical-400">
+                                <input type="text" value="男性" class="col-span-3 px-2 py-1.5 text-xs border-0 border-r border-gray-200 dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-medical-400">
+                                <input type="text" value="生理性别为男性" class="col-span-6 px-2 py-1.5 text-xs border-0 border-r border-gray-200 dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-medical-400">
+                                <button type="button" class="col-span-1 text-gray-300 hover:text-danger-600 transition-colors flex items-center justify-center focus-visible:ring-1 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除此行" aria-label="删除此行" onclick="removeDictCodeRow(this)"><i class="fas fa-times text-xs" aria-hidden="true"></i></button>
+                            </div>
+                            <div class="grid grid-cols-12 group">
+                                <input type="text" value="2" class="col-span-2 px-2 py-1.5 text-xs font-mono border-0 border-r border-gray-200 dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-medical-400">
+                                <input type="text" value="女性" class="col-span-3 px-2 py-1.5 text-xs border-0 border-r border-gray-200 dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-medical-400">
+                                <input type="text" value="生理性别为女性" class="col-span-6 px-2 py-1.5 text-xs border-0 border-r border-gray-200 dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-medical-400">
+                                <button type="button" class="col-span-1 text-gray-300 hover:text-danger-600 transition-colors flex items-center justify-center focus-visible:ring-1 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除此行" aria-label="删除此行" onclick="removeDictCodeRow(this)"><i class="fas fa-times text-xs" aria-hidden="true"></i></button>
+                            </div>
+                            <div class="grid grid-cols-12 group">
+                                <input type="text" value="9" class="col-span-2 px-2 py-1.5 text-xs font-mono border-0 border-r border-gray-200 dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-medical-400">
+                                <input type="text" value="未说明" class="col-span-3 px-2 py-1.5 text-xs border-0 border-r border-gray-200 dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-medical-400">
+                                <input type="text" value="生理性别无法确认或未采集" class="col-span-6 px-2 py-1.5 text-xs border-0 border-r border-gray-200 dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-medical-400">
+                                <button type="button" class="col-span-1 text-gray-300 hover:text-danger-600 transition-colors flex items-center justify-center focus-visible:ring-1 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除此行" aria-label="删除此行" onclick="removeDictCodeRow(this)"><i class="fas fa-times text-xs" aria-hidden="true"></i></button>
+                            </div>
+                            <div class="grid grid-cols-12 group">
+                                <input type="text" value="0" class="col-span-2 px-2 py-1.5 text-xs font-mono border-0 border-r border-gray-200 dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-medical-400">
+                                <input type="text" value="未知" class="col-span-3 px-2 py-1.5 text-xs border-0 border-r border-gray-200 dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-medical-400">
+                                <input type="text" value="生理性别为未知" class="col-span-6 px-2 py-1.5 text-xs border-0 border-r border-gray-200 dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-medical-400">
+                                <button type="button" class="col-span-1 text-gray-300 hover:text-danger-600 transition-colors flex items-center justify-center focus-visible:ring-1 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除此行" aria-label="删除此行" onclick="removeDictCodeRow(this)"><i class="fas fa-times text-xs" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="mt-2 text-xs text-medical-600 hover:text-medical-700 flex items-center gap-1 focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none rounded px-1.5 py-0.5" onclick="addDictCodeRow('editDictCodesRows')">
+                        <i class="fas fa-plus"></i> 新增一行
+                    </button>
+                </div>
+                <div>
+                    <label for="editDictDesc" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">说明</label>
+                    <textarea id="editDictDesc" rows="2" placeholder="例如：患者性别标准字典，对应源系统各类性别编码" class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus resize-none">患者性别标准字典，对应源系统各类性别编码</textarea>
+                </div>
+            </form>
+            <div class="px-6 py-4 border-t border-gray-100 dark:border-gray-700 flex justify-end gap-3 flex-shrink-0">
+                <button type="button" class="px-4 py-2.5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors" data-action="closeModal" data-args="editDictModal">取消</button>
+                <button type="submit" id="editDictSubmit" form="editDictForm" class="px-4 py-2.5 bg-medical-600 text-white rounded-xl text-sm font-medium hover:bg-medical-700 transition-colors shadow-md shadow-medical-600/20">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加标准值 - 录入方式选择 -->
+    <div id="addStdDictValueModal" class="modal fixed inset-0 z-50 items-center justify-center bg-black/50">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-lg mx-4 shadow-2xl flex flex-col max-h-[85vh]">
+            <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between flex-shrink-0">
+                <div class="flex items-center gap-3"><div class="w-10 h-10 bg-medical-50 dark:bg-medical-900/30 rounded-xl flex items-center justify-center"><i class="fas fa-plus-circle text-medical-600" aria-hidden="true"></i></div><h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">添加标准值</h3></div>
+                <button type="button" class="text-gray-400 hover:text-gray-600 dark:text-gray-400 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:outline-none" data-action="closeModal" data-args="addStdDictValueModal" aria-label="关闭"><i class="fas fa-times text-xs" aria-hidden="true"></i></button>
+            </div>
+            <div class="p-6 overflow-y-auto">
+                <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">请选择标准值的录入方式</p>
+                <div class="space-y-3">
+                    <button class="w-full p-4 border-2 border-gray-200 dark:border-gray-700 rounded-xl hover:border-medical-500 dark:hover:border-medical-500 transition-all text-left group" onclick="closeModal('addStdDictValueModal'); openModal('sqlCollectModal')">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-medical-50 rounded-lg flex items-center justify-center group-hover:bg-medical-100 transition-colors">
+                                <i class="fas fa-database text-medical-600"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-900 dark:text-gray-100">SQL 采集</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">通过 SQL 语句从数据源采集字典值</p>
+                            </div>
+                        </div>
+                    </button>
+                    <button class="w-full p-4 border-2 border-gray-200 dark:border-gray-700 rounded-xl hover:border-medical-500 dark:hover:border-medical-500 transition-all text-left group" onclick="closeModal('addStdDictValueModal'); openModal('excelImportModal')">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center group-hover:bg-green-100 transition-colors">
+                                <i class="fas fa-file-excel text-green-600"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-900 dark:text-gray-100">Excel 导入</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">上传 Excel 文件批量导入字典值</p>
+                            </div>
+                        </div>
+                    </button>
+                    <button class="w-full p-4 border-2 border-gray-200 dark:border-gray-700 rounded-xl hover:border-medical-500 dark:hover:border-medical-500 transition-all text-left group" onclick="closeModal('addStdDictValueModal'); openModal('manualAddModal')">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center group-hover:bg-blue-100 transition-colors">
+                                <i class="fas fa-keyboard text-blue-600"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-900 dark:text-gray-100">手工录入</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">逐条手工添加字典值</p>
+                            </div>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SQL采集模态框 -->
+    <div id="sqlCollectModal" class="modal fixed inset-0 z-50 items-center justify-center bg-black/50">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-2xl mx-4 shadow-2xl flex flex-col max-h-[85vh]">
+            <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between flex-shrink-0">
+                <div class="flex items-center gap-3"><div class="w-10 h-10 bg-medical-50 dark:bg-medical-900/30 rounded-xl flex items-center justify-center"><i class="fas fa-file-code text-medical-600" aria-hidden="true"></i></div><h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">SQL 采集字典值</h3></div>
+                <button type="button" class="text-gray-400 hover:text-gray-600 dark:text-gray-400 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:outline-none" data-action="closeModal" data-args="sqlCollectModal" aria-label="关闭"><i class="fas fa-times text-xs" aria-hidden="true"></i></button>
+            </div>
+            <div class="p-6 space-y-4 overflow-y-auto">
+                <div>
+                    <label for="sqlCollectDs" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">选择数据源</label>
+                    <select id="sqlCollectDs" class="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus dark:bg-gray-700">
+                        <option value="">请选择数据源</option>
+                        <option value="his_main">HIS_主数据库 (Oracle)</option>
+                        <option value="emr_db">EMR_电子病历库 (MySQL)</option>
+                        <option value="lis_db">LIS_检验数据库 (SQL Server)</option>
+                        <option value="pacs_db">PACS_影像数据库 (Oracle)</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="sqlCollectQuery" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">SQL 查询语句</label>
+                    <textarea id="sqlCollectQuery" rows="4" placeholder="SELECT code, name FROM dict_table WHERE status = 1" class="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus resize-none font-mono dark:bg-gray-700"></textarea>
+                    <p class="text-xs text-gray-400 mt-1">提示：查询结果第一列为代码(code)，第二列为名称(name)</p>
+                </div>
+                <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-3">
+                    <p class="text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">示例 SQL：</p>
+                    <code class="text-xs text-gray-600 dark:text-gray-400 font-mono block">SELECT gender_code, gender_name FROM sys_gender_dict WHERE active = 1</code>
+                </div>
+                <div>
+                    <label for="sqlCodeColumn" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">代码列名</label>
+                    <input type="text" id="sqlCodeColumn" placeholder="code" value="code" class="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus dark:bg-gray-700">
+                </div>
+                <div>
+                    <label for="sqlNameColumn" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">名称列名</label>
+                    <input type="text" id="sqlNameColumn" placeholder="name" value="name" class="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus dark:bg-gray-700">
+                </div>
+            </div>
+            <div class="px-6 py-4 border-t border-gray-100 dark:border-gray-700 flex justify-end gap-3 flex-shrink-0">
+                <button class="px-4 py-2.5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors" data-action="closeModal" data-args="sqlCollectModal">取消</button>
+                <button class="px-4 py-2.5 bg-medical-600 text-white rounded-xl text-sm font-medium hover:bg-medical-700 transition-colors shadow-md shadow-medical-600/20" onclick="handleSqlCollect()">
+                    <i class="fas fa-play mr-1"></i>执行采集
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Excel导入模态框 -->
+    <div id="excelImportModal" class="modal fixed inset-0 z-50 items-center justify-center bg-black/50">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-lg mx-4 shadow-2xl flex flex-col max-h-[85vh]">
+            <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between flex-shrink-0">
+                <div class="flex items-center gap-3"><div class="w-10 h-10 bg-medical-50 dark:bg-medical-900/30 rounded-xl flex items-center justify-center"><i class="fas fa-file-excel text-medical-600" aria-hidden="true"></i></div><h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">Excel 导入字典值</h3></div>
+                <button type="button" class="text-gray-400 hover:text-gray-600 dark:text-gray-400 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:outline-none" data-action="closeModal" data-args="excelImportModal" aria-label="关闭"><i class="fas fa-times text-xs" aria-hidden="true"></i></button>
+            </div>
+            <div class="p-6 space-y-4 overflow-y-auto">
+                <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl p-8 text-center hover:border-medical-500 transition-colors cursor-pointer" role="button" tabindex="0" aria-label="上传 Excel 文件" data-clickable onclick="document.getElementById('dictExcelFile').click()">
+                    <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-3"></i>
+                    <p class="text-sm text-gray-600 dark:text-gray-300 mb-1">点击或拖拽上传 Excel 文件</p>
+                    <p class="text-xs text-gray-400">支持 .xlsx, .xls 格式</p>
+                    <input type="file" id="dictExcelFile" accept=".xlsx,.xls" class="hidden" onchange="handleDictExcelUpload(this)">
+                </div>
+                <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-3">
+                    <p class="text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">文件格式要求：</p>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-xs">
+                            <thead>
+                                <tr class="border-b border-gray-200 dark:border-gray-600">
+                                    <th class="text-left py-1 px-2 text-gray-500">code</th>
+                                    <th class="text-left py-1 px-2 text-gray-500">name</th>
+                                    <th class="text-left py-1 px-2 text-gray-500">description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b border-gray-100 dark:border-gray-600">
+                                    <td class="py-1 px-2 text-gray-600">1</td>
+                                    <td class="py-1 px-2 text-gray-600">男性</td>
+                                    <td class="py-1 px-2 text-gray-600">生理性别为男性</td>
+                                </tr>
+                                <tr class="border-b border-gray-100 dark:border-gray-600">
+                                    <td class="py-1 px-2 text-gray-600">2</td>
+                                    <td class="py-1 px-2 text-gray-600">女性</td>
+                                    <td class="py-1 px-2 text-gray-600">生理性别为女性</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="text-xs text-gray-400 mt-2">第一行为表头，必须包含 code 和 name 列</p>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">导入方式</label>
+                    <div class="flex gap-3">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="importMode" value="append" checked class="text-medical-600">
+                            <span class="text-sm text-gray-700 dark:text-gray-300">追加导入</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="importMode" value="replace" class="text-medical-600">
+                            <span class="text-sm text-gray-700 dark:text-gray-300">覆盖导入</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="px-6 py-4 border-t border-gray-100 dark:border-gray-700 flex justify-end gap-3 flex-shrink-0">
+                <button class="px-4 py-2.5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors" data-action="closeModal" data-args="excelImportModal">取消</button>
+                <button class="px-4 py-2.5 bg-medical-600 text-white rounded-xl text-sm font-medium hover:bg-medical-700 transition-colors shadow-md shadow-medical-600/20" onclick="handleDictExcelImport()">
+                    <i class="fas fa-file-import mr-1"></i>确认导入
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 手工录入模态框 -->
+    <div id="manualAddModal" class="modal fixed inset-0 z-50 items-center justify-center bg-black/50">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-lg mx-4 shadow-2xl flex flex-col max-h-[85vh]">
+            <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between flex-shrink-0">
+                <div class="flex items-center gap-3"><div class="w-10 h-10 bg-medical-50 dark:bg-medical-900/30 rounded-xl flex items-center justify-center"><i class="fas fa-keyboard text-medical-600" aria-hidden="true"></i></div><h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">手工录入字典值</h3></div>
+                <button type="button" class="text-gray-400 hover:text-gray-600 dark:text-gray-400 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:outline-none" data-action="closeModal" data-args="manualAddModal" aria-label="关闭"><i class="fas fa-times text-xs" aria-hidden="true"></i></button>
+            </div>
+            <div class="p-6 space-y-4 overflow-y-auto">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">标准代码 <span class="text-red-500">*</span></label>
+                    <input type="text" id="manualCode" placeholder="请输入标准代码" class="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus dark:bg-gray-700">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">标准名称 <span class="text-red-500">*</span></label>
+                    <input type="text" id="manualName" placeholder="请输入标准名称" class="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus dark:bg-gray-700">
+                </div>
+                <div>
+                    <label for="manualDesc" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">说明</label>
+                    <textarea id="manualDesc" rows="2" placeholder="请输入字典值说明" class="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus resize-none dark:bg-gray-700"></textarea>
+                </div>
+                <div class="border-t border-gray-100 dark:border-gray-700 pt-4">
+                    <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">源系统映射（可选）</p>
+                    <div class="space-y-2">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 px-2 py-1 rounded w-20 text-center">HIS</span>
+                            <input type="text" placeholder="如 PAT_ID" class="flex-1 px-3 py-1.5 border border-gray-200 dark:border-gray-700 rounded-lg text-sm dark:bg-gray-700">
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 px-2 py-1 rounded w-20 text-center">EMR</span>
+                            <input type="text" placeholder="如 PATIENT_NO" class="flex-1 px-3 py-1.5 border border-gray-200 dark:border-gray-700 rounded-lg text-sm dark:bg-gray-700">
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 px-2 py-1 rounded w-20 text-center">LIS</span>
+                            <input type="text" placeholder="如 SAMPLE_ID" class="flex-1 px-3 py-1.5 border border-gray-200 dark:border-gray-700 rounded-lg text-sm dark:bg-gray-700">
+                        </div>
+                        <button type="button" class="text-xs text-medical-600 hover:text-medical-700 font-medium flex items-center gap-1 mt-1" data-action="showToast" data-args="可从源系统字典中选择并关联|info">
+                            <i class="fas fa-plus"></i> 添加源系统映射
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="px-6 py-4 border-t border-gray-100 dark:border-gray-700 flex justify-end gap-3 flex-shrink-0">
+                <button class="px-4 py-2.5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors" data-action="closeModal" data-args="manualAddModal">取消</button>
+                <button class="px-4 py-2.5 bg-medical-600 text-white rounded-xl text-sm font-medium hover:bg-medical-700 transition-colors shadow-md shadow-medical-600/20" onclick="handleManualAdd()">
+                    <i class="fas fa-plus mr-1"></i>添加
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加源字典模态框 -->
+    <div id="addSourceDictModal" class="modal fixed inset-0 z-50 items-center justify-center bg-black/50">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-lg mx-4 shadow-2xl flex flex-col max-h-[85vh]">
+            <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between flex-shrink-0">
+                <div class="flex items-center gap-3"><div class="w-10 h-10 bg-medical-50 dark:bg-medical-900/30 rounded-xl flex items-center justify-center"><i class="fas fa-database text-medical-600" aria-hidden="true"></i></div><h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">添加源字典</h3></div>
+                <button type="button" class="text-gray-400 hover:text-gray-600 dark:text-gray-400 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:outline-none" data-action="closeModal" data-args="addSourceDictModal" aria-label="关闭"><i class="fas fa-times text-xs" aria-hidden="true"></i></button>
+            </div>
+            <div class="p-6 space-y-4 overflow-y-auto">
+                <div>
+                    <label for="sourceDictDs" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">数据源</label>
+                    <select id="sourceDictDs" class="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus dark:bg-gray-700">
+                        <option value="">请选择数据源</option>
+                        <option value="his_main">HIS_主数据库</option>
+                        <option value="emr_db">EMR_电子病历库</option>
+                        <option value="lis_db">LIS_检验数据库</option>
+                        <option value="pacs_db">PACS_影像数据库</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="sourceDictTable" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">字典表名</label>
+                    <input type="text" id="sourceDictTable" placeholder="如：sys_gender_dict" class="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus dark:bg-gray-700">
+                </div>
+                <div>
+                    <label for="sourceDictCodeField" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">代码字段</label>
+                    <input type="text" id="sourceDictCodeField" placeholder="如：gender_code" class="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus dark:bg-gray-700">
+                </div>
+                <div>
+                    <label for="sourceDictNameField" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">名称字段</label>
+                    <input type="text" id="sourceDictNameField" placeholder="如：gender_name" class="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus dark:bg-gray-700">
+                </div>
+                <div>
+                    <label for="sourceDictRemark" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">备注</label>
+                    <textarea id="sourceDictRemark" rows="2" placeholder="请输入备注信息" class="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus resize-none dark:bg-gray-700"></textarea>
+                </div>
+            </div>
+            <div class="px-6 py-4 border-t border-gray-100 dark:border-gray-700 flex justify-end gap-3 flex-shrink-0">
+                <button class="px-4 py-2.5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors" data-action="closeModal" data-args="addSourceDictModal">取消</button>
+                <button class="px-4 py-2.5 bg-medical-600 text-white rounded-xl text-sm font-medium hover:bg-medical-700 transition-colors shadow-md shadow-medical-600/20" onclick="handleAddSourceDict()">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 树节点展开/折叠
+        function toggleTreeNode(el, ev) {
+            if (ev && ev.target.closest('button, a, input, [data-no-toggle]')) return;
+            const arrow = el.querySelector('.std-tree-arrow');
+            const children = el.nextElementSibling;
+            if (children && children.classList.contains('std-tree-children')) {
+                arrow.classList.toggle('expanded');
+                children.classList.toggle('expanded');
+            }
+        }
+
+        function selectDictItem(el, name, desc, status, category) {
+            document.querySelectorAll('.std-tree-item').forEach(function(item) {
+                item.classList.remove('active');
+                var icon = item.querySelector('.fa-book');
+                if (icon) icon.classList.replace('text-medical-500', 'text-gray-400');
+            });
+            el.classList.add('active');
+            var icon = el.querySelector('.fa-book');
+            if (icon) icon.classList.replace('text-gray-400', 'text-medical-500');
+
+            document.getElementById('dictTitle').textContent = name;
+            document.getElementById('dictDesc').textContent = desc;
+
+            var statusEl = document.getElementById('dictStatus');
+            if (status === '已映射') {
+                statusEl.className = 'mapping-badge mapping-done';
+                statusEl.innerHTML = '<i class="fas fa-check-circle"></i>已映射';
+            } else if (status === '待审核') {
+                statusEl.className = 'mapping-badge mapping-pending';
+                statusEl.innerHTML = '<i class="fas fa-clock"></i>待审核';
+            } else {
+                statusEl.className = 'mapping-badge mapping-none';
+                statusEl.innerHTML = '<i class="fas fa-minus-circle"></i>未映射';
+            }
+
+            // 更新分类标签
+            var domainTag = document.querySelector('.domain-tag');
+            if (domainTag) {
+                domainTag.textContent = category;
+                domainTag.className = 'domain-tag ' + (category === '基础信息类' ? 'domain-base' : category === '临床业务类' ? 'domain-clinical' : 'domain-lab');
+            }
+
+            showToast('已切换至：' + name, 'success');
+        }
+
+        function filterDictTree(query) {
+            const items = document.querySelectorAll('#dictTree .std-tree-item');
+            const q = query.toLowerCase();
+            items.forEach(function(item) {
+                const text = item.textContent.toLowerCase();
+                const parent = item.closest('.std-tree-children');
+                if (text.includes(q)) {
+                    item.style.display = '';
+                    if (parent) {
+                        parent.classList.add('expanded');
+                        parent.previousElementSibling?.querySelector('.std-tree-arrow')?.classList.add('expanded');
+                    }
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        function switchTab(btn, tabId) {
+            document.querySelectorAll('.tab-btn').forEach(function(t) {
+                t.classList.remove('active', 'text-medical-600');
+                t.classList.add('text-gray-500', 'dark:text-gray-400');
+            });
+            btn.classList.add('active', 'text-medical-600');
+            btn.classList.remove('text-gray-500', 'dark:text-gray-400');
+
+            document.querySelectorAll('.tab-content').forEach(function(c) { c.classList.add('hidden'); });
+            document.getElementById(tabId).classList.remove('hidden');
+
+            // 添加标准值按钮仅在「标准字典」tab 显示
+            var addBtn = document.getElementById('addStdValueBtn');
+            if (addBtn) {
+                addBtn.classList.toggle('hidden', tabId !== 'standardTab');
+            }
+        }
+
+        // 标准代码行新增（新建/编辑字典模态框复用）
+        function addDictCodeRow(containerId) {
+            var container = document.getElementById(containerId || 'newDictCodesRows');
+            if (!container) return;
+            var html = '<div class="grid grid-cols-12 group">' +
+                '<input type="text" placeholder="code" class="col-span-2 px-2 py-1.5 text-xs font-mono border-0 border-r border-gray-200 dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-medical-400">' +
+                '<input type="text" placeholder="name" class="col-span-3 px-2 py-1.5 text-xs border-0 border-r border-gray-200 dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-medical-400">' +
+                '<input type="text" placeholder="说明" class="col-span-6 px-2 py-1.5 text-xs border-0 border-r border-gray-200 dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-medical-400">' +
+                '<button type="button" class="col-span-1 text-gray-300 hover:text-danger-600 transition-colors flex items-center justify-center focus-visible:ring-1 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除此行" aria-label="删除此行" onclick="removeDictCodeRow(this)"><i class="fas fa-times text-xs" aria-hidden="true"></i></button>' +
+                '</div>';
+            container.insertAdjacentHTML('beforeend', html);
+        }
+
+        function handleSqlCollect() {
+            var ds = document.getElementById('sqlCollectDs').value;
+            var sql = document.getElementById('sqlCollectQuery').value.trim();
+            if (!ds) {
+                showToast('请选择数据源', 'warning');
+                return;
+            }
+            if (!sql) {
+                showToast('请输入SQL查询语句', 'warning');
+                return;
+            }
+            closeModal('sqlCollectModal');
+            showToast('SQL采集任务已提交，正在执行...', 'info');
+            setTimeout(function() {
+                showToast('SQL采集完成，成功采集 4 条字典值', 'success');
+            }, 1500);
+        }
+
+        function handleDictExcelUpload(input) {
+            if (input.files && input.files[0]) {
+                showToast('已选择文件：' + input.files[0].name, 'info');
+            }
+        }
+
+        function handleDictExcelImport() {
+            var file = document.getElementById('dictExcelFile').files[0];
+            if (!file) {
+                showToast('请先选择Excel文件', 'warning');
+                return;
+            }
+            closeModal('excelImportModal');
+            showToast('Excel导入成功，新增 4 条字典值', 'success');
+        }
+
+        function handleManualAdd() {
+            var code = document.getElementById('manualCode').value.trim();
+            var name = document.getElementById('manualName').value.trim();
+            if (!code) {
+                showToast('请输入标准代码', 'warning');
+                return;
+            }
+            if (!name) {
+                showToast('请输入标准名称', 'warning');
+                return;
+            }
+            closeModal('manualAddModal');
+            showToast('字典值添加成功', 'success');
+            document.getElementById('manualCode').value = '';
+            document.getElementById('manualName').value = '';
+            document.getElementById('manualDesc').value = '';
+        }
+
+        function handleAddSourceDict() {
+            var ds = document.getElementById('sourceDictDs').value;
+            var table = document.getElementById('sourceDictTable').value.trim();
+            if (!ds) {
+                showToast('请选择数据源', 'warning');
+                return;
+            }
+            if (!table) {
+                showToast('请输入字典表名', 'warning');
+                return;
+            }
+            closeModal('addSourceDictModal');
+            showToast('源字典添加成功', 'success');
+        }
+
+        function handleAddDict() {
+            var name = document.getElementById('newDictName').value.trim();
+            var category = document.getElementById('newDictCategory').value;
+            if (!name) {
+                showToast('请输入字典名称', 'warning');
+                document.getElementById('newDictName').focus();
+                return;
+            }
+            if (!category) {
+                showToast('请选择字典分类', 'warning');
+                document.getElementById('newDictCategory').focus();
+                return;
+            }
+            MediData.btnLoading.show(document.getElementById('addDictSubmit'), '创建中...');
+            setTimeout(function() {
+                MediData.btnLoading.hide(document.getElementById('addDictSubmit'));
+                closeModal('addDictModal');
+                showToast('字典"' + name + '"创建成功', 'success');
+            }, 800);
+        }
+
+        function removeDictCodeRow(btn) {
+            var row = btn.closest('.grid');
+            if (!row) return;
+            row.style.transition = 'opacity 0.2s ease, max-height 0.2s ease';
+            row.style.opacity = '0';
+            row.style.maxHeight = row.offsetHeight + 'px';
+            requestAnimationFrame(function() { row.style.maxHeight = '0'; });
+            setTimeout(function() { row.remove(); }, 200);
+        }
+
+        function handleEditDict() {
+            var name = document.getElementById('editDictName').value.trim();
+            if (!name) {
+                showToast('请输入字典名称', 'warning');
+                return;
+            }
+            closeModal('editDictModal');
+            showToast('字典"' + name + '"保存成功', 'success');
+        }
+
+        // ===== 分类增删改 =====
+        var _categoryCtx = { node: null, name: '', mode: 'edit' };
+
+        function openAddCategoryModal() {
+            _categoryCtx = { node: null, name: '', mode: 'add' };
+            document.getElementById('categoryModalTitle').textContent = '新增分类';
+            document.getElementById('categoryNameInput').value = '';
+            openModal('categoryModal');
+        }
+
+        function editCategory(btn, categoryName) {
+            _categoryCtx = { node: btn.closest('[data-category-node]'), name: categoryName, mode: 'edit' };
+            document.getElementById('categoryModalTitle').textContent = '编辑分类';
+            document.getElementById('categoryNameInput').value = categoryName;
+            openModal('categoryModal');
+        }
+
+        function saveCategory() {
+            var newName = document.getElementById('categoryNameInput').value.trim();
+            if (!newName) {
+                showToast('分类名称为必填项', 'error');
+                return;
+            }
+            if (_categoryCtx.mode === 'add') {
+                var tree = document.getElementById('dictTree');
+                var html = '<div class="mb-1" data-category-node>' +
+                    '<div tabindex="0" role="treeitem" class="std-tree-item flex items-center gap-2 px-3 py-2 rounded-lg" onclick="toggleTreeNode(this, event)">' +
+                        '<i class="fas fa-chevron-right std-tree-arrow text-gray-400 text-xs flex-shrink-0"></i>' +
+                        '<i class="fas fa-folder text-medical-600 text-sm flex-shrink-0"></i>' +
+                        '<span class="text-sm font-medium text-gray-800 dark:text-gray-200 flex-1 min-w-0 truncate">' + MediData.escapeHtml(newName) + '</span>' +
+                        '<span class="text-xs text-gray-400 flex-shrink-0">0字典</span>' +
+                        '<div class="flex items-center gap-0.5 flex-shrink-0">' +
+                            '<button type="button" class="text-gray-400 hover:text-medical-600 transition-colors flex-shrink-0 w-5 h-5 flex items-center justify-center rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑分类" aria-label="编辑' + MediData.escapeHtml(newName) + '" onclick="event.stopPropagation(); editCategory(this, \'' + newName.replace(/'/g, "\\'") + '\');"><i class="fas fa-edit text-xs" aria-hidden="true"></i></button>' +
+                            '<button type="button" class="text-danger-600 hover:text-danger-700 transition-colors flex-shrink-0 w-5 h-5 flex items-center justify-center rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除分类" aria-label="删除' + MediData.escapeHtml(newName) + '" onclick="event.stopPropagation(); deleteCategory(this, \'' + newName.replace(/'/g, "\\'") + '\');"><i class="fas fa-trash-alt text-xs" aria-hidden="true"></i></button>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="std-tree-children pl-4"></div>' +
+                '</div>';
+                tree.insertAdjacentHTML('beforeend', html);
+                showToast('分类「' + newName + '」已新增', 'success');
+            } else if (_categoryCtx.node) {
+                var labelSpan = _categoryCtx.node.querySelector('.std-tree-item > span.text-sm.font-medium');
+                if (labelSpan) labelSpan.textContent = newName;
+                showToast('分类「' + newName + '」已更新', 'success');
+            }
+            closeModal('categoryModal');
+        }
+
+        function deleteCategory(btn, categoryName) {
+            var categoryNode = btn.closest('[data-category-node]');
+            var dictCount = categoryNode ? categoryNode.querySelectorAll('.std-tree-children > .std-tree-item').length : 0;
+            showConfirm({
+                title: '删除分类',
+                message: '确定要删除分类「' + categoryName + '」吗？该分类下共 ' + dictCount + ' 个字典将一并移除，此操作不可撤销。',
+                confirmText: '确认删除',
+                cancelText: '取消',
+                type: 'danger',
+                onConfirm: function() {
+                    if (categoryNode) {
+                        categoryNode.style.transition = 'opacity 0.2s ease, max-height 0.25s ease';
+                        categoryNode.style.opacity = '0';
+                        categoryNode.style.maxHeight = categoryNode.offsetHeight + 'px';
+                        requestAnimationFrame(function() { categoryNode.style.maxHeight = '0'; });
+                        setTimeout(function() { categoryNode.remove(); }, 250);
+                    }
+                    showToast('分类「' + categoryName + '」已删除', 'success');
+                },
+                onCancel: function() { btn.blur(); }
+            });
+        }
+
+        // ===== 字典删除 =====
+        function deleteDict() {
+            var dictTitle = document.getElementById('dictTitle').textContent;
+            showConfirm({
+                title: '删除字典',
+                message: '确定要删除字典「' + dictTitle + '」及其所有标准值与映射关系吗？此操作不可撤销。',
+                confirmText: '确认删除',
+                cancelText: '取消',
+                type: 'danger',
+                onConfirm: function() {
+                    var activeNode = document.querySelector('.std-tree-item.active');
+                    if (activeNode) {
+                        var categoryNode = activeNode.closest('[data-category-node]');
+                        activeNode.remove();
+                        if (categoryNode) {
+                            var countSpan = categoryNode.querySelector('.std-tree-item > .text-xs.text-gray-400');
+                            if (countSpan) {
+                                var m = countSpan.textContent.match(/(\d+)/);
+                                if (m && parseInt(m[1]) > 0) countSpan.textContent = (parseInt(m[1]) - 1) + '字典';
+                            }
+                        }
+                    }
+                    MediData.renderEmptyState('dictDetailPanel', {
+                        icon: 'fa-language',
+                        title: '请选择字典',
+                        desc: '从左侧字典分类树中选择一个字典查看标准值与映射'
+                    });
+                    showToast('字典「' + dictTitle + '」已删除', 'success');
+                }
+            });
+        }
+
+        // ===== 标准值删除 =====
+        function deleteStdDictValue(btn) {
+            var row = btn.closest('tr');
+            var valueName = row.querySelector('td:nth-child(2)').textContent.trim();
+            showConfirm({
+                title: '删除标准值',
+                message: '确定要删除标准值「' + valueName + '」吗？相关映射关系将解除，此操作不可撤销。',
+                confirmText: '确认删除',
+                cancelText: '取消',
+                type: 'danger',
+                onConfirm: function() {
+                    row.style.transition = 'opacity 0.2s ease';
+                    row.style.opacity = '0';
+                    setTimeout(function() { row.remove(); }, 250);
+                    showToast('标准值「' + valueName + '」已删除', 'success');
+                },
+                onCancel: function() { btn.blur(); }
+            });
+        }
+
+        // ===== AI 字典匹配（需求：系统字典 → 标准字典智能映射） =====
+        function bumpMappingCompletion() {
+            var el = document.querySelector('.text-2xl.font-bold.text-medical-600');
+            if (!el) return;
+            var val = parseFloat(el.textContent);
+            if (isNaN(val)) return;
+            // 12 个源映射中确认 1 条待审核 + 应用 1 条推荐 → 完成度提升
+            var next = Math.min(100, Math.round((val + 2.4) * 10) / 10);
+            el.textContent = next.toFixed(1) + '%';
+        }
+
+        function applyEmrSuggestion(btn) {
+            var row = btn.closest('tr');
+            if (!row) return;
+            btn.disabled = true;
+            setTimeout(function() {
+                row.querySelector('td:nth-child(4)').innerHTML =
+                    '<span class="mapping-badge mapping-pending"><i class="fas fa-clock"></i>待审核</span>';
+                btn.outerHTML = '<span class="text-xs text-gray-400">已应用</span>';
+                bumpMappingCompletion();
+                showToast('已按 AI 建议建立映射，状态置为「待审核」，请人工复核', 'success', 3500);
+            }, 400);
+        }
+
+        function aiMatchDictionary() {
+            var btn = document.getElementById('aiDictMatchBtn');
+            MediData.btnLoading.show(btn, 'AI 匹配中...');
+            setTimeout(function() {
+                MediData.btnLoading.hide(btn);
+                // 1) 展示建议横幅所在 Tab
+                var sourceTabBtn = document.querySelector('[onclick*="sourceTab"]');
+                if (sourceTabBtn && !sourceTabBtn.classList.contains('active')) sourceTabBtn.click();
+                // 2) 自动应用 EMR 未映射项的推荐
+                var applyBtn = document.getElementById('emrAiApplyBtn');
+                if (applyBtn && !applyBtn.disabled) {
+                    applyEmrSuggestion(applyBtn);
+                } else {
+                    showToast('AI 扫描完成：未发现新的可自动匹配项', 'info');
+                }
+            }, 1800);
+        }
+
+        // 默认展开第一个分类
+        document.addEventListener('DOMContentLoaded', function() {
+            var firstArrow = document.querySelector('.std-tree-arrow');
+            if (firstArrow) firstArrow.classList.add('expanded');
+            var firstChildren = document.querySelector('.std-tree-children');
+            if (firstChildren) firstChildren.classList.add('expanded');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0d9488">
+    <meta name="description" content="审计日志 - 记录系统所有操作行为，满足医疗数据安全合规要求">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="审计日志 - MediData AI">
+    <meta property="og:description" content="记录系统所有操作行为，满足医疗数据安全合规要求">
+    <title>审计日志 - MediData AI</title>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="stylesheet" href="components/tailwind.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="components/common.css">
+    <script src="components/common.js" defer></script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+    <a href="#main-content" class="skip-link">跳转到主内容</a>
+    <div class="flex h-screen overflow-hidden">
+        <aside id="sidebar" class="w-64 gradient-bg text-white flex flex-col flex-shrink-0"></aside>
+
+        <main id="main-content" class="flex-1 flex flex-col overflow-hidden" role="main">
+            <header id="header" class="glass-effect border-b border-gray-200 dark:border-gray-700 px-6 py-4 flex items-center justify-between flex-shrink-0 z-10"></header>
+
+            <div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-2">
+                <nav id="breadcrumb" class="breadcrumb"></nav>
+            </div>
+
+            <div class="flex-1 overflow-y-auto p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">审计日志</h2>
+                        <p class="text-gray-500 dark:text-gray-400 mt-1">记录系统所有操作行为，满足医疗数据安全合规要求</p>
+                    </div>
+                    <div class="flex gap-3">
+                        <button id="filterToggleBtn" class="px-4 py-2.5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors flex items-center gap-2 btn-transition" onclick="toggleAdvancedFilter()">
+                            <i class="fas fa-filter"></i> 筛选
+                        </button>
+                        <button id="exportBtn" class="px-4 py-2.5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors flex items-center gap-2 btn-transition" onclick="exportAuditLog()">
+                            <i id="exportIcon" class="fas fa-download"></i> <span id="exportText">导出日志</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 stats-grid gap-4 mb-6">
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-2xl font-bold text-gray-900 dark:text-gray-100">15,234</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">今日操作数</p>
+                            </div>
+                            <div class="w-10 h-10 bg-medical-50 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-mouse-pointer text-medical-600"></i>
+                            </div>
+                            
+</div>
+                            <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-3"><span class="text-success-600 font-medium">+8%</span> 较昨日</div>
+                            
+                    </div>
+                            
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-2xl font-bold text-warning-600">23</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">敏感操作</p>
+                            </div>
+                            
+                            <div class="w-10 h-10 bg-warning-50 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-exclamation-triangle text-warning-600"></i>
+                            </div>
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+</div>
+                            <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-3"><span class="text-warning-600 font-medium">需复核</span></div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-2xl font-bold text-danger-600">3</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">异常告警</p>
+                            </div>
+                            <div class="w-10 h-10 bg-danger-50 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-shield-alt text-danger-600"></i>
+                            </div>
+</div>
+                            <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-3"><span class="text-danger-600 font-medium">待处理</span></div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-2xl font-bold text-primary-600">8</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">活跃用户数</p>
+                            </div>
+                            <div class="w-10 h-10 bg-primary-50 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-users text-primary-600"></i>
+                            </div>
+</div>
+                            <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-3">近 7 日去重统计</div>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 mb-6">
+                    <div class="flex items-center gap-4">
+                        <div class="relative flex-1">
+                            <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                            <input id="auditSearch" type="text" placeholder="搜索用户、操作类型、对象..."
+                                   class="w-full pl-10 pr-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus"
+                                   oninput="filterAuditLogs()">
+                        </div>
+                        <select id="auditTypeFilter" class="px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus" onchange="filterAuditLogs()">
+                            <option>全部操作类型</option>
+                            <option>登录</option>
+                            <option>数据查询</option>
+                            <option>数据修改</option>
+                            <option>配置变更</option>
+                            <option>导出下载</option>
+                            <option>AI 操作</option>
+                            <option>敏感操作</option>
+                        </select>
+                        <select id="auditUserFilter" class="px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus" onchange="filterAuditLogs()">
+                            <option>全部用户</option>
+                            <option>张工程师</option>
+                            <option>李工程师</option>
+                            <option>系统管理员</option>
+                        </select>
+                        <input id="auditDateFilter" type="date" aria-label="按日期筛选" class="px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus" onchange="filterAuditLogs()">
+                    </div>
+                </div>
+
+                <!-- 高级筛选 -->
+                <div id="advancedFilter" class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 mb-6" style="display:none">
+                    <h3 class="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3">高级筛选</h3>
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+                        <div>
+                            <label for="advDateFrom" class="block text-xs text-gray-500 dark:text-gray-400 mb-1">开始时间</label>
+                            <input id="advDateFrom" type="date" class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus">
+                        </div>
+                        <div>
+                            <label for="advDateTo" class="block text-xs text-gray-500 dark:text-gray-400 mb-1">结束时间</label>
+                            <input id="advDateTo" type="date" class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus">
+                        </div>
+                        <div>
+                            <label for="advResultFilter" class="block text-xs text-gray-500 dark:text-gray-400 mb-1">操作结果</label>
+                            <select id="advResultFilter" class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus">
+                                <option>全部</option>
+                                <option>成功</option>
+                                <option>失败</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="advIpFilter" class="block text-xs text-gray-500 dark:text-gray-400 mb-1">IP 地址</label>
+                            <input id="advIpFilter" type="text" placeholder="如: 192.168.1.50" class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus">
+                        </div>
+                    </div>
+                    <div class="flex justify-end gap-3">
+                        <button class="px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-colors" onclick="resetAdvancedFilter()">重置</button>
+                        <button class="px-4 py-2 bg-medical-600 text-white text-sm font-medium rounded-xl hover:bg-medical-700 transition-colors" onclick="applyAdvancedFilter()">应用</button>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 overflow-hidden">
+                    <div id="batchBar" class="px-4 py-2 bg-medical-50 dark:bg-medical-900 border-b border-medical-100 dark:border-medical-800 flex items-center gap-3" style="display:none">
+                        <span class="text-sm text-medical-700 dark:text-medical-300">已选择 <span id="selectedCount">0</span> 条</span>
+                        <button class="px-3 py-1 text-xs bg-medical-600 text-white rounded-xl hover:bg-medical-700 transition-colors" onclick="batchExport()">批量导出</button>
+                        <button class="px-3 py-1 text-xs bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors" onclick="clearSelection()">取消选择</button>
+                    </div>
+                    <div class="overflow-x-auto max-h-[60vh]">
+                    <table class="w-full" id="auditLogTable" aria-label="审计日志">
+                        <thead class="sticky-head bg-gray-50 dark:bg-gray-700 border-b border-gray-100 dark:border-gray-700">
+                            <tr>
+                                <th scope="col" class="px-4 py-3 text-left"><input type="checkbox" id="selectAll" aria-label="全选本页日志" class="rounded border-gray-300" onchange="toggleSelectAll(this)"></th>
+                                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">时间</th>
+                                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">用户</th>
+                                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">操作类型</th>
+                                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">操作对象</th>
+                                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">操作内容</th>
+                                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">IP 地址</th>
+                                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">结果</th>
+                            </tr>
+                        </thead>
+                        <tbody id="auditLogBody" class="divide-y divide-gray-100 dark:divide-gray-700">
+                            <tr class="table-row-hover transition-colors cursor-pointer" tabindex="0" data-clickable onclick="showLogDetail(this)" data-time="2026-05-04 10:32:15" data-user="张工程师" data-type="数据修改" data-target="字段映射" data-content="修改 HIS_ORDER 表 3 个字段映射关系" data-ip="192.168.1.50" data-result="成功" data-params='{"table":"HIS_ORDER","fields":["PAT_ID","ORDER_CODE","ORDER_NAME"],"action":"update"}' data-response='{"status":"success","affected_rows":3,"duration":"120ms"}'>
+                                <td class="px-4 py-3" onclick="event.stopPropagation()"><input type="checkbox" aria-label="选择该日志" class="row-checkbox rounded border-gray-300" onchange="updateSelection()"></td>
+                                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">2026-05-04 10:32:15</td>
+                                <td class="px-4 py-3">
+                                    <div class="flex items-center gap-2">
+                                        <img loading="lazy" src="https://ui-avatars.com/api/?name=Zhang&background=0d9488&color=fff&size=24" class="w-6 h-6 rounded-full" alt="张工程师">
+                                        <span class="text-sm text-gray-700 dark:text-gray-300">张工程师</span>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <span class="text-xs bg-primary-50 text-primary-600 px-2 py-1 rounded-full">数据修改</span>
+                                </td>
+                                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">字段映射</td>
+                                <td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-400">修改 HIS_ORDER 表 3 个字段映射关系</td>
+                                <td class="px-4 py-3 text-sm font-mono text-gray-500 dark:text-gray-400">192.168.1.50</td>
+                                <td class="px-4 py-3">
+                                    <span class="text-xs bg-success-50 text-success-600 px-2 py-1 rounded-full">成功</span>
+                                </td>
+                            </tr>
+                            <tr class="table-row-hover transition-colors cursor-pointer" tabindex="0" data-clickable onclick="showLogDetail(this)" data-time="2026-05-04 10:28:42" data-user="李工程师" data-type="配置变更" data-target="数据源" data-content="修改 LIS_检验库 连接密码" data-ip="192.168.1.51" data-result="成功" data-params='{"datasource":"LIS_检验库","action":"update_password"}' data-response='{"status":"success","message":"密码已更新"}'>
+                                <td class="px-4 py-3" onclick="event.stopPropagation()"><input type="checkbox" aria-label="选择该日志" class="row-checkbox rounded border-gray-300" onchange="updateSelection()"></td>
+                                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">2026-05-04 10:28:42</td>
+                                <td class="px-4 py-3">
+                                    <div class="flex items-center gap-2">
+                                        <img loading="lazy" src="https://ui-avatars.com/api/?name=Li&background=2563eb&color=fff&size=24" class="w-6 h-6 rounded-full" alt="李工程师">
+                                        <span class="text-sm text-gray-700 dark:text-gray-300">李工程师</span>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <span class="text-xs bg-warning-50 text-warning-600 px-2 py-1 rounded-full">配置变更</span>
+                                </td>
+                                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">数据源</td>
+                                <td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-400">修改 LIS_检验库 连接密码</td>
+                                <td class="px-4 py-3 text-sm font-mono text-gray-500 dark:text-gray-400">192.168.1.51</td>
+                                <td class="px-4 py-3">
+                                    <span class="text-xs bg-success-50 text-success-600 px-2 py-1 rounded-full">成功</span>
+                                </td>
+                            </tr>
+                            <tr class="table-row-hover transition-colors cursor-pointer" tabindex="0" data-clickable onclick="showLogDetail(this)" data-time="2026-05-04 10:15:30" data-user="张工程师" data-type="AI 操作" data-target="智能映射" data-content="AI 自动生成 PAT_VISIT_INFO 字段映射" data-ip="192.168.1.50" data-result="成功" data-params='{"table":"PAT_VISIT_INFO","model":"GPT-4","confidence":0.92}' data-response='{"status":"success","mapped_fields":15,"unmapped_fields":2}'>
+                                <td class="px-4 py-3" onclick="event.stopPropagation()"><input type="checkbox" aria-label="选择该日志" class="row-checkbox rounded border-gray-300" onchange="updateSelection()"></td>
+                                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">2026-05-04 10:15:30</td>
+                                <td class="px-4 py-3">
+                                    <div class="flex items-center gap-2">
+                                        <img loading="lazy" src="https://ui-avatars.com/api/?name=Zhang&background=0d9488&color=fff&size=24" class="w-6 h-6 rounded-full" alt="张工程师">
+                                        <span class="text-sm text-gray-700 dark:text-gray-300">张工程师</span>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <span class="text-xs bg-medical-50 text-medical-600 px-2 py-1 rounded-full">AI 操作</span>
+                                </td>
+                                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">智能映射</td>
+                                <td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-400">AI 自动生成 PAT_VISIT_INFO 字段映射</td>
+                                <td class="px-4 py-3 text-sm font-mono text-gray-500 dark:text-gray-400">192.168.1.50</td>
+                                <td class="px-4 py-3">
+                                    <span class="text-xs bg-success-50 text-success-600 px-2 py-1 rounded-full">成功</span>
+                                </td>
+                            </tr>
+                            <tr class="table-row-hover transition-colors cursor-pointer" tabindex="0" data-clickable onclick="showLogDetail(this)" data-time="2026-05-04 09:45:00" data-user="张工程师" data-type="登录" data-target="系统" data-content="用户登录系统" data-ip="192.168.1.50" data-result="成功" data-params='{"login_method":"password","browser":"Chrome"}' data-response='{"status":"success","session_id":"sess_abc123"}'>
+                                <td class="px-4 py-3" onclick="event.stopPropagation()"><input type="checkbox" aria-label="选择该日志" class="row-checkbox rounded border-gray-300" onchange="updateSelection()"></td>
+                                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">2026-05-04 09:45:00</td>
+                                <td class="px-4 py-3">
+                                    <div class="flex items-center gap-2">
+                                        <img loading="lazy" src="https://ui-avatars.com/api/?name=Zhang&background=0d9488&color=fff&size=24" class="w-6 h-6 rounded-full" alt="张工程师">
+                                        <span class="text-sm text-gray-700 dark:text-gray-300">张工程师</span>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <span class="text-xs bg-danger-50 text-danger-600 px-2 py-1 rounded-full">登录</span>
+                                </td>
+                                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">系统</td>
+                                <td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-400">用户登录系统</td>
+                                <td class="px-4 py-3 text-sm font-mono text-gray-500 dark:text-gray-400">192.168.1.50</td>
+                                <td class="px-4 py-3">
+                                    <span class="text-xs bg-success-50 text-success-600 px-2 py-1 rounded-full">成功</span>
+                                </td>
+                            </tr>
+                            <tr class="table-row-hover transition-colors cursor-pointer" tabindex="0" data-clickable onclick="showLogDetail(this)" data-time="2026-05-04 09:30:22" data-user="系统管理员" data-type="敏感操作" data-target="权限管理" data-content="修改张工程师的数据源访问权限" data-ip="192.168.1.10" data-result="成功" data-params='{"target_user":"张工程师","permission":"datasource_access","action":"grant"}' data-response='{"status":"success","new_permissions":["read","write"]}'>
+                                <td class="px-4 py-3" onclick="event.stopPropagation()"><input type="checkbox" aria-label="选择该日志" class="row-checkbox rounded border-gray-300" onchange="updateSelection()"></td>
+                                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">2026-05-04 09:30:22</td>
+                                <td class="px-4 py-3">
+                                    <div class="flex items-center gap-2">
+                                        <img loading="lazy" src="https://ui-avatars.com/api/?name=Admin&background=dc2626&color=fff&size=24" class="w-6 h-6 rounded-full" alt="系统管理员">
+                                        <span class="text-sm text-gray-700 dark:text-gray-300">系统管理员</span>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <span class="text-xs bg-danger-50 text-danger-600 px-2 py-1 rounded-full">敏感操作</span>
+                                </td>
+                                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">权限管理</td>
+                                <td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-400">修改张工程师的数据源访问权限</td>
+                                <td class="px-4 py-3 text-sm font-mono text-gray-500 dark:text-gray-400">192.168.1.10</td>
+                                <td class="px-4 py-3">
+                                    <span class="text-xs bg-success-50 text-success-600 px-2 py-1 rounded-full">成功</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    </div>
+                    <div class="px-4 py-3 bg-gray-50 dark:bg-gray-700 border-t border-gray-100 dark:border-gray-700 flex items-center justify-between">
+                        <span class="text-sm text-gray-500 dark:text-gray-400" id="auditCountText">显示 1-5 条，共 5 条</span>
+                        <div id="auditPagination" class="pagination"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 日志详情模态框 -->
+    <div id="logDetailModal" class="modal fixed inset-0 z-50 items-center justify-center bg-black/50" onclick="if(event.target===this)closeModal('logDetailModal')">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto">
+            <div class="flex items-center justify-between p-6 border-b border-gray-100 dark:border-gray-700">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">日志详情</h3>
+                <button class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" data-action="closeModal" data-args="logDetailModal" aria-label="关闭">
+                    <i class="fas fa-times text-gray-500 dark:text-gray-400" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="p-6 space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">操作时间</p>
+                        <p id="detailTime" class="text-sm text-gray-900 dark:text-gray-100"></p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">操作用户</p>
+                        <p id="detailUser" class="text-sm text-gray-900 dark:text-gray-100"></p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">操作类型</p>
+                        <p id="detailType" class="text-sm text-gray-900 dark:text-gray-100"></p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">操作对象</p>
+                        <p id="detailTarget" class="text-sm text-gray-900 dark:text-gray-100"></p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">IP 地址</p>
+                        <p id="detailIp" class="text-sm font-mono text-gray-900 dark:text-gray-100"></p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">操作结果</p>
+                        <p id="detailResult" class="text-sm text-gray-900 dark:text-gray-100"></p>
+                    </div>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">操作内容</p>
+                    <p id="detailContent" class="text-sm text-gray-900 dark:text-gray-100"></p>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">请求参数</p>
+                    <pre id="detailParams" class="text-xs bg-gray-50 dark:bg-gray-700 p-3 rounded-lg overflow-x-auto text-gray-700 dark:text-gray-300 font-mono"></pre>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">响应结果</p>
+                    <pre id="detailResponse" class="text-xs bg-gray-50 dark:bg-gray-700 p-3 rounded-lg overflow-x-auto text-gray-700 dark:text-gray-300 font-mono"></pre>
+                </div>
+            </div>
+            <div class="p-6 border-t border-gray-100 dark:border-gray-700 flex justify-end">
+                <button class="px-4 py-2 bg-medical-600 text-white text-sm font-medium rounded-xl hover:bg-medical-700 transition-colors" data-action="closeModal" data-args="logDetailModal">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== 客户端真实分页：pageSize 3，与筛选联动 =====
+        var auditPageSize = 3;
+        var auditCurrentPage = 1;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            applyAuditPage();
+        });
+
+        // 通过筛选的行（data-filtered 由 filterAuditLogs 维护）
+        function getFilteredRows() {
+            var rows = document.getElementById('auditLogBody').querySelectorAll('tr');
+            return Array.prototype.slice.call(rows).filter(function(r) {
+                return r.getAttribute('data-filtered') !== 'hidden';
+            });
+        }
+
+        function applyAuditPage() {
+            var allRows = document.getElementById('auditLogBody').querySelectorAll('tr');
+            var visible = getFilteredRows();
+            var totalPages = Math.max(1, Math.ceil(visible.length / auditPageSize));
+            if (auditCurrentPage > totalPages) auditCurrentPage = totalPages;
+            Array.prototype.forEach.call(allRows, function(r) { r.style.display = 'none'; });
+            var start = (auditCurrentPage - 1) * auditPageSize;
+            visible.forEach(function(r, i) {
+                r.style.display = (i >= start && i < start + auditPageSize) ? '' : 'none';
+            });
+            renderPagination('auditPagination', auditCurrentPage, totalPages, 'goToPage');
+            var countEl = document.getElementById('auditCountText');
+            if (countEl) {
+                var from = visible.length === 0 ? 0 : start + 1;
+                var to = Math.min(visible.length, start + auditPageSize);
+                countEl.textContent = '显示 ' + from + '-' + to + ' 条，共 ' + visible.length + ' 条';
+            }
+        }
+
+        function goToPage(page) {
+            auditCurrentPage = page;
+            applyAuditPage();
+        }
+
+        function toggleAdvancedFilter() {
+            var panel = document.getElementById('advancedFilter');
+            var btn = document.getElementById('filterToggleBtn');
+            var ACTIVE = ['bg-medical-50', 'border-medical-200', 'text-medical-700', 'dark:bg-medical-900/30', 'dark:border-medical-700', 'dark:text-medical-300'];
+            var IDLE = ['bg-white', 'border-gray-200', 'text-gray-700', 'dark:bg-gray-700', 'dark:border-gray-700', 'dark:text-gray-300'];
+            if (panel.style.display === 'none') {
+                panel.style.display = 'block';
+                btn.classList.add.apply(btn.classList, ACTIVE);
+                btn.classList.remove.apply(btn.classList, IDLE);
+                btn.setAttribute('aria-expanded', 'true');
+            } else {
+                panel.style.display = 'none';
+                btn.classList.remove.apply(btn.classList, ACTIVE);
+                btn.classList.add.apply(btn.classList, IDLE);
+                btn.setAttribute('aria-expanded', 'false');
+            }
+        }
+
+        function resetAdvancedFilter() {
+            document.getElementById('advDateFrom').value = '';
+            document.getElementById('advDateTo').value = '';
+            document.getElementById('advResultFilter').selectedIndex = 0;
+            document.getElementById('advIpFilter').value = '';
+            filterAuditLogs();
+        }
+
+        function applyAdvancedFilter() {
+            filterAuditLogs();
+            showToast('高级筛选已应用', 'success');
+        }
+
+        // 筛选只维护 data-filtered 标记，显隐交给分页层（applyAuditPage）
+        function filterAuditLogs() {
+            var searchText = document.getElementById('auditSearch').value.toLowerCase();
+            var typeFilter = document.getElementById('auditTypeFilter').value;
+            var userFilter = document.getElementById('auditUserFilter').value;
+            var dateFilter = document.getElementById('auditDateFilter') ? document.getElementById('auditDateFilter').value : '';
+            var advOpen = document.getElementById('advancedFilter').style.display !== 'none';
+            var advResult = advOpen ? document.getElementById('advResultFilter').value : '';
+            var advIp = advOpen ? document.getElementById('advIpFilter').value.toLowerCase() : '';
+            var advFrom = advOpen ? document.getElementById('advDateFrom').value : '';
+            var advTo = advOpen ? document.getElementById('advDateTo').value : '';
+            var rows = document.getElementById('auditLogBody').querySelectorAll('tr');
+
+            rows.forEach(function(row) {
+                var user = row.getAttribute('data-user') || '';
+                var type = row.getAttribute('data-type') || '';
+                var content = row.getAttribute('data-content') || '';
+                var target = row.getAttribute('data-target') || '';
+                var ip = row.getAttribute('data-ip') || '';
+                var result = row.getAttribute('data-result') || '';
+                var day = (row.getAttribute('data-time') || '').slice(0, 10);
+
+                var matchSearch = !searchText || user.toLowerCase().includes(searchText) || type.toLowerCase().includes(searchText) || content.toLowerCase().includes(searchText) || target.toLowerCase().includes(searchText);
+                var matchType = typeFilter === '全部操作类型' || type === typeFilter;
+                var matchUser = userFilter === '全部用户' || user === userFilter;
+                var matchDate = !dateFilter || day === dateFilter;
+                var matchResult = !advResult || advResult === '全部' || result === advResult;
+                var matchIp = !advIp || ip.toLowerCase().includes(advIp);
+                var matchFrom = !advFrom || day >= advFrom;
+                var matchTo = !advTo || day <= advTo;
+
+                var match = matchSearch && matchType && matchUser && matchDate && matchResult && matchIp && matchFrom && matchTo;
+                row.setAttribute('data-filtered', match ? '' : 'hidden');
+            });
+            auditCurrentPage = 1; // 筛选条件变化回到第一页
+            applyAuditPage();
+        }
+
+        function exportAuditLog() {
+            var btn = document.getElementById('exportBtn');
+            var icon = document.getElementById('exportIcon');
+            var text = document.getElementById('exportText');
+            btn.disabled = true;
+            icon.className = 'fas fa-spinner fa-spin';
+            text.textContent = '导出中...';
+
+            setTimeout(function() {
+                var rows = document.getElementById('auditLogBody').querySelectorAll('tr');
+                var csvContent = '\uFEFF时间,用户,操作类型,操作对象,操作内容,IP地址,结果\n';
+                rows.forEach(function(row) {
+                    if (row.getAttribute('data-filtered') === 'hidden') return;
+                    var cols = [
+                        row.getAttribute('data-time'),
+                        row.getAttribute('data-user'),
+                        row.getAttribute('data-type'),
+                        row.getAttribute('data-target'),
+                        '"' + (row.getAttribute('data-content') || '').replace(/"/g, '""') + '"',
+                        row.getAttribute('data-ip'),
+                        row.getAttribute('data-result')
+                    ];
+                    csvContent += cols.join(',') + '\n';
+                });
+                var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                var url = URL.createObjectURL(blob);
+                var link = document.createElement('a');
+                link.href = url;
+                link.download = 'audit_log_' + new Date().toISOString().slice(0, 10) + '.csv';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+                showToast('审计日志已导出为CSV文件', 'success');
+                btn.disabled = false;
+                icon.className = 'fas fa-download';
+                text.textContent = '导出日志';
+            }, 1500);
+        }
+
+        function toggleSelectAll(el) {
+            var checkboxes = document.querySelectorAll('.row-checkbox');
+            checkboxes.forEach(function(cb) { cb.checked = el.checked; });
+            updateSelection();
+        }
+
+        function updateSelection() {
+            var checkboxes = document.querySelectorAll('.row-checkbox');
+            var checked = document.querySelectorAll('.row-checkbox:checked');
+            var bar = document.getElementById('batchBar');
+            var count = document.getElementById('selectedCount');
+            var selectAll = document.getElementById('selectAll');
+            count.textContent = checked.length;
+            bar.style.display = checked.length > 0 ? 'flex' : 'none';
+            selectAll.checked = checked.length === checkboxes.length && checkboxes.length > 0;
+        }
+
+        function clearSelection() {
+            var checkboxes = document.querySelectorAll('.row-checkbox');
+            checkboxes.forEach(function(cb) { cb.checked = false; });
+            document.getElementById('selectAll').checked = false;
+            updateSelection();
+        }
+
+        function batchExport() {
+            var checked = document.querySelectorAll('.row-checkbox:checked');
+            if (checked.length === 0) { showToast('请先选择日志', 'warning'); return; }
+            var rows = [];
+            checked.forEach(function(cb) { rows.push(cb.closest('tr')); });
+            var csvContent = '\uFEFF时间,用户,操作类型,操作对象,操作内容,IP地址,结果\n';
+            rows.forEach(function(row) {
+                var cols = [
+                    row.getAttribute('data-time'),
+                    row.getAttribute('data-user'),
+                    row.getAttribute('data-type'),
+                    row.getAttribute('data-target'),
+                    '"' + (row.getAttribute('data-content') || '').replace(/"/g, '""') + '"',
+                    row.getAttribute('data-ip'),
+                    row.getAttribute('data-result')
+                ];
+                csvContent += cols.join(',') + '\n';
+            });
+            var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            var url = URL.createObjectURL(blob);
+            var link = document.createElement('a');
+            link.href = url;
+            link.download = 'audit_log_selected_' + new Date().toISOString().slice(0, 10) + '.csv';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            showToast('已导出 ' + rows.length + ' 条日志', 'success');
+            clearSelection();
+        }
+
+        function showLogDetail(row) {
+            document.getElementById('detailTime').textContent = row.getAttribute('data-time');
+            document.getElementById('detailUser').textContent = row.getAttribute('data-user');
+            document.getElementById('detailType').textContent = row.getAttribute('data-type');
+            document.getElementById('detailTarget').textContent = row.getAttribute('data-target');
+            document.getElementById('detailContent').textContent = row.getAttribute('data-content');
+            document.getElementById('detailIp').textContent = row.getAttribute('data-ip');
+            document.getElementById('detailResult').textContent = row.getAttribute('data-result');
+            try {
+                document.getElementById('detailParams').textContent = JSON.stringify(JSON.parse(row.getAttribute('data-params')), null, 2);
+            } catch(e) {
+                document.getElementById('detailParams').textContent = row.getAttribute('data-params') || '';
+            }
+            try {
+                document.getElementById('detailResponse').textContent = JSON.stringify(JSON.parse(row.getAttribute('data-response')), null, 2);
+            } catch(e) {
+                document.getElementById('detailResponse').textContent = row.getAttribute('data-response') || '';
+            }
+            openModal('logDetailModal');
+        }
+    </script>
+</body>
+</html>

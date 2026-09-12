@@ -1,0 +1,1679 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0d9488">
+    <meta name="description" content="标准库管理 - 维护业务域、标准表与标准字段定义，支撑数据标准化映射">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="标准库管理 - MediData AI">
+    <meta property="og:description" content="维护业务域、标准表与标准字段定义">
+    <title>标准库管理 - MediData AI</title>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="stylesheet" href="components/tailwind.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="components/common.css">
+    <script src="components/common.js" defer></script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+    <a href="#main-content" class="skip-link">跳转到主内容</a>
+    <div class="flex h-screen overflow-hidden">
+        <aside id="sidebar" class="w-64 gradient-bg text-white flex flex-col flex-shrink-0"></aside>
+        <main id="main-content" class="flex-1 flex flex-col overflow-hidden" role="main">
+            <header id="header" class="glass-effect border-b border-gray-200 dark:border-gray-700 px-6 py-4 flex items-center justify-between flex-shrink-0 z-10"></header>
+            <div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-2">
+                <nav id="breadcrumb" class="breadcrumb"></nav>
+            </div>
+            <div class="flex-1 overflow-hidden p-6 flex flex-col">
+                <!-- 页面标题 -->
+                <div class="flex items-center justify-between mb-6 flex-shrink-0">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">标准库管理</h2>
+                        <p class="text-gray-500 dark:text-gray-400 mt-1">维护业务域、标准表与标准字段定义，支撑数据标准化映射</p>
+                    </div>
+                    <div class="flex gap-3">
+                        <button class="px-4 py-2.5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors flex items-center gap-2 btn-transition" data-action="openModal" data-args="importFromDsModal">
+                            <i class="fas fa-cloud-download-alt"></i> 从数据源导入
+                        </button>
+                        <button class="px-4 py-2.5 bg-medical-600 text-white rounded-xl text-sm font-medium hover:bg-medical-700 transition-colors flex items-center gap-2 shadow-md shadow-medical-600/20 btn-transition" data-action="openModal" data-args="createStdTableModal">
+                            <i class="fas fa-plus"></i> 新建标准表
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 统计卡片 -->
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 stats-grid gap-4 mb-6">
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-2xl font-bold text-gray-900 dark:text-gray-100">5</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">业务域</p>
+                            </div>
+                            <div class="w-10 h-10 bg-medical-50 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-sitemap text-medical-600"></i>
+                            </div>
+                            
+</div>
+                            <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-3">标准版本 <span class="text-medical-600 font-medium">v2.3.1</span></div>
+                            
+                    </div>
+                            
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-2xl font-bold text-gray-900 dark:text-gray-100">86</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">标准表</p>
+                            </div>
+                            
+                            <div class="w-10 h-10 bg-primary-50 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-table text-primary-600"></i>
+                            </div>
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+</div>
+                            <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-3"><span class="text-success-600 font-medium">+4</span> 本月新增</div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-2xl font-bold text-gray-900 dark:text-gray-100">1,247</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">标准字段</p>
+                            </div>
+                            <div class="w-10 h-10 bg-warning-50 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-columns text-warning-600"></i>
+                            </div>
+</div>
+                            <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-3"><span class="text-success-600 font-medium">92.8%</span> 已建立映射</div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-2xl font-bold text-gray-900 dark:text-gray-100">156</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">标准字典</p>
+                            </div>
+                            <div class="w-10 h-10 bg-success-50 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-book text-success-600"></i>
+                            </div>
+</div>
+                            <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-3">遵循 WS/T 305 规范</div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-2xl font-bold text-medical-600">92.8%</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">映射完成度</p>
+                            </div>
+                            <div class="w-10 h-10 bg-medical-50 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-check-double text-medical-600"></i>
+                            </div>
+</div>
+                            <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-3">较上月 <span class="text-medical-600 font-medium">+1.2%</span></div>
+                    </div>
+                </div>
+
+                <!-- 主内容区 -->
+                <div class="grid grid-cols-12 gap-5 flex-1 min-h-0">
+                    <!-- 左侧：标准库树 -->
+                    <div class="col-span-12 lg:col-span-3 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 flex flex-col overflow-hidden">
+                        <div class="p-3 border-b border-gray-100 dark:border-gray-700 flex-shrink-0">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">标准库结构</span>
+                                <span class="text-xs bg-medical-50 text-medical-600 px-2 py-0.5 rounded-full">v2.3.1</span>
+                            </div>
+                            <div class="relative mb-2">
+                                <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                                <input type="text" id="stdSearch" placeholder="搜索标准表..."
+                                       class="w-full pl-8 pr-3 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm form-control-focus focus:bg-white dark:focus:bg-gray-600 transition-all"
+                                       oninput="filterStdTree(this.value)">
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button class="flex-1 py-2 bg-medical-600 text-white rounded-xl text-xs font-medium hover:bg-medical-700 transition-colors flex items-center justify-center gap-1.5" data-action="openModal" data-args="createStdTableModal">
+                                    <i class="fas fa-plus"></i> 新增标准表
+                                </button>
+                                <button class="flex-shrink-0 w-9 h-9 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-medical-600 hover:bg-medical-50 dark:hover:bg-gray-600 rounded-xl text-sm font-medium transition-colors flex items-center justify-center" title="新增域" aria-label="新增域" onclick="openAddDomainModal()">
+                                    <i class="fas fa-folder-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="flex-1 overflow-y-auto p-2 scrollbar-thin" id="stdTree">
+                            <!-- 患者域 -->
+                            <div class="mb-1" data-domain-node>
+                                <div tabindex="0" role="treeitem" class="std-tree-item flex items-center gap-2 px-3 py-2 rounded-lg" onclick="toggleTreeNode(this, event)">
+                                    <i class="fas fa-chevron-right std-tree-arrow text-gray-400 text-xs flex-shrink-0"></i>
+                                    <i class="fas fa-folder text-medical-600 text-sm flex-shrink-0"></i>
+                                    <span class="text-sm font-medium text-gray-800 dark:text-gray-200 flex-1 min-w-0 truncate">患者域 (PAT)</span>
+                                    <span class="text-xs text-gray-400 flex-shrink-0">12表</span>
+                                    <div class="flex items-center gap-0.5 flex-shrink-0">
+                                        <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors flex-shrink-0 w-5 h-5 flex items-center justify-center rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑域" aria-label="编辑患者域" onclick="event.stopPropagation(); editDomain(this, '患者域', 'PAT');">
+                                            <i class="fas fa-edit text-xs" aria-hidden="true"></i>
+                                        </button>
+                                        <button type="button" class="text-danger-600 hover:text-danger-700 transition-colors flex-shrink-0 w-5 h-5 flex items-center justify-center rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除域" aria-label="删除患者域" onclick="event.stopPropagation(); deleteDomain(this, '患者域');">
+                                            <i class="fas fa-trash-alt text-xs" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="std-tree-children pl-4">
+                                    <div tabindex="0" role="treeitem" class="std-tree-item flex items-center gap-2 px-3 py-1.5 rounded-lg active" onclick="selectStdTable(this, 'PAT_PATIENT_INFO')">
+                                        <i class="fas fa-table text-primary-600 text-xs"></i>
+                                        <div class="flex-1 min-w-0 flex flex-col gap-0.5">
+                                            <span class="text-sm text-gray-700 dark:text-gray-300 truncate" title="患者基本信息表">PAT_PATIENT_INFO</span>
+                                            <span class="text-xs text-gray-400 dark:text-gray-500 truncate">患者基本信息表</span>
+                                        </div>
+                                        <span class="text-xs text-gray-400">28字段</span>
+                                    </div>
+                                    <div tabindex="0" role="treeitem" class="std-tree-item flex items-center gap-2 px-3 py-1.5 rounded-lg" onclick="selectStdTable(this, 'PAT_VISIT_INFO')">
+                                        <i class="fas fa-table text-primary-600 text-xs"></i>
+                                        <div class="flex-1 min-w-0 flex flex-col gap-0.5">
+                                            <span class="text-sm text-gray-700 dark:text-gray-300 truncate" title="就诊信息表">PAT_VISIT_INFO</span>
+                                            <span class="text-xs text-gray-400 dark:text-gray-500 truncate">就诊信息表</span>
+                                        </div>
+                                        <span class="text-xs text-gray-400">36字段</span>
+                                    </div>
+                                    <div tabindex="0" role="treeitem" class="std-tree-item flex items-center gap-2 px-3 py-1.5 rounded-lg" onclick="selectStdTable(this, 'PAT_ALLERGY_INFO')">
+                                        <i class="fas fa-table text-primary-600 text-xs"></i>
+                                        <div class="flex-1 min-w-0 flex flex-col gap-0.5">
+                                            <span class="text-sm text-gray-700 dark:text-gray-300 truncate" title="过敏信息表">PAT_ALLERGY_INFO</span>
+                                            <span class="text-xs text-gray-400 dark:text-gray-500 truncate">过敏信息表</span>
+                                        </div>
+                                        <span class="text-xs text-gray-400">14字段</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 医嘱域 -->
+                            <div class="mb-1" data-domain-node>
+                                <div tabindex="0" role="treeitem" class="std-tree-item flex items-center gap-2 px-3 py-2 rounded-lg" onclick="toggleTreeNode(this, event)">
+                                    <i class="fas fa-chevron-right std-tree-arrow text-gray-400 text-xs flex-shrink-0"></i>
+                                    <i class="fas fa-folder text-primary-600 text-sm flex-shrink-0"></i>
+                                    <span class="text-sm font-medium text-gray-800 dark:text-gray-200 flex-1 min-w-0 truncate">医嘱域 (ORD)</span>
+                                    <span class="text-xs text-gray-400 flex-shrink-0">8表</span>
+                                    <div class="flex items-center gap-0.5 flex-shrink-0">
+                                        <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors flex-shrink-0 w-5 h-5 flex items-center justify-center rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑域" aria-label="编辑医嘱域" onclick="event.stopPropagation(); editDomain(this, '医嘱域', 'ORD');">
+                                            <i class="fas fa-edit text-xs" aria-hidden="true"></i>
+                                        </button>
+                                        <button type="button" class="text-danger-600 hover:text-danger-700 transition-colors flex-shrink-0 w-5 h-5 flex items-center justify-center rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除域" aria-label="删除医嘱域" onclick="event.stopPropagation(); deleteDomain(this, '医嘱域');">
+                                            <i class="fas fa-trash-alt text-xs" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="std-tree-children pl-4">
+                                    <div tabindex="0" role="treeitem" class="std-tree-item flex items-center gap-2 px-3 py-1.5 rounded-lg" onclick="selectStdTable(this, 'ORD_ORDER_INFO')">
+                                        <i class="fas fa-table text-primary-600 text-xs"></i>
+                                        <div class="flex-1 min-w-0 flex flex-col gap-0.5">
+                                            <span class="text-sm text-gray-700 dark:text-gray-300 truncate" title="医嘱记录表">ORD_ORDER_INFO</span>
+                                            <span class="text-xs text-gray-400 dark:text-gray-500 truncate">医嘱记录表</span>
+                                        </div>
+                                        <span class="text-xs text-gray-400">32字段</span>
+                                    </div>
+                                    <div tabindex="0" role="treeitem" class="std-tree-item flex items-center gap-2 px-3 py-1.5 rounded-lg" onclick="selectStdTable(this, 'ORD_PRESCRIPTION')">
+                                        <i class="fas fa-table text-primary-600 text-xs"></i>
+                                        <div class="flex-1 min-w-0 flex flex-col gap-0.5">
+                                            <span class="text-sm text-gray-700 dark:text-gray-300 truncate" title="处方记录表">ORD_PRESCRIPTION</span>
+                                            <span class="text-xs text-gray-400 dark:text-gray-500 truncate">处方记录表</span>
+                                        </div>
+                                        <span class="text-xs text-gray-400">24字段</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 检验域 -->
+                            <div class="mb-1" data-domain-node>
+                                <div tabindex="0" role="treeitem" class="std-tree-item flex items-center gap-2 px-3 py-2 rounded-lg" onclick="toggleTreeNode(this, event)">
+                                    <i class="fas fa-chevron-right std-tree-arrow text-gray-400 text-xs flex-shrink-0"></i>
+                                    <i class="fas fa-folder text-warning-600 text-sm flex-shrink-0"></i>
+                                    <span class="text-sm font-medium text-gray-800 dark:text-gray-200 flex-1 min-w-0 truncate">检验域 (LAB)</span>
+                                    <span class="text-xs text-gray-400 flex-sh-0">15表</span>
+                                    <div class="flex items-center gap-0.5 flex-shrink-0">
+                                        <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors flex-shrink-0 w-5 h-5 flex items-center justify-center rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑域" aria-label="编辑检验域" onclick="event.stopPropagation(); editDomain(this, '检验域', 'LAB');">
+                                            <i class="fas fa-edit text-xs" aria-hidden="true"></i>
+                                        </button>
+                                        <button type="button" class="text-danger-600 hover:text-danger-700 transition-colors flex-shrink-0 w-5 h-5 flex items-center justify-center rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除域" aria-label="删除检验域" onclick="event.stopPropagation(); deleteDomain(this, '检验域');">
+                                            <i class="fas fa-trash-alt text-xs" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="std-tree-children pl-4">
+                                    <div tabindex="0" role="treeitem" class="std-tree-item flex items-center gap-2 px-3 py-1.5 rounded-lg" onclick="selectStdTable(this, 'LAB_TEST_RESULT')">
+                                        <i class="fas fa-table text-primary-600 text-xs"></i>
+                                        <div class="flex-1 min-w-0 flex flex-col gap-0.5">
+                                            <span class="text-sm text-gray-700 dark:text-gray-300 truncate" title="检验结果表">LAB_TEST_RESULT</span>
+                                            <span class="text-xs text-gray-400 dark:text-gray-500 truncate">检验结果表</span>
+                                        </div>
+                                        <span class="text-xs text-gray-400">28字段</span>
+                                    </div>
+                                    <div tabindex="0" role="treeitem" class="std-tree-item flex items-center gap-2 px-3 py-1.5 rounded-lg" onclick="selectStdTable(this, 'LAB_SPECIMEN')">
+                                        <i class="fas fa-table text-primary-600 text-xs"></i>
+                                        <div class="flex-1 min-w-0 flex flex-col gap-0.5">
+                                            <span class="text-sm text-gray-700 dark:text-gray-300 truncate" title="标本信息表">LAB_SPECIMEN</span>
+                                            <span class="text-xs text-gray-400 dark:text-gray-500 truncate">标本信息表</span>
+                                        </div>
+                                        <span class="text-xs text-gray-400">20字段</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 检查域 -->
+                            <div class="mb-1" data-domain-node>
+                                <div tabindex="0" role="treeitem" class="std-tree-item flex items-center gap-2 px-3 py-2 rounded-lg" onclick="toggleTreeNode(this, event)">
+                                    <i class="fas fa-chevron-right std-tree-arrow text-gray-400 text-xs flex-shrink-0"></i>
+                                    <i class="fas fa-folder text-purple-600 text-sm flex-shrink-0"></i>
+                                    <span class="text-sm font-medium text-gray-800 dark:text-gray-200 flex-1 min-w-0 truncate">检查域 (EXM)</span>
+                                    <span class="text-xs text-gray-400 flex-shrink-0">10表</span>
+                                    <div class="flex items-center gap-0.5 flex-shrink-0">
+                                        <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors flex-shrink-0 w-5 h-5 flex items-center justify-center rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑域" aria-label="编辑检查域" onclick="event.stopPropagation(); editDomain(this, '检查域', 'EXM');">
+                                            <i class="fas fa-edit text-xs" aria-hidden="true"></i>
+                                        </button>
+                                        <button type="button" class="text-danger-600 hover:text-danger-700 transition-colors flex-shrink-0 w-5 h-5 flex items-center justify-center rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除域" aria-label="删除检查域" onclick="event.stopPropagation(); deleteDomain(this, '检查域');">
+                                            <i class="fas fa-trash-alt text-xs" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="std-tree-children pl-4">
+                                    <div tabindex="0" role="treeitem" class="std-tree-item flex items-center gap-2 px-3 py-1.5 rounded-lg" onclick="selectStdTable(this, 'EXM_REPORT_INFO')">
+                                        <i class="fas fa-table text-primary-600 text-xs"></i>
+                                        <div class="flex-1 min-w-0 flex flex-col gap-0.5">
+                                            <span class="text-sm text-gray-700 dark:text-gray-300 truncate" title="检查报告表">EXM_REPORT_INFO</span>
+                                            <span class="text-xs text-gray-400 dark:text-gray-500 truncate">检查报告表</span>
+                                        </div>
+                                        <span class="text-xs text-gray-400">22字段</span>
+                                    </div>
+                                    <div tabindex="0" role="treeitem" class="std-tree-item flex items-center gap-2 px-3 py-1.5 rounded-lg" onclick="selectStdTable(this, 'EXM_IMAGE_REF')">
+                                        <i class="fas fa-table text-primary-600 text-xs"></i>
+                                        <div class="flex-1 min-w-0 flex flex-col gap-0.5">
+                                            <span class="text-sm text-gray-700 dark:text-gray-300 truncate" title="影像关联表">EXM_IMAGE_REF</span>
+                                            <span class="text-xs text-gray-400 dark:text-gray-500 truncate">影像关联表</span>
+                                        </div>
+                                        <span class="text-xs text-gray-400">16字段</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 药品域 -->
+                            <div class="mb-1" data-domain-node>
+                                <div tabindex="0" role="treeitem" class="std-tree-item flex items-center gap-2 px-3 py-2 rounded-lg" onclick="toggleTreeNode(this, event)">
+                                    <i class="fas fa-chevron-right std-tree-arrow text-gray-400 text-xs flex-shrink-0"></i>
+                                    <i class="fas fa-folder text-pink-600 text-sm flex-shrink-0"></i>
+                                    <span class="text-sm font-medium text-gray-800 dark:text-gray-200 flex-1 min-w-0 truncate">药品域 (DRG)</span>
+                                    <span class="text-xs text-gray-400 flex-shrink-0">6表</span>
+                                    <div class="flex items-center gap-0.5 flex-shrink-0">
+                                        <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors flex-shrink-0 w-5 h-5 flex items-center justify-center rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑域" aria-label="编辑药品域" onclick="event.stopPropagation(); editDomain(this, '药品域', 'DRG');">
+                                            <i class="fas fa-edit text-xs" aria-hidden="true"></i>
+                                        </button>
+                                        <button type="button" class="text-danger-600 hover:text-danger-700 transition-colors flex-shrink-0 w-5 h-5 flex items-center justify-center rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除域" aria-label="删除药品域" onclick="event.stopPropagation(); deleteDomain(this, '药品域');">
+                                            <i class="fas fa-trash-alt text-xs" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="std-tree-children pl-4">
+                                    <div tabindex="0" role="treeitem" class="std-tree-item flex items-center gap-2 px-3 py-1.5 rounded-lg" onclick="selectStdTable(this, 'DRG_CATALOG')">
+                                        <i class="fas fa-table text-primary-600 text-xs"></i>
+                                        <div class="flex-1 min-w-0 flex flex-col gap-0.5">
+                                            <span class="text-sm text-gray-700 dark:text-gray-300 truncate" title="药品目录表">DRG_CATALOG</span>
+                                            <span class="text-xs text-gray-400 dark:text-gray-500 truncate">药品目录表</span>
+                                        </div>
+                                        <span class="text-xs text-gray-400">18字段</span>
+                                    </div>
+                                    <div tabindex="0" role="treeitem" class="std-tree-item flex items-center gap-2 px-3 py-1.5 rounded-lg" onclick="selectStdTable(this, 'DRG_DISPENSE')">
+                                        <i class="fas fa-table text-primary-600 text-xs"></i>
+                                        <div class="flex-1 min-w-0 flex flex-col gap-0.5">
+                                            <span class="text-sm text-gray-700 dark:text-gray-300 truncate" title="发药记录表">DRG_DISPENSE</span>
+                                            <span class="text-xs text-gray-400 dark:text-gray-500 truncate">发药记录表</span>
+                                        </div>
+                                        <span class="text-xs text-gray-400">14字段</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 右侧：详情区 -->
+                    <div id="stdDetailPanel" class="col-span-12 lg:col-span-9 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 flex flex-col overflow-hidden">
+                        <!-- 表头信息 -->
+                        <div class="p-4 border-b border-gray-100 dark:border-gray-700 flex-shrink-0">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3 min-w-0 flex-1">
+                                    <div class="w-10 h-10 bg-primary-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                                        <i class="fas fa-table text-primary-600"></i>
+                                    </div>
+                                    <div class="min-w-0 flex-1">
+                                        <div class="flex items-center gap-2 min-w-0">
+                                            <h2 class="text-lg font-bold text-gray-900 dark:text-gray-100 truncate" id="stdTableName" title="PAT_PATIENT_INFO">PAT_PATIENT_INFO</h2>
+                                            <span class="domain-tag domain-pat flex-shrink-0">患者域</span>
+                                            <span class="text-xs bg-medical-50 text-medical-600 px-2 py-0.5 rounded-full flex-shrink-0">核心表</span>
+                                        </div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 truncate" title="患者基本信息表，存储患者的人口统计学信息和核心标识信息">患者基本信息表，存储患者的人口统计学信息和核心标识信息</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="stats-mini">
+                                        <i class="fas fa-columns text-primary-600 text-xs"></i>
+                                        <span class="text-xs font-medium text-gray-700 dark:text-gray-300">28 字段</span>
+                                    </span>
+                                    <span class="stats-mini">
+                                        <i class="fas fa-check-double text-success-600 text-xs"></i>
+                                        <span class="text-xs font-medium text-gray-700 dark:text-gray-300">92.8% 映射</span>
+                                    </span>
+                                    <button class="px-3 py-1.5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-xl text-xs font-medium hover:bg-gray-50 transition-colors flex items-center gap-1.5" data-action="openModal" data-args="versionHistoryModal">
+                                        <i class="fas fa-history"></i> 版本历史
+                                    </button>
+                                    <button class="px-3 py-1.5 bg-medical-600 text-white rounded-xl text-xs font-medium hover:bg-medical-700 transition-colors flex items-center gap-1.5" data-action="openModal" data-args="editTableModal">
+                                        <i class="fas fa-edit"></i> 编辑
+                                    </button>
+                                    <button class="px-3 py-1.5 bg-danger-600 text-white rounded-xl text-xs font-medium hover:bg-danger-700 transition-colors flex items-center gap-1.5" onclick="deleteStdTable()">
+                                        <i class="fas fa-trash-alt"></i> 删除表
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tab 切换 -->
+                        <div class="px-4 border-b border-gray-100 dark:border-gray-700 flex-shrink-0">
+                            <div class="flex items-center justify-between">
+                                <div class="flex gap-1">
+                                    <button class="tab-btn active px-4 py-3 text-sm font-medium text-medical-600" onclick="switchTab(this, 'fields')">
+                                        <i class="fas fa-columns mr-1.5"></i>标准字段
+                                    </button>
+                                    <button class="tab-btn px-4 py-3 text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200" onclick="switchTab(this, 'dict')">
+                                        <i class="fas fa-book mr-1.5"></i>标准字典
+                                    </button>
+                                    <button class="tab-btn px-4 py-3 text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200" onclick="switchTab(this, 'mapping')">
+                                        <i class="fas fa-project-diagram mr-1.5"></i>映射关系
+                                    </button>
+                                    <button class="tab-btn px-4 py-3 text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200" onclick="switchTab(this, 'version')">
+                                        <i class="fas fa-code-branch mr-1.5"></i>变更历史
+                                    </button>
+                                </div>
+                                <button id="addFieldBtn" class="px-3 py-1.5 bg-medical-600 text-white rounded-xl text-xs font-medium hover:bg-medical-700 transition-colors flex items-center gap-1.5" onclick="openStdFieldModal()">
+                                    <i class="fas fa-plus"></i> 新增字段
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 标准字段 Tab -->
+                        <div id="tab-fields" class="flex-1 overflow-auto p-4 tab-content">
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-sm">
+                                    <thead class="sticky-head">
+                                        <tr class="border-b border-gray-200 dark:border-gray-700">
+                                            <th class="text-left py-2 px-3 font-medium text-gray-500 dark:text-gray-400 text-xs">序号</th>
+                                            <th class="text-left py-2 px-3 font-medium text-gray-500 dark:text-gray-400 text-xs">标准字段名</th>
+                                            <th class="text-left py-2 px-3 font-medium text-gray-500 dark:text-gray-400 text-xs">中文名</th>
+                                            <th class="text-left py-2 px-3 font-medium text-gray-500 dark:text-gray-400 text-xs">数据类型</th>
+                                            <th class="text-left py-2 px-3 font-medium text-gray-500 dark:text-gray-400 text-xs">必填</th>
+                                            <th class="text-left py-2 px-3 font-medium text-gray-500 dark:text-gray-400 text-xs">值域/格式</th>
+                                            <th class="text-left py-2 px-3 font-medium text-gray-500 dark:text-gray-400 text-xs">映射状态</th>
+                                            <th class="text-left py-2 px-3 font-medium text-gray-500 dark:text-gray-400 text-xs">操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="field-row border-b border-gray-100 dark:border-gray-800">
+                                            <td class="py-2.5 px-3 text-xs text-gray-400">1</td>
+                                            <td class="py-2.5 px-3">
+                                                <span class="font-mono text-xs text-primary-600 font-medium">PATIENT_ID</span>
+                                            </td>
+                                            <td class="py-2.5 px-3 text-xs text-gray-700 dark:text-gray-300">患者唯一标识</td>
+                                            <td class="py-2.5 px-3 text-xs text-gray-600 dark:text-gray-400">VARCHAR(32)</td>
+                                            <td class="py-2.5 px-3"><span class="text-xs text-danger-600 font-medium">是</span></td>
+                                            <td class="py-2.5 px-3 text-xs text-gray-500">P+年月日+6位序号</td>
+                                            <td class="py-2.5 px-3">
+                                                <span class="mapping-badge mapping-done"><i class="fas fa-check-circle"></i>已映射</span>
+                                            </td>
+                                            <td class="py-2.5 px-3 whitespace-nowrap">
+                                                <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑字段" onclick="editStdField(this)">
+                                                    <i class="fas fa-edit text-xs" aria-hidden="true"></i>
+                                                </button>
+                                                <button type="button" class="text-danger-600 hover:text-danger-700 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除字段" onclick="deleteStdField(this)">
+                                                    <i class="fas fa-trash-alt text-xs" aria-hidden="true"></i>
+                                                </button>
+                                                <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="查看映射详情" data-action="showToast" data-args="查看映射详情|info">
+                                                    <i class="fas fa-eye text-xs" aria-hidden="true"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr class="field-row border-b border-gray-100 dark:border-gray-800">
+                                            <td class="py-2.5 px-3 text-xs text-gray-400">2</td>
+                                            <td class="py-2.5 px-3">
+                                                <span class="font-mono text-xs text-primary-600 font-medium">NAME</span>
+                                            </td>
+                                            <td class="py-2.5 px-3 text-xs text-gray-700 dark:text-gray-300">患者姓名</td>
+                                            <td class="py-2.5 px-3 text-xs text-gray-600 dark:text-gray-400">VARCHAR(64)</td>
+                                            <td class="py-2.5 px-3"><span class="text-xs text-danger-600 font-medium">是</span></td>
+                                            <td class="py-2.5 px-3 text-xs text-gray-500">-</td>
+                                            <td class="py-2.5 px-3">
+                                                <span class="mapping-badge mapping-done"><i class="fas fa-check-circle"></i>已映射</span>
+                                            </td>
+                                            <td class="py-2.5 px-3 whitespace-nowrap">
+                                                <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑字段" onclick="editStdField(this)">
+                                                    <i class="fas fa-edit text-xs" aria-hidden="true"></i>
+                                                </button>
+                                                <button type="button" class="text-danger-600 hover:text-danger-700 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除字段" onclick="deleteStdField(this)">
+                                                    <i class="fas fa-trash-alt text-xs" aria-hidden="true"></i>
+                                                </button>
+                                                <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="查看映射详情" data-action="showToast" data-args="查看映射详情|info">
+                                                    <i class="fas fa-eye text-xs" aria-hidden="true"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr class="field-row border-b border-gray-100 dark:border-gray-800">
+                                            <td class="py-2.5 px-3 text-xs text-gray-400">3</td>
+                                            <td class="py-2.5 px-3">
+                                                <span class="font-mono text-xs text-primary-600 font-medium">GENDER</span>
+                                            </td>
+                                            <td class="py-2.5 px-3 text-xs text-gray-700 dark:text-gray-300">性别</td>
+                                            <td class="py-2.5 px-3 text-xs text-gray-600 dark:text-gray-400">VARCHAR(2)</td>
+                                            <td class="py-2.5 px-3"><span class="text-xs text-danger-600 font-medium">是</span></td>
+                                            <td class="py-2.5 px-3 text-xs text-gray-500">1-男 2-女 9-未知</td>
+                                            <td class="py-2.5 px-3">
+                                                <span class="mapping-badge mapping-pending"><i class="fas fa-clock"></i>待审核</span>
+                                            </td>
+                                            <td class="py-2.5 px-3 whitespace-nowrap">
+                                                <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑字段" onclick="editStdField(this)">
+                                                    <i class="fas fa-edit text-xs" aria-hidden="true"></i>
+                                                </button>
+                                                <button type="button" class="text-danger-600 hover:text-danger-700 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除字段" onclick="deleteStdField(this)">
+                                                    <i class="fas fa-trash-alt text-xs" aria-hidden="true"></i>
+                                                </button>
+                                                <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="查看映射详情" data-action="showToast" data-args="查看映射详情|info">
+                                                    <i class="fas fa-eye text-xs" aria-hidden="true"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr class="field-row border-b border-gray-100 dark:border-gray-800">
+                                            <td class="py-2.5 px-3 text-xs text-gray-400">4</td>
+                                            <td class="py-2.5 px-3">
+                                                <span class="font-mono text-xs text-primary-600 font-medium">BIRTH_DATE</span>
+                                            </td>
+                                            <td class="py-2.5 px-3 text-xs text-gray-700 dark:text-gray-300">出生日期</td>
+                                            <td class="py-2.5 px-3 text-xs text-gray-600 dark:text-gray-400">DATE</td>
+                                            <td class="py-2.5 px-3"><span class="text-xs text-gray-500">否</span></td>
+                                            <td class="py-2.5 px-3 text-xs text-gray-500">YYYY-MM-DD</td>
+                                            <td class="py-2.5 px-3">
+                                                <span class="mapping-badge mapping-none"><i class="fas fa-minus-circle"></i>未映射</span>
+                                            </td>
+                                            <td class="py-2.5 px-3 whitespace-nowrap">
+                                                <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑字段" onclick="editStdField(this)">
+                                                    <i class="fas fa-edit text-xs" aria-hidden="true"></i>
+                                                </button>
+                                                <button type="button" class="text-danger-600 hover:text-danger-700 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除字段" onclick="deleteStdField(this)">
+                                                    <i class="fas fa-trash-alt text-xs" aria-hidden="true"></i>
+                                                </button>
+                                                <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="查看映射详情" data-action="showToast" data-args="查看映射详情|info">
+                                                    <i class="fas fa-eye text-xs" aria-hidden="true"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr class="field-row border-b border-gray-100 dark:border-gray-800">
+                                            <td class="py-2.5 px-3 text-xs text-gray-400">5</td>
+                                            <td class="py-2.5 px-3">
+                                                <span class="font-mono text-xs text-primary-600 font-medium">ID_CARD</span>
+                                            </td>
+                                            <td class="py-2.5 px-3 text-xs text-gray-700 dark:text-gray-300">身份证号</td>
+                                            <td class="py-2.5 px-3 text-xs text-gray-600 dark:text-gray-400">VARCHAR(18)</td>
+                                            <td class="py-2.5 px-3"><span class="text-xs text-gray-500">否</span></td>
+                                            <td class="py-2.5 px-3 text-xs text-gray-500">符合GB 11643</td>
+                                            <td class="py-2.5 px-3">
+                                                <span class="mapping-badge mapping-done"><i class="fas fa-check-circle"></i>已映射</span>
+                                            </td>
+                                            <td class="py-2.5 px-3 whitespace-nowrap">
+                                                <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑字段" onclick="editStdField(this)">
+                                                    <i class="fas fa-edit text-xs" aria-hidden="true"></i>
+                                                </button>
+                                                <button type="button" class="text-danger-600 hover:text-danger-700 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除字段" onclick="deleteStdField(this)">
+                                                    <i class="fas fa-trash-alt text-xs" aria-hidden="true"></i>
+                                                </button>
+                                                <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="查看映射详情" data-action="showToast" data-args="查看映射详情|info">
+                                                    <i class="fas fa-eye text-xs" aria-hidden="true"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr class="field-row border-b border-gray-100 dark:border-gray-800">
+                                            <td class="py-2.5 px-3 text-xs text-gray-400">6</td>
+                                            <td class="py-2.5 px-3">
+                                                <span class="font-mono text-xs text-primary-600 font-medium">PHONE</span>
+                                            </td>
+                                            <td class="py-2.5 px-3 text-xs text-gray-700 dark:text-gray-300">联系电话</td>
+                                            <td class="py-2.5 px-3 text-xs text-gray-600 dark:text-gray-400">VARCHAR(20)</td>
+                                            <td class="py-2.5 px-3"><span class="text-xs text-gray-500">否</span></td>
+                                            <td class="py-2.5 px-3 text-xs text-gray-500">-</td>
+                                            <td class="py-2.5 px-3">
+                                                <span class="mapping-badge mapping-done"><i class="fas fa-check-circle"></i>已映射</span>
+                                            </td>
+                                            <td class="py-2.5 px-3 whitespace-nowrap">
+                                                <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑字段" onclick="editStdField(this)">
+                                                    <i class="fas fa-edit text-xs" aria-hidden="true"></i>
+                                                </button>
+                                                <button type="button" class="text-danger-600 hover:text-danger-700 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除字段" onclick="deleteStdField(this)">
+                                                    <i class="fas fa-trash-alt text-xs" aria-hidden="true"></i>
+                                                </button>
+                                                <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="查看映射详情" data-action="showToast" data-args="查看映射详情|info">
+                                                    <i class="fas fa-eye text-xs" aria-hidden="true"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr class="field-row border-b border-gray-100 dark:border-gray-800">
+                                            <td class="py-2.5 px-3 text-xs text-gray-400">7</td>
+                                            <td class="py-2.5 px-3">
+                                                <span class="font-mono text-xs text-primary-600 font-medium">ADDRESS</span>
+                                            </td>
+                                            <td class="py-2.5 px-3 text-xs text-gray-700 dark:text-gray-300">住址</td>
+                                            <td class="py-2.5 px-3 text-xs text-gray-600 dark:text-gray-400">VARCHAR(200)</td>
+                                            <td class="py-2.5 px-3"><span class="text-xs text-gray-500">否</span></td>
+                                            <td class="py-2.5 px-3 text-xs text-gray-500">-</td>
+                                            <td class="py-2.5 px-3">
+                                                <span class="mapping-badge mapping-none"><i class="fas fa-minus-circle"></i>未映射</span>
+                                            </td>
+                                            <td class="py-2.5 px-3 whitespace-nowrap">
+                                                <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑字段" onclick="editStdField(this)">
+                                                    <i class="fas fa-edit text-xs" aria-hidden="true"></i>
+                                                </button>
+                                                <button type="button" class="text-danger-600 hover:text-danger-700 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除字段" onclick="deleteStdField(this)">
+                                                    <i class="fas fa-trash-alt text-xs" aria-hidden="true"></i>
+                                                </button>
+                                                <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="查看映射详情" data-action="showToast" data-args="查看映射详情|info">
+                                                    <i class="fas fa-eye text-xs" aria-hidden="true"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr class="field-row border-b border-gray-100 dark:border-gray-800">
+                                            <td class="py-2.5 px-3 text-xs text-gray-400">8</td>
+                                            <td class="py-2.5 px-3">
+                                                <span class="font-mono text-xs text-primary-600 font-medium">CREATE_TIME</span>
+                                            </td>
+                                            <td class="py-2.5 px-3 text-xs text-gray-700 dark:text-gray-300">创建时间</td>
+                                            <td class="py-2.5 px-3 text-xs text-gray-600 dark:text-gray-400">TIMESTAMP</td>
+                                            <td class="py-2.5 px-3"><span class="text-xs text-danger-600 font-medium">是</span></td>
+                                            <td class="py-2.5 px-3 text-xs text-gray-500">YYYY-MM-DD HH:MI:SS</td>
+                                            <td class="py-2.5 px-3">
+                                                <span class="mapping-badge mapping-done"><i class="fas fa-check-circle"></i>已映射</span>
+                                            </td>
+                                            <td class="py-2.5 px-3 whitespace-nowrap">
+                                                <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑字段" onclick="editStdField(this)">
+                                                    <i class="fas fa-edit text-xs" aria-hidden="true"></i>
+                                                </button>
+                                                <button type="button" class="text-danger-600 hover:text-danger-700 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除字段" onclick="deleteStdField(this)">
+                                                    <i class="fas fa-trash-alt text-xs" aria-hidden="true"></i>
+                                                </button>
+                                                <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="查看映射详情" data-action="showToast" data-args="查看映射详情|info">
+                                                    <i class="fas fa-eye text-xs" aria-hidden="true"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- 标准字典 Tab -->
+                        <div id="tab-dict" class="flex-1 overflow-auto p-4 tab-content hidden">
+                            <div class="space-y-4">
+                                <!-- 性别字典 -->
+                                <div class="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+                                    <div class="px-4 py-3 bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-sm font-medium text-gray-800 dark:text-gray-200">GENDER - 性别代码</span>
+                                            <span class="text-xs bg-success-50 text-success-600 px-2 py-0.5 rounded-full">已绑定</span>
+                                        </div>
+                                        <span class="text-xs text-gray-500">基础信息类 · WS/T 305</span>
+                                    </div>
+                                    <div class="p-4">
+                                        <table class="w-full text-sm">
+                                            <thead class="sticky-head">
+                                                <tr class="border-b border-gray-100 dark:border-gray-700">
+                                                    <th class="text-left py-2 px-3 font-medium text-gray-500 text-xs">标准值</th>
+                                                    <th class="text-left py-2 px-3 font-medium text-gray-500 text-xs">标准含义</th>
+                                                    <th class="text-left py-2 px-3 font-medium text-gray-500 text-xs">源系统值</th>
+                                                    <th class="text-left py-2 px-3 font-medium text-gray-500 text-xs">源系统含义</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr class="border-b border-gray-50 dark:border-gray-800">
+                                                    <td class="py-2 px-3 text-xs font-mono text-primary-600">1</td>
+                                                    <td class="py-2 px-3 text-xs">男性</td>
+                                                    <td class="py-2 px-3 text-xs font-mono text-gray-600">M / 1</td>
+                                                    <td class="py-2 px-3 text-xs text-gray-600">男 / 男性</td>
+                                                </tr>
+                                                <tr class="border-b border-gray-50 dark:border-gray-800">
+                                                    <td class="py-2 px-3 text-xs font-mono text-primary-600">2</td>
+                                                    <td class="py-2 px-3 text-xs">女性</td>
+                                                    <td class="py-2 px-3 text-xs font-mono text-gray-600">F / 2</td>
+                                                    <td class="py-2 px-3 text-xs text-gray-600">女 / 女性</td>
+                                                </tr>
+                                                <tr class="border-b border-gray-50 dark:border-gray-800">
+                                                    <td class="py-2 px-3 text-xs font-mono text-primary-600">9</td>
+                                                    <td class="py-2 px-3 text-xs">未知</td>
+                                                    <td class="py-2 px-3 text-xs font-mono text-gray-600">U / 0</td>
+                                                    <td class="py-2 px-3 text-xs text-gray-600">未知 / 未说明</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <!-- 证件类型字典 -->
+                                <div class="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+                                    <div class="px-4 py-3 bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-sm font-medium text-gray-800 dark:text-gray-200">ID_TYPE - 证件类型代码</span>
+                                            <span class="text-xs bg-warning-50 text-warning-600 px-2 py-0.5 rounded-full">待配置</span>
+                                        </div>
+                                        <span class="text-xs text-gray-500">基础信息类 · WS/T 305</span>
+                                    </div>
+                                    <div class="p-4">
+                                        <table class="w-full text-sm">
+                                            <thead class="sticky-head">
+                                                <tr class="border-b border-gray-100 dark:border-gray-700">
+                                                    <th class="text-left py-2 px-3 font-medium text-gray-500 text-xs">标准值</th>
+                                                    <th class="text-left py-2 px-3 font-medium text-gray-500 text-xs">标准含义</th>
+                                                    <th class="text-left py-2 px-3 font-medium text-gray-500 text-xs">源系统值</th>
+                                                    <th class="text-left py-2 px-3 font-medium text-gray-500 text-xs">源系统含义</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr class="border-b border-gray-50 dark:border-gray-800">
+                                                    <td class="py-2 px-3 text-xs font-mono text-primary-600">01</td>
+                                                    <td class="py-2 px-3 text-xs">居民身份证</td>
+                                                    <td class="py-2 px-3 text-xs text-gray-400">-</td>
+                                                    <td class="py-2 px-3 text-xs text-gray-400">-</td>
+                                                </tr>
+                                                <tr class="border-b border-gray-50 dark:border-gray-800">
+                                                    <td class="py-2 px-3 text-xs font-mono text-primary-600">02</td>
+                                                    <td class="py-2 px-3 text-xs">居民户口簿</td>
+                                                    <td class="py-2 px-3 text-xs text-gray-400">-</td>
+                                                    <td class="py-2 px-3 text-xs text-gray-400">-</td>
+                                                </tr>
+                                                <tr class="border-b border-gray-50 dark:border-gray-800">
+                                                    <td class="py-2 px-3 text-xs font-mono text-primary-600">03</td>
+                                                    <td class="py-2 px-3 text-xs">护照</td>
+                                                    <td class="py-2 px-3 text-xs text-gray-400">-</td>
+                                                    <td class="py-2 px-3 text-xs text-gray-400">-</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 映射关系 Tab -->
+                        <div id="tab-mapping" class="flex-1 overflow-auto p-4 tab-content hidden">
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">源系统到标准表映射</span>
+                                    <button class="px-3 py-1.5 bg-medical-600 text-white rounded-xl text-xs font-medium hover:bg-medical-700 transition-colors" data-action="showToast" data-args="AI智能映射推荐中...|info">
+                                        <i class="fas fa-robot mr-1"></i>AI推荐映射
+                                    </button>
+                                </div>
+                                <!-- HIS映射 -->
+                                <div class="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+                                    <div class="px-4 py-3 bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-700 flex items-center gap-2">
+                                        <i class="fas fa-database text-medical-600 text-sm"></i>
+                                        <span class="text-sm font-medium text-gray-800 dark:text-gray-200">HIS_主数据库</span>
+                                        <span class="text-xs bg-success-50 text-success-600 px-2 py-0.5 rounded-full">22/26 已映射</span>
+                                    </div>
+                                    <div class="p-4">
+                                        <table class="w-full text-sm">
+                                            <thead class="sticky-head">
+                                                <tr class="border-b border-gray-100 dark:border-gray-700">
+                                                    <th class="text-left py-2 px-3 font-medium text-gray-500 text-xs">标准字段</th>
+                                                    <th class="text-left py-2 px-3 font-medium text-gray-500 text-xs">源字段</th>
+                                                    <th class="text-left py-2 px-3 font-medium text-gray-500 text-xs">转换规则</th>
+                                                    <th class="text-left py-2 px-3 font-medium text-gray-500 text-xs">状态</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr class="border-b border-gray-50 dark:border-gray-800">
+                                                    <td class="py-2 px-3 text-xs font-mono text-primary-600">PATIENT_ID</td>
+                                                    <td class="py-2 px-3 text-xs font-mono text-gray-600">BRBH</td>
+                                                    <td class="py-2 px-3 text-xs text-gray-500">直接映射</td>
+                                                    <td class="py-2 px-3"><span class="mapping-badge mapping-done">已确认</span></td>
+                                                </tr>
+                                                <tr class="border-b border-gray-50 dark:border-gray-800">
+                                                    <td class="py-2 px-3 text-xs font-mono text-primary-600">NAME</td>
+                                                    <td class="py-2 px-3 text-xs font-mono text-gray-600">BRXM</td>
+                                                    <td class="py-2 px-3 text-xs text-gray-500">直接映射</td>
+                                                    <td class="py-2 px-3"><span class="mapping-badge mapping-done">已确认</span></td>
+                                                </tr>
+                                                <tr class="border-b border-gray-50 dark:border-gray-800">
+                                                    <td class="py-2 px-3 text-xs font-mono text-primary-600">GENDER</td>
+                                                    <td class="py-2 px-3 text-xs font-mono text-gray-600">BRXB</td>
+                                                    <td class="py-2 px-3 text-xs text-gray-500">值映射: M→1, F→2, U→9</td>
+                                                    <td class="py-2 px-3"><span class="mapping-badge mapping-pending">待审核</span></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <!-- LIS映射 -->
+                                <div class="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+                                    <div class="px-4 py-3 bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-700 flex items-center gap-2">
+                                        <i class="fas fa-database text-warning-600 text-sm"></i>
+                                        <span class="text-sm font-medium text-gray-800 dark:text-gray-200">LIS_检验数据库</span>
+                                        <span class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">0/26 未映射</span>
+                                    </div>
+                                    <div class="p-4 text-center py-8">
+                                        <i class="fas fa-inbox text-gray-300 text-2xl mb-2"></i>
+                                        <p class="text-xs text-gray-500">该数据源尚未配置映射关系</p>
+                                        <button class="mt-2 px-3 py-1.5 bg-medical-600 text-white rounded-xl text-xs font-medium hover:bg-medical-700 transition-colors" data-action="showToast" data-args="启动AI智能映射...|info">
+                                            开始映射
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 变更历史 Tab -->
+                        <div id="tab-version" class="flex-1 overflow-auto p-4 tab-content hidden">
+                            <div class="version-timeline space-y-6">
+                                <div class="relative">
+                                    <div class="version-dot bg-medical-500 top-1"></div>
+                                    <div class="ml-4">
+                                        <div class="flex items-center gap-2 mb-1">
+                                            <span class="text-sm font-bold text-gray-900 dark:text-gray-100">v2.3.1</span>
+                                            <span class="text-xs bg-medical-50 text-medical-600 px-2 py-0.5 rounded-full">当前版本</span>
+                                        </div>
+                                        <p class="text-xs text-gray-500 mb-2">2026-05-04 · 张工程师</p>
+                                        <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 text-xs text-gray-700 dark:text-gray-300 space-y-1">
+                                            <p><span class="text-success-600 font-medium">[+]</span> 新增 PAT_ALLERGY_INFO 表字段映射</p>
+                                            <p><span class="text-warning-600 font-medium">[~]</span> 修复 GENDER 字段值域校验规则</p>
+                                            <p><span class="text-primary-600 font-medium">[*]</span> 优化 BIRTH_DATE 日期格式转换逻辑</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="relative">
+                                    <div class="version-dot bg-gray-400 top-1"></div>
+                                    <div class="ml-4">
+                                        <div class="flex items-center gap-2 mb-1">
+                                            <span class="text-sm font-bold text-gray-900 dark:text-gray-100">v2.3.0</span>
+                                        </div>
+                                        <p class="text-xs text-gray-500 mb-2">2026-04-15 · 李工程师</p>
+                                        <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 text-xs text-gray-700 dark:text-gray-300 space-y-1">
+                                            <p><span class="text-success-600 font-medium">[+]</span> 重构患者域表结构</p>
+                                            <p><span class="text-success-600 font-medium">[+]</span> 新增身份证号、联系方式等标准字段</p>
+                                            <p><span class="text-primary-600 font-medium">[*]</span> 统一编码规范为 WS/T 305</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="relative">
+                                    <div class="version-dot bg-gray-400 top-1"></div>
+                                    <div class="ml-4">
+                                        <div class="flex items-center gap-2 mb-1">
+                                            <span class="text-sm font-bold text-gray-900 dark:text-gray-100">v2.2.0</span>
+                                        </div>
+                                        <p class="text-xs text-gray-500 mb-2">2026-03-01 · 王工程师</p>
+                                        <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 text-xs text-gray-700 dark:text-gray-300 space-y-1">
+                                            <p><span class="text-success-600 font-medium">[+]</span> 新增医嘱域和检验域标准表定义</p>
+                                            <p><span class="text-primary-600 font-medium">[*]</span> 完善ETL映射规则模板</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="relative">
+                                    <div class="version-dot bg-gray-400 top-1"></div>
+                                    <div class="ml-4">
+                                        <div class="flex items-center gap-2 mb-1">
+                                            <span class="text-sm font-bold text-gray-900 dark:text-gray-100">v2.1.0</span>
+                                        </div>
+                                        <p class="text-xs text-gray-500 mb-2">2026-01-20 · 张工程师</p>
+                                        <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 text-xs text-gray-700 dark:text-gray-300 space-y-1">
+                                            <p><span class="text-success-600 font-medium">[+]</span> 初始版本，定义患者域核心表结构</p>
+                                            <p><span class="text-success-600 font-medium">[+]</span> 基础字段映射规则</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 域编辑模态框 -->
+    <div id="domainModal" class="modal fixed inset-0 z-50 items-center justify-center bg-black/50">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-md mx-4 shadow-2xl flex flex-col max-h-[90vh]">
+            <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between flex-shrink-0">
+                <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100" id="domainModalTitle">编辑域</h3>
+                <button type="button" class="text-gray-400 hover:text-gray-600 dark:text-gray-400 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:outline-none" data-action="closeModal" data-args="domainModal" aria-label="关闭"><i class="fas fa-times text-xs" aria-hidden="true"></i></button>
+            </div>
+            <form class="px-6 py-5 space-y-4 flex-1 overflow-y-auto scrollbar-thin" onsubmit="event.preventDefault(); saveDomain();">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">域名 <span class="text-danger-500">*</span></label>
+                    <input type="text" id="domainNameInput" required placeholder="例如：患者域" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">域编码 <span class="text-danger-500">*</span></label>
+                    <input type="text" id="domainCodeInput" required placeholder="例如：PAT" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-mono form-control-focus">
+                </div>
+            </form>
+            <div class="px-6 py-4 border-t border-gray-100 dark:border-gray-700 flex justify-end gap-3 flex-shrink-0">
+                <button class="px-4 py-2.5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors" data-action="closeModal" data-args="domainModal">取消</button>
+                <button class="px-4 py-2.5 bg-medical-600 text-white rounded-xl text-sm font-medium hover:bg-medical-700 transition-colors" onclick="saveDomain()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 字段新增/编辑模态框 -->
+    <div id="stdFieldModal" class="modal fixed inset-0 z-50 items-center justify-center bg-black/50">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-lg mx-4 shadow-2xl flex flex-col max-h-[90vh]">
+            <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between flex-shrink-0">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-medical-50 dark:bg-medical-900/30 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-plus text-medical-600" aria-hidden="true"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100" id="stdFieldModalTitle">新增字段</h3>
+                </div>
+                <button type="button" class="text-gray-400 hover:text-gray-600 dark:text-gray-400 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:outline-none" data-action="closeModal" data-args="stdFieldModal" aria-label="关闭"><i class="fas fa-times text-xs" aria-hidden="true"></i></button>
+            </div>
+            <form id="stdFieldForm" class="px-6 py-5 overflow-y-auto scrollbar-thin flex-1 space-y-4" onsubmit="event.preventDefault(); saveStdField();">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">标准字段名 <span class="text-danger-500">*</span></label>
+                        <input type="text" id="stdFieldName" required placeholder="PATIENT_ID" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-mono form-control-focus">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">中文名 <span class="text-danger-500">*</span></label>
+                        <input type="text" id="stdFieldCnName" required placeholder="患者唯一标识" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">数据类型 <span class="text-danger-500">*</span></label>
+                        <input type="text" id="stdFieldType" required placeholder="VARCHAR(32)" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-mono form-control-focus">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">必填</label>
+                        <select id="stdFieldRequired" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus">
+                            <option value="否">否</option>
+                            <option value="是">是</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">值域/格式</label>
+                    <input type="text" id="stdFieldDomain" placeholder="如 P+年月日+6位序号，无则留空" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-mono form-control-focus">
+                </div>
+            </form>
+            <div class="px-6 py-4 border-t border-gray-100 dark:border-gray-700 flex justify-end gap-3 flex-shrink-0">
+                <button class="px-4 py-2.5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors" data-action="closeModal" data-args="stdFieldModal">取消</button>
+                <button id="stdFieldSubmit" class="px-4 py-2.5 bg-medical-600 text-white rounded-xl text-sm font-medium hover:bg-medical-700 transition-colors" onclick="saveStdField()">确认保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 版本历史模态框 -->
+    <div id="versionHistoryModal" class="modal fixed inset-0 z-50 items-center justify-center bg-black/50">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-lg mx-4 shadow-2xl flex flex-col max-h-[90vh]">
+            <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between flex-shrink-0">
+                <div class="flex items-center gap-3"><div class="w-10 h-10 bg-medical-50 dark:bg-medical-900/30 rounded-xl flex items-center justify-center"><i class="fas fa-history text-medical-600" aria-hidden="true"></i></div><h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">版本历史</h3></div>
+                <button type="button" class="text-gray-400 hover:text-gray-600 dark:text-gray-400 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:outline-none" data-action="closeModal" data-args="versionHistoryModal" aria-label="关闭"><i class="fas fa-times text-xs" aria-hidden="true"></i></button>
+            </div>
+            <div class="p-6 space-y-4 overflow-y-auto">
+                <div class="flex items-start gap-4 p-4 bg-medical-50 dark:bg-medical-900/20 rounded-xl border border-medical-100 dark:border-medical-800">
+                    <div class="w-10 h-10 bg-medical-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-code-branch text-medical-600"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-sm font-semibold text-gray-900 dark:text-gray-100">v2.3.1</span>
+                            <span class="text-xs bg-medical-100 text-medical-600 px-2 py-0.5 rounded-full">当前版本</span>
+                        </div>
+                        <p class="text-xs text-gray-500 mb-2">2026-05-04</p>
+                        <p class="text-sm text-gray-700 dark:text-gray-300">新增PAT_ALLERGY_INFO表字段映射，修复GENDER字段值域校验规则</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-xl border border-gray-100 dark:border-gray-700">
+                    <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-code-branch text-gray-500"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-sm font-semibold text-gray-900 dark:text-gray-100">v2.3.0</span>
+                        </div>
+                        <p class="text-xs text-gray-500 mb-2">2026-04-15</p>
+                        <p class="text-sm text-gray-700 dark:text-gray-300">重构患者域表结构，新增身份证号、联系方式等标准字段，统一编码规范</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-xl border border-gray-100 dark:border-gray-700">
+                    <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-code-branch text-gray-500"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-sm font-semibold text-gray-900 dark:text-gray-100">v2.2.0</span>
+                        </div>
+                        <p class="text-xs text-gray-500 mb-2">2026-03-01</p>
+                        <p class="text-sm text-gray-700 dark:text-gray-300">新增医嘱域和检验域标准表定义，完善ETL映射规则模板</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新增标准表 - 创建方式选择模态框 -->
+    <div id="createStdTableModal" class="modal fixed inset-0 z-50 items-center justify-center bg-black/50">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-lg mx-4 shadow-2xl flex flex-col max-h-[90vh]">
+            <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between flex-shrink-0">
+                <div class="flex items-center gap-3"><div class="w-10 h-10 bg-medical-50 dark:bg-medical-900/30 rounded-xl flex items-center justify-center"><i class="fas fa-table text-medical-600" aria-hidden="true"></i></div><h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">新增标准表</h3></div>
+                <button type="button" class="text-gray-400 hover:text-gray-600 dark:text-gray-400 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:outline-none" data-action="closeModal" data-args="createStdTableModal" aria-label="关闭"><i class="fas fa-times text-xs" aria-hidden="true"></i></button>
+            </div>
+            <div class="p-6 overflow-y-auto">
+                <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">请选择标准表的创建方式：</p>
+                <div class="space-y-3">
+                    <button class="w-full flex items-center gap-4 p-4 bg-gray-50 dark:bg-gray-700 hover:bg-medical-50 dark:hover:bg-medical-900/20 rounded-xl border border-gray-200 dark:border-gray-600 hover:border-medical-300 transition-all text-left" onclick="closeModal('createStdTableModal');openModal('importFromDsModal')">
+                        <div class="w-12 h-12 bg-medical-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-database text-medical-600 text-lg"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm font-semibold text-gray-900 dark:text-gray-100">从数据源导入</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">从已接入的数据源中选择现有表，自动转换为标准表结构</p>
+                        </div>
+                        <i class="fas fa-chevron-right text-gray-400"></i>
+                    </button>
+                    <button class="w-full flex items-center gap-4 p-4 bg-gray-50 dark:bg-gray-700 hover:bg-success-50 dark:hover:bg-success-900/20 rounded-xl border border-gray-200 dark:border-gray-600 hover:border-success-300 transition-all text-left" onclick="closeModal('createStdTableModal');openModal('importFromExcelModal')">
+                        <div class="w-12 h-12 bg-success-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-file-excel text-success-600 text-lg"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm font-semibold text-gray-900 dark:text-gray-100">Excel 导入</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">上传标准表定义Excel文件，批量导入表结构和字段信息</p>
+                        </div>
+                        <i class="fas fa-chevron-right text-gray-400"></i>
+                    </button>
+                    <button class="w-full flex items-center gap-4 p-4 bg-gray-50 dark:bg-gray-700 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-xl border border-gray-200 dark:border-gray-600 hover:border-primary-300 transition-all text-left" onclick="closeModal('createStdTableModal');openModal('manualCreateModal')">
+                        <div class="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-pen text-primary-600 text-lg"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm font-semibold text-gray-900 dark:text-gray-100">手工录入</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">手动填写表名、字段信息、数据类型等，逐条创建标准表</p>
+                        </div>
+                        <i class="fas fa-chevron-right text-gray-400"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 从数据源导入模态框 -->
+    <div id="importFromDsModal" class="modal fixed inset-0 z-50 items-center justify-center bg-black/50">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-2xl mx-4 shadow-2xl flex flex-col max-h-[90vh]">
+            <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between flex-shrink-0">
+                <div class="flex items-center gap-3"><div class="w-10 h-10 bg-medical-50 dark:bg-medical-900/30 rounded-xl flex items-center justify-center"><i class="fas fa-download text-medical-600" aria-hidden="true"></i></div><h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">从数据源导入</h3></div>
+                <button type="button" class="text-gray-400 hover:text-gray-600 dark:text-gray-400 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:outline-none" data-action="closeModal" data-args="importFromDsModal" aria-label="关闭"><i class="fas fa-times text-xs" aria-hidden="true"></i></button>
+            </div>
+            <div class="p-6 space-y-4 overflow-y-auto">
+                <div>
+                    <label for="importDsSelect" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">选择数据源</label>
+                    <select id="importDsSelect" class="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm form-control-focus" onchange="loadDsTables()">
+                        <option value="">请选择数据源</option>
+                        <option value="his">HIS_主数据库 (Oracle)</option>
+                        <option value="lis">LIS_检验数据库 (MySQL)</option>
+                        <option value="pacs">PACS_影像数据库 (SQL Server)</option>
+                        <option value="emr">EMR_电子病历库 (Oracle)</option>
+                    </select>
+                </div>
+                <div id="dsTablesArea" class="hidden">
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">选择数据表 <span class="text-xs text-gray-400">(可多选)</span></label>
+                    <div class="border border-gray-200 dark:border-gray-600 rounded-lg overflow-hidden">
+                        <div class="bg-gray-50 dark:bg-gray-700 px-3 py-2 border-b border-gray-200 dark:border-gray-600 flex items-center gap-2">
+                            <input type="checkbox" id="selectAllDsTables" class="rounded border-gray-300 text-medical-600 focus:ring-medical-500" onchange="toggleAllDsTables(this)">
+                            <span class="text-xs font-medium text-gray-600 dark:text-gray-300">全选</span>
+                            <span class="text-xs text-gray-400 ml-auto">共 <span id="dsTableCount">0</span> 张表</span>
+                        </div>
+                        <div class="max-h-48 overflow-y-auto p-2 space-y-1" id="dsTableList">
+                            <div class="flex items-center gap-2 p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded cursor-pointer">
+                                <input type="checkbox" class="ds-table-checkbox rounded border-gray-300 text-medical-600 focus:ring-medical-500">
+                                <span class="text-sm text-gray-700 dark:text-gray-300 flex-1 min-w-0 truncate" title="患者基本信息表">PAT_PATIENT_INFO</span><span class="text-xs text-gray-400 dark:text-gray-500 truncate">患者基本信息表</span>
+                                <span class="text-xs text-gray-400">28 字段</span>
+                            </div>
+                            <div class="flex items-center gap-2 p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded cursor-pointer">
+                                <input type="checkbox" class="ds-table-checkbox rounded border-gray-300 text-medical-600 focus:ring-medical-500">
+                                <span class="text-sm text-gray-700 dark:text-gray-300 flex-1 min-w-0 truncate" title="就诊信息表">PAT_VISIT_INFO</span><span class="text-xs text-gray-400 dark:text-gray-500 truncate">就诊信息表</span>
+                                <span class="text-xs text-gray-400">36 字段</span>
+                            </div>
+                            <div class="flex items-center gap-2 p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded cursor-pointer">
+                                <input type="checkbox" class="ds-table-checkbox rounded border-gray-300 text-medical-600 focus:ring-medical-500">
+                                <span class="text-sm text-gray-700 dark:text-gray-300 flex-1">HIS_ORDER</span>
+                                <span class="text-xs text-gray-400">42 字段</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">目标业务域</label>
+                    <select class="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm form-control-focus">
+                        <option>患者域 (PAT)</option>
+                        <option>医嘱域 (ORD)</option>
+                        <option>检验域 (LAB)</option>
+                        <option>检查域 (EXM)</option>
+                        <option>药品域 (DRG)</option>
+                    </select>
+                </div>
+                <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3">
+                    <div class="flex items-start gap-2">
+                        <i class="fas fa-info-circle text-blue-600 mt-0.5 text-xs"></i>
+                        <p class="text-xs text-blue-700 dark:text-blue-300">导入后将自动识别字段类型、长度、注释等信息，并生成标准表结构。您可以在导入后进一步编辑和完善。</p>
+                    </div>
+                </div>
+            </div>
+            <div class="p-6 border-t border-gray-100 dark:border-gray-700 flex justify-end gap-3">
+                <button class="px-4 py-2.5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors" data-action="closeModal" data-args="importFromDsModal">取消</button>
+                <button class="px-4 py-2 bg-medical-600 text-white rounded-xl text-sm font-medium hover:bg-medical-700 transition-colors" onclick="importFromDatasource()">开始导入</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Excel导入模态框 -->
+    <div id="importFromExcelModal" class="modal fixed inset-0 z-50 items-center justify-center bg-black/50">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-lg mx-4 shadow-2xl flex flex-col max-h-[90vh]">
+            <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between flex-shrink-0">
+                <div class="flex items-center gap-3"><div class="w-10 h-10 bg-medical-50 dark:bg-medical-900/30 rounded-xl flex items-center justify-center"><i class="fas fa-file-excel text-medical-600" aria-hidden="true"></i></div><h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">Excel 导入</h3></div>
+                <button type="button" class="text-gray-400 hover:text-gray-600 dark:text-gray-400 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:outline-none" data-action="closeModal" data-args="importFromExcelModal" aria-label="关闭"><i class="fas fa-times text-xs" aria-hidden="true"></i></button>
+            </div>
+            <div class="p-6 space-y-4 overflow-y-auto">
+                <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl p-8 text-center hover:border-medical-400 transition-colors cursor-pointer" onclick="document.getElementById('excelFileInput').click()">
+                    <input type="file" id="excelFileInput" accept=".xlsx,.xls" class="hidden" onchange="handleExcelUpload(this)">
+                    <div class="w-16 h-16 bg-success-50 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-cloud-upload-alt text-success-600 text-2xl"></i>
+                    </div>
+                    <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">点击上传或拖拽文件到此处</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">支持 .xlsx, .xls 格式，单个文件不超过 10MB</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="flex-1 h-px bg-gray-200 dark:bg-gray-700"></div>
+                    <span class="text-xs text-gray-400">或</span>
+                    <div class="flex-1 h-px bg-gray-200 dark:bg-gray-700"></div>
+                </div>
+                <button class="w-full flex items-center justify-center gap-2 p-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 transition-colors" data-action="showToast" data-args="模板下载成功|success">
+                    <i class="fas fa-download text-gray-400"></i>
+                    下载标准导入模板
+                </button>
+                <div id="excelPreview" class="hidden">
+                    <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">文件预览：<span id="excelFileName" class="text-medical-600"></span></p>
+                    <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 text-xs text-gray-600 dark:text-gray-400 space-y-1">
+                        <div class="flex items-center justify-between">
+                            <span>表数量</span>
+                            <span class="font-medium text-gray-900 dark:text-gray-100">5</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span>字段总数</span>
+                            <span class="font-medium text-gray-900 dark:text-gray-100">86</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span>预计导入时间</span>
+                            <span class="font-medium text-gray-900 dark:text-gray-100">约 30 秒</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-6 border-t border-gray-100 dark:border-gray-700 flex justify-end gap-3">
+                <button class="px-4 py-2.5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors" data-action="closeModal" data-args="importFromExcelModal">取消</button>
+                <button id="excelImportBtn" class="px-4 py-2 bg-medical-600 text-white rounded-xl text-sm font-medium hover:bg-medical-700 transition-colors disabled:opacity-50" disabled onclick="startExcelImport()">开始导入</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 手工录入模态框 -->
+    <div id="manualCreateModal" class="modal fixed inset-0 z-50 items-center justify-center bg-black/50">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-3xl mx-4 shadow-2xl flex flex-col max-h-[90vh]">
+            <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between flex-shrink-0">
+                <div class="flex items-center gap-3"><div class="w-10 h-10 bg-medical-50 dark:bg-medical-900/30 rounded-xl flex items-center justify-center"><i class="fas fa-keyboard text-medical-600" aria-hidden="true"></i></div><h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">手工录入标准表</h3></div>
+                <button type="button" class="text-gray-400 hover:text-gray-600 dark:text-gray-400 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:outline-none" data-action="closeModal" data-args="manualCreateModal" aria-label="关闭"><i class="fas fa-times text-xs" aria-hidden="true"></i></button>
+            </div>
+            <div class="p-6 space-y-4 overflow-y-auto">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">表名 <span class="text-danger-500">*</span></label>
+                        <input type="text" id="manualTableName" placeholder="例如：PAT_PATIENT_INFO" class="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm form-control-focus">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">所属域 <span class="text-danger-500">*</span></label>
+                        <select id="manualDomain" class="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm form-control-focus">
+                            <option value="">请选择</option>
+                            <option>患者域 (PAT)</option>
+                            <option>医嘱域 (ORD)</option>
+                            <option>检验域 (LAB)</option>
+                            <option>检查域 (EXM)</option>
+                            <option>药品域 (DRG)</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label for="manualTableDesc" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">表描述</label>
+                    <textarea id="manualTableDesc" placeholder="请输入表的业务描述..." rows="2" class="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm form-control-focus"></textarea>
+                </div>
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">字段定义</label>
+                        <button class="text-xs text-medical-600 hover:text-medical-700 font-medium" onclick="addManualField()">
+                            <i class="fas fa-plus mr-1"></i>添加字段
+                        </button>
+                    </div>
+                    <div class="border border-gray-200 dark:border-gray-600 rounded-lg overflow-hidden">
+                        <table class="w-full text-sm">
+                            <thead class="bg-gray-50 dark:bg-gray-700">
+                                <tr>
+                                    <th class="text-left py-2 px-3 text-xs font-medium text-gray-500">序号</th>
+                                    <th class="text-left py-2 px-3 text-xs font-medium text-gray-500">字段名 <span class="text-danger-500">*</span></th>
+                                    <th class="text-left py-2 px-3 text-xs font-medium text-gray-500">中文名 <span class="text-danger-500">*</span></th>
+                                    <th class="text-left py-2 px-3 text-xs font-medium text-gray-500">数据类型 <span class="text-danger-500">*</span></th>
+                                    <th class="text-left py-2 px-3 text-xs font-medium text-gray-500">长度</th>
+                                    <th class="text-left py-2 px-3 text-xs font-medium text-gray-500">必填</th>
+                                    <th class="text-left py-2 px-3 text-xs font-medium text-gray-500">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="manualFieldList">
+                                <tr class="border-b border-gray-100 dark:border-gray-700">
+                                    <td class="py-2 px-3 text-xs text-gray-400">1</td>
+                                    <td class="py-2 px-2"><input type="text" placeholder="PATIENT_ID" class="w-full px-2 py-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded text-xs focus:ring-1 focus:ring-medical-500"></td>
+                                    <td class="py-2 px-2"><input type="text" placeholder="患者ID" class="w-full px-2 py-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded text-xs focus:ring-1 focus:ring-medical-500"></td>
+                                    <td class="py-2 px-2">
+                                        <select class="w-full px-2 py-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded text-xs focus:ring-1 focus:ring-medical-500">
+                                            <option>VARCHAR</option>
+                                            <option>INT</option>
+                                            <option>BIGINT</option>
+                                            <option>DECIMAL</option>
+                                            <option>DATE</option>
+                                            <option>TIMESTAMP</option>
+                                            <option>TEXT</option>
+                                        </select>
+                                    </td>
+                                    <td class="py-2 px-2"><input type="text" placeholder="32" class="w-full px-2 py-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded text-xs focus:ring-1 focus:ring-medical-500"></td>
+                                    <td class="py-2 px-3 text-center"><input type="checkbox" class="rounded border-gray-300 text-medical-600 focus:ring-medical-500" checked></td>
+                                    <td class="py-2 px-3">
+                                        <button type="button" class="text-danger-600 hover:text-danger-700 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除" onclick="this.closest('tr').remove();renumberManualFields()"><i class="fas fa-trash-alt text-xs" aria-hidden="true"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="p-6 border-t border-gray-100 dark:border-gray-700 flex justify-end gap-3">
+                <button class="px-4 py-2.5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors" data-action="closeModal" data-args="manualCreateModal">取消</button>
+                <button class="px-4 py-2 bg-medical-600 text-white rounded-xl text-sm font-medium hover:bg-medical-700 transition-colors" onclick="saveManualTable()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 编辑表结构模态框 -->
+    <div id="editTableModal" class="modal fixed inset-0 z-50 items-center justify-center bg-black/50">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-lg mx-4 shadow-2xl flex flex-col max-h-[90vh]">
+            <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between flex-shrink-0">
+                <div class="flex items-center gap-3"><div class="w-10 h-10 bg-medical-50 dark:bg-medical-900/30 rounded-xl flex items-center justify-center"><i class="fas fa-edit text-medical-600" aria-hidden="true"></i></div><h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">编辑表结构</h3></div>
+                <button type="button" class="text-gray-400 hover:text-gray-600 dark:text-gray-400 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:outline-none" data-action="closeModal" data-args="editTableModal" aria-label="关闭"><i class="fas fa-times text-xs" aria-hidden="true"></i></button>
+            </div>
+            <div class="p-6 space-y-4 overflow-y-auto">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">表名</label>
+                    <input type="text" value="PAT_PATIENT_INFO" class="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm form-control-focus">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">所属域</label>
+                    <select class="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm form-control-focus">
+                        <option selected>患者域 (PAT)</option>
+                        <option>医嘱域 (ORD)</option>
+                        <option>检验域 (LAB)</option>
+                        <option>检查域 (EXM)</option>
+                        <option>药品域 (DRG)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">描述</label>
+                    <textarea class="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm form-control-focus" rows="3">患者基本信息表，存储患者的人口统计学信息和核心标识信息</textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">表类型</label>
+                    <div class="flex gap-3">
+                        <label class="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-700 rounded-lg cursor-pointer">
+                            <input type="radio" name="tableType" checked class="text-medical-600">
+                            <span class="text-sm text-gray-700 dark:text-gray-300">核心表</span>
+                        </label>
+                        <label class="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-700 rounded-lg cursor-pointer">
+                            <input type="radio" name="tableType" class="text-medical-600">
+                            <span class="text-sm text-gray-700 dark:text-gray-300">辅助表</span>
+                        </label>
+                        <label class="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-700 rounded-lg cursor-pointer">
+                            <input type="radio" name="tableType" class="text-medical-600">
+                            <span class="text-sm text-gray-700 dark:text-gray-300">字典表</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="p-6 border-t border-gray-100 dark:border-gray-700 flex justify-end gap-3">
+                <button class="px-4 py-2.5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors" data-action="closeModal" data-args="editTableModal">取消</button>
+                <button class="px-4 py-2 bg-medical-600 text-white rounded-xl text-sm font-medium hover:bg-medical-700 transition-colors" onclick="closeModal('editTableModal');showToast('表结构已保存','success')">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 树节点展开/折叠
+        function toggleTreeNode(el, ev) {
+            // 点击域内增删改按钮时不触发折叠
+            if (ev && ev.target.closest('button, a, input, [data-no-toggle]')) return;
+            const arrow = el.querySelector('.std-tree-arrow');
+            const children = el.nextElementSibling;
+            if (children && children.classList.contains('std-tree-children')) {
+                arrow.classList.toggle('expanded');
+                children.classList.toggle('expanded');
+            }
+        }
+
+        // 选择标准表
+        function selectStdTable(el, tableName) {
+            document.querySelectorAll('.std-tree-item').forEach(item => item.classList.remove('active'));
+            el.classList.add('active');
+            document.getElementById('stdTableName').textContent = tableName;
+            showToast('已加载 ' + tableName + ' 的标准定义', 'success');
+        }
+
+        // 过滤标准树
+        function filterStdTree(query) {
+            const items = document.querySelectorAll('#stdTree .std-tree-item');
+            const q = query.toLowerCase();
+            items.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                const parent = item.closest('.std-tree-children');
+                if (text.includes(q)) {
+                    item.style.display = '';
+                    if (parent) {
+                        parent.classList.add('expanded');
+                        parent.previousElementSibling?.querySelector('.std-tree-arrow')?.classList.add('expanded');
+                    }
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // Tab 切换
+        function switchTab(btn, tabId) {
+            document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active', 'text-medical-600'));
+            document.querySelectorAll('.tab-btn').forEach(t => t.classList.add('text-gray-500', 'dark:text-gray-400'));
+            btn.classList.add('active', 'text-medical-600');
+            btn.classList.remove('text-gray-500', 'dark:text-gray-400');
+
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+            document.getElementById('tab-' + tabId).classList.remove('hidden');
+
+            // 新增字段按钮仅在「标准字段」tab 显示
+            var addFieldBtn = document.getElementById('addFieldBtn');
+            if (addFieldBtn) {
+                addFieldBtn.classList.toggle('hidden', tabId !== 'fields');
+            }
+        }
+
+        // 从数据源导入 - 加载表列表
+        function loadDsTables() {
+            const select = document.getElementById('importDsSelect');
+            const area = document.getElementById('dsTablesArea');
+            if (select.value) {
+                area.classList.remove('hidden');
+                document.getElementById('dsTableCount').textContent = '3';
+            } else {
+                area.classList.add('hidden');
+            }
+        }
+
+        function toggleAllDsTables(checkbox) {
+            document.querySelectorAll('.ds-table-checkbox').forEach(cb => cb.checked = checkbox.checked);
+        }
+
+        function importFromDatasource() {
+            const select = document.getElementById('importDsSelect');
+            if (!select.value) {
+                showToast('请选择数据源', 'warning');
+                return;
+            }
+            const checked = document.querySelectorAll('.ds-table-checkbox:checked');
+            if (checked.length === 0) {
+                showToast('请至少选择一张表', 'warning');
+                return;
+            }
+            closeModal('importFromDsModal');
+            showToast('正在从 ' + select.options[select.selectedIndex].text + ' 导入 ' + checked.length + ' 张表...', 'info');
+            setTimeout(() => {
+                showToast('标准表导入成功', 'success');
+            }, 2000);
+        }
+
+        // Excel 导入
+        function handleExcelUpload(input) {
+            const file = input.files[0];
+            if (file) {
+                document.getElementById('excelFileName').textContent = file.name;
+                document.getElementById('excelPreview').classList.remove('hidden');
+                document.getElementById('excelImportBtn').disabled = false;
+            }
+        }
+
+        function startExcelImport() {
+            closeModal('importFromExcelModal');
+            showToast('正在解析Excel文件...', 'info');
+            setTimeout(() => {
+                showToast('Excel导入成功，共导入 5 张标准表', 'success');
+                document.getElementById('excelPreview').classList.add('hidden');
+                document.getElementById('excelImportBtn').disabled = true;
+                document.getElementById('excelFileInput').value = '';
+            }, 2000);
+        }
+
+        // 手工录入
+        function addManualField() {
+            const tbody = document.getElementById('manualFieldList');
+            const count = tbody.querySelectorAll('tr').length + 1;
+            const tr = document.createElement('tr');
+            tr.className = 'border-b border-gray-100 dark:border-gray-700';
+            tr.innerHTML = `
+                <td class="py-2 px-3 text-xs text-gray-400">${count}</td>
+                <td class="py-2 px-2"><input type="text" placeholder="字段名" class="w-full px-2 py-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded text-xs focus:ring-1 focus:ring-medical-500"></td>
+                <td class="py-2 px-2"><input type="text" placeholder="中文名" class="w-full px-2 py-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded text-xs focus:ring-1 focus:ring-medical-500"></td>
+                <td class="py-2 px-2">
+                    <select class="w-full px-2 py-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded text-xs focus:ring-1 focus:ring-medical-500">
+                        <option>VARCHAR</option>
+                        <option>INT</option>
+                        <option>BIGINT</option>
+                        <option>DECIMAL</option>
+                        <option>DATE</option>
+                        <option>TIMESTAMP</option>
+                        <option>TEXT</option>
+                    </select>
+                </td>
+                <td class="py-2 px-2"><input type="text" placeholder="长度" class="w-full px-2 py-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded text-xs focus:ring-1 focus:ring-medical-500"></td>
+                <td class="py-2 px-3 text-center"><input type="checkbox" class="rounded border-gray-300 text-medical-600 focus:ring-medical-500"></td>
+                <td class="py-2 px-3">
+                    <button type="button" class="text-danger-600 hover:text-danger-700 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除" onclick="this.closest('tr').remove();renumberManualFields()"><i class="fas fa-trash-alt text-xs" aria-hidden="true"></i></button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        }
+
+        // ===== 域增删改 =====
+        var _domainCtx = { node: null, name: '', code: '' };
+
+        function addStdTableToDomain(btn, domainName, domainCode) {
+            var domainNode = btn.closest('[data-domain-node]');
+            var children = domainNode.querySelector('.std-tree-children');
+            var tableName = 'NEW_TABLE_' + (children ? children.querySelectorAll('.std-tree-item').length + 1 : 1);
+            var html = '<div tabindex="0" role="treeitem" class="std-tree-item flex items-center gap-2 px-3 py-1.5 rounded-lg" onclick="selectStdTable(this, \'' + tableName + '\')">' +
+                '<i class="fas fa-table text-primary-600 text-xs"></i>' +
+                '<span class="text-sm text-gray-700 dark:text-gray-300 flex-1">' + tableName + '</span>' +
+                '<span class="text-xs text-gray-400">0字段</span>' +
+                '</div>';
+            if (children) {
+                children.insertAdjacentHTML('beforeend', html);
+                // 更新域表数
+                var countSpan = domainNode.querySelector('.std-tree-item > .text-xs.text-gray-400');
+                if (countSpan) {
+                    var m = countSpan.textContent.match(/(\d+)/);
+                    if (m) countSpan.textContent = (parseInt(m[1]) + 1) + '表';
+                }
+                // 自动展开
+                if (!children.classList.contains('expanded')) {
+                    children.previousElementSibling.click();
+                }
+            }
+            showToast('已在' + domainName + '新增标准表 ' + tableName + '，请进一步编辑字段', 'success');
+        }
+
+        function editDomain(btn, domainName, domainCode) {
+            _domainCtx = { node: btn.closest('[data-domain-node]'), name: domainName, code: domainCode, mode: 'edit' };
+            document.getElementById('domainModalTitle').textContent = '编辑域';
+            document.getElementById('domainNameInput').value = domainName;
+            document.getElementById('domainCodeInput').value = domainCode;
+            openModal('domainModal');
+        }
+
+        // 新增域（复用 domainModal）
+        function openAddDomainModal() {
+            _domainCtx = { node: null, name: '', code: '', mode: 'add' };
+            document.getElementById('domainModalTitle').textContent = '新增域';
+            document.getElementById('domainNameInput').value = '';
+            document.getElementById('domainCodeInput').value = '';
+            openModal('domainModal');
+        }
+
+        function deleteDomain(btn, domainName) {
+            var domainNode = btn.closest('[data-domain-node]');
+            var tableCount = domainNode ? domainNode.querySelectorAll('.std-tree-children > .std-tree-item').length : 0;
+            showConfirm({
+                title: '删除域',
+                message: '确定要删除「' + domainName + '」吗？该域下共 ' + tableCount + ' 张标准表将一并移除，此操作不可撤销。',
+                confirmText: '确认删除',
+                cancelText: '取消',
+                type: 'danger',
+                onConfirm: function() {
+                    if (domainNode) {
+                        domainNode.style.transition = 'opacity 0.2s ease, max-height 0.25s ease';
+                        domainNode.style.opacity = '0';
+                        domainNode.style.maxHeight = domainNode.offsetHeight + 'px';
+                        requestAnimationFrame(function() { domainNode.style.maxHeight = '0'; });
+                        setTimeout(function() { domainNode.remove(); }, 250);
+                    }
+                    showToast('域「' + domainName + '」已删除', 'success');
+                },
+                onCancel: function() { btn.blur(); }
+            });
+        }
+
+        function saveDomain() {
+            var newName = document.getElementById('domainNameInput').value.trim();
+            var newCode = document.getElementById('domainCodeInput').value.trim();
+            if (!newName || !newCode) {
+                showToast('域名与编码为必填项', 'error');
+                return;
+            }
+            if (_domainCtx.mode === 'add') {
+                // 新增域：追加到树末尾
+                var tree = document.getElementById('stdTree');
+                var html = '<div class="mb-1" data-domain-node>' +
+                    '<div tabindex="0" role="treeitem" class="std-tree-item flex items-center gap-2 px-3 py-2 rounded-lg" onclick="toggleTreeNode(this, event)">' +
+                        '<i class="fas fa-chevron-right std-tree-arrow text-gray-400 text-xs flex-shrink-0"></i>' +
+                        '<i class="fas fa-folder text-medical-600 text-sm flex-shrink-0"></i>' +
+                        '<span class="text-sm font-medium text-gray-800 dark:text-gray-200 flex-1 min-w-0 truncate">' + MediData.escapeHtml(newName) + ' (' + MediData.escapeHtml(newCode) + ')</span>' +
+                        '<span class="text-xs text-gray-400 flex-shrink-0">0表</span>' +
+                        '<div class="flex items-center gap-0.5 flex-shrink-0">' +
+                            '<button type="button" class="text-gray-400 hover:text-medical-600 transition-colors flex-shrink-0 w-5 h-5 flex items-center justify-center rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑域" aria-label="编辑' + MediData.escapeHtml(newName) + '" onclick="event.stopPropagation(); editDomain(this, \'' + newName.replace(/'/g, "\\'") + '\', \'' + newCode.replace(/'/g, "\\'") + '\');"><i class="fas fa-edit text-xs" aria-hidden="true"></i></button>' +
+                            '<button type="button" class="text-danger-600 hover:text-danger-700 transition-colors flex-shrink-0 w-5 h-5 flex items-center justify-center rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除域" aria-label="删除' + MediData.escapeHtml(newName) + '" onclick="event.stopPropagation(); deleteDomain(this, \'' + newName.replace(/'/g, "\\'") + '\');"><i class="fas fa-trash-alt text-xs" aria-hidden="true"></i></button>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="std-tree-children pl-4"></div>' +
+                '</div>';
+                tree.insertAdjacentHTML('beforeend', html);
+                showToast('域「' + newName + '」已新增', 'success');
+            } else if (_domainCtx.node) {
+                var labelSpan = _domainCtx.node.querySelector('.std-tree-item > span.text-sm.font-medium');
+                if (labelSpan) labelSpan.textContent = newName + ' (' + newCode + ')';
+                showToast('域「' + newName + '」已更新', 'success');
+            }
+            closeModal('domainModal');
+        }
+
+        // ===== 标准表删除 =====
+        function deleteStdTable() {
+            var tableName = document.getElementById('stdTableName').textContent;
+            showConfirm({
+                title: '删除标准表',
+                message: '确定要删除标准表「' + tableName + '」及其所有字段定义吗？相关映射关系将解除，此操作不可撤销。',
+                confirmText: '确认删除',
+                cancelText: '取消',
+                type: 'danger',
+                onConfirm: function() {
+                    var activeNode = document.querySelector('.std-tree-item.active');
+                    if (activeNode) {
+                        var domainNode = activeNode.closest('[data-domain-node]');
+                        activeNode.remove();
+                        if (domainNode) {
+                            var countSpan = domainNode.querySelector('.std-tree-item > .text-xs.text-gray-400');
+                            if (countSpan) {
+                                var m = countSpan.textContent.match(/(\d+)/);
+                                if (m && parseInt(m[1]) > 0) countSpan.textContent = (parseInt(m[1]) - 1) + '表';
+                            }
+                        }
+                    }
+                    MediData.renderEmptyState('stdDetailPanel', {
+                        icon: 'fa-book',
+                        title: '请选择标准表',
+                        desc: '从左侧标准域树中选择一张标准表查看字段与映射详情'
+                    });
+                    showToast('标准表「' + tableName + '」已删除', 'success');
+                }
+            });
+        }
+
+        // ===== 字段增删改 =====
+        var _stdFieldCtx = { row: null };
+
+        function openStdFieldModal() {
+            _stdFieldCtx.row = null;
+            document.getElementById('stdFieldModalTitle').textContent = '新增字段';
+            document.getElementById('stdFieldForm').reset();
+            openModal('stdFieldModal');
+        }
+
+        function editStdField(btn) {
+            _stdFieldCtx.row = btn.closest('tr');
+            var cells = _stdFieldCtx.row.querySelectorAll('td');
+            document.getElementById('stdFieldModalTitle').textContent = '编辑字段';
+            document.getElementById('stdFieldName').value = cells[1].textContent.trim();
+            document.getElementById('stdFieldCnName').value = cells[2].textContent.trim();
+            document.getElementById('stdFieldType').value = cells[3].textContent.trim();
+            document.getElementById('stdFieldRequired').value = cells[4].textContent.trim() === '是' ? '是' : '否';
+            document.getElementById('stdFieldDomain').value = cells[5].textContent.trim();
+            openModal('stdFieldModal');
+        }
+
+        function saveStdField() {
+            var name = document.getElementById('stdFieldName').value.trim();
+            var cnName = document.getElementById('stdFieldCnName').value.trim();
+            var type = document.getElementById('stdFieldType').value.trim();
+            var required = document.getElementById('stdFieldRequired').value;
+            var domain = document.getElementById('stdFieldDomain').value.trim() || '-';
+            if (!name || !cnName) {
+                showToast('字段名与中文名为必填项', 'error');
+                return;
+            }
+            MediData.btnLoading.show(document.getElementById('stdFieldSubmit'), '保存中...');
+            setTimeout(function() {
+                MediData.btnLoading.hide(document.getElementById('stdFieldSubmit'));
+                if (_stdFieldCtx.row) {
+                    var cells = _stdFieldCtx.row.querySelectorAll('td');
+                    cells[1].innerHTML = '<span class="font-mono text-xs text-primary-600 font-medium">' + MediData.escapeHtml(name) + '</span>';
+                    cells[2].textContent = cnName;
+                    cells[3].textContent = type;
+                    cells[4].innerHTML = '<span class="text-xs ' + (required === '是' ? 'text-danger-600 font-medium' : 'text-gray-500') + '">' + required + '</span>';
+                    cells[5].textContent = domain;
+                    showToast('字段「' + name + '」已更新', 'success');
+                } else {
+                    var tbody = document.querySelector('#tab-fields tbody');
+                    var seq = tbody.querySelectorAll('tr').length + 1;
+                    var html = '<tr class="field-row border-b border-gray-100 dark:border-gray-800">' +
+                        '<td class="py-2.5 px-3 text-xs text-gray-400">' + seq + '</td>' +
+                        '<td class="py-2.5 px-3"><span class="font-mono text-xs text-primary-600 font-medium">' + MediData.escapeHtml(name) + '</span></td>' +
+                        '<td class="py-2.5 px-3 text-xs text-gray-700 dark:text-gray-300">' + MediData.escapeHtml(cnName) + '</td>' +
+                        '<td class="py-2.5 px-3 text-xs text-gray-600 dark:text-gray-400">' + MediData.escapeHtml(type) + '</td>' +
+                        '<td class="py-2.5 px-3"><span class="text-xs ' + (required === '是' ? 'text-danger-600 font-medium' : 'text-gray-500') + '">' + required + '</span></td>' +
+                        '<td class="py-2.5 px-3 text-xs text-gray-500">' + MediData.escapeHtml(domain) + '</td>' +
+                        '<td class="py-2.5 px-3"><span class="mapping-badge mapping-none">未映射</span></td>' +
+                        '<td class="py-2.5 px-3 whitespace-nowrap">' +
+                            '<button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑字段" onclick="editStdField(this)"><i class="fas fa-edit text-xs" aria-hidden="true"></i></button> ' +
+                            '<button type="button" class="text-danger-600 hover:text-danger-700 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除字段" onclick="deleteStdField(this)"><i class="fas fa-trash-alt text-xs" aria-hidden="true"></i></button> ' +
+                            '<button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="查看映射详情" data-action="showToast" data-args="\'查看映射详情\|\'info\"><i class="fas fa-eye text-xs" aria-hidden="true"></i></button>' +
+                        '</td></tr>';
+                    tbody.insertAdjacentHTML('beforeend', html);
+                    showToast('字段「' + name + '」已添加', 'success');
+                }
+                closeModal('stdFieldModal');
+            }, 600);
+        }
+
+        function deleteStdField(btn) {
+            var row = btn.closest('tr');
+            var fieldName = row.querySelector('td:nth-child(2)').textContent.trim();
+            showConfirm({
+                title: '删除字段',
+                message: '确定要删除字段「' + fieldName + '」吗？该字段的数据将被一并移除，此操作不可撤销。',
+                confirmText: '确认删除',
+                cancelText: '取消',
+                type: 'danger',
+                onConfirm: function() {
+                    row.style.transition = 'opacity 0.2s ease';
+                    row.style.opacity = '0';
+                    setTimeout(function() { row.remove(); }, 250);
+                    showToast('字段「' + fieldName + '」已删除', 'success');
+                },
+                onCancel: function() { btn.blur(); }
+            });
+        }
+
+        function renumberManualFields() {
+            const rows = document.querySelectorAll('#manualFieldList tr');
+            rows.forEach((row, index) => {
+                row.querySelector('td:first-child').textContent = index + 1;
+            });
+        }
+
+        function saveManualTable() {
+            const tableName = document.getElementById('manualTableName').value.trim();
+            const domain = document.getElementById('manualDomain').value;
+            if (!tableName) {
+                showToast('请输入表名', 'warning');
+                return;
+            }
+            if (!domain) {
+                showToast('请选择所属域', 'warning');
+                return;
+            }
+            closeModal('manualCreateModal');
+            showToast('标准表 ' + tableName + ' 创建成功', 'success');
+        }
+
+        // 默认展开第一个域
+        document.addEventListener('DOMContentLoaded', () => {
+            const firstNode = document.querySelector('.std-tree-arrow');
+            if (firstNode) firstNode.classList.add('expanded');
+            const firstChildren = document.querySelector('.std-tree-children');
+            if (firstChildren) firstChildren.classList.add('expanded');
+        });
+    </script>
+</body>
+</html>

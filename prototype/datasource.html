@@ -1,0 +1,1391 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0d9488">
+    <meta name="description" content="数据源管理 - 管理医院 HIS/LIS/PACS/EMR 各业务系统数据库连接、健康度监控与元数据采集">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="数据源管理 - MediData AI">
+    <meta property="og:description" content="管理医院各业务系统数据库连接、健康度监控与元数据采集">
+    <title>数据源管理 - MediData AI</title>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="stylesheet" href="components/tailwind.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="components/common.css">
+    <script src="components/common.js" defer></script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+    <a href="#main-content" class="skip-link">跳转到主内容</a>
+    <div class="flex h-screen overflow-hidden">
+        <!-- 侧边栏 -->
+        <aside id="sidebar" class="w-64 gradient-bg text-white flex flex-col flex-shrink-0"></aside>
+
+        <!-- 主内容区 -->
+        <main id="main-content" class="flex-1 flex flex-col overflow-hidden" role="main">
+            <!-- 顶部导航 -->
+            <header id="header" class="glass-effect border-b border-gray-200 dark:border-gray-700 px-6 py-4 flex items-center justify-between flex-shrink-0 z-10"></header>
+
+            <!-- 面包屑 -->
+            <div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-2">
+                <nav id="breadcrumb" class="breadcrumb"></nav>
+            </div>
+
+            <!-- 页面内容 -->
+            <div class="flex-1 overflow-y-auto p-6">
+                <!-- 页面标题 -->
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">数据源管理</h2>
+                        <p class="text-gray-500 dark:text-gray-400 mt-1">管理医院各业务系统的数据库连接与元数据采集</p>
+                    </div>
+                    <div class="flex gap-3">
+                        <button class="px-4 py-2.5 bg-medical-600 text-white rounded-xl text-sm font-medium hover:bg-medical-700 transition-colors flex items-center gap-2 shadow-md shadow-medical-600/20 btn-transition" data-action="openModal" data-args="addDatasourceModal">
+                            <i class="fas fa-plus"></i> 新增数据源
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 统计卡片 -->
+                <div class="grid grid-cols-2 md:grid-cols-4 stats-grid gap-4 mb-6">
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-2xl font-bold text-gray-900 dark:text-gray-100">24</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">数据源总数</p>
+                            </div>
+                            <div class="w-10 h-10 bg-medical-50 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-database text-medical-600"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-3">
+                            <span class="text-success-600 font-medium">+2</span> 较上周新增
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-2xl font-bold text-gray-900 dark:text-gray-100">22</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">正常运行</p>
+                            </div>
+                            <div class="w-10 h-10 bg-success-50 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-check-circle text-success-600"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-3">
+                            <span class="text-success-600 font-medium">91.7%</span> 可用率
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-2xl font-bold text-gray-900 dark:text-gray-100">3</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Schema变更</p>
+                            </div>
+                            <div class="w-10 h-10 bg-danger-50 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-code-branch text-danger-600"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-3">
+                            <span class="text-danger-600 font-medium">需处理</span> HIS/LIS/EMR
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-2xl font-bold text-gray-900 dark:text-gray-100">96.5%</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">元数据采集率</p>
+                            </div>
+                            <div class="w-10 h-10 bg-primary-50 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-table text-primary-600"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-3">
+                            <span class="text-primary-600 font-medium">1,856</span> 表 · <span class="text-primary-600 font-medium">24,320</span> 字段
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 筛选搜索栏 -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 mb-6">
+                    <div class="flex items-center gap-4">
+                        <div class="relative flex-1">
+                            <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                            <input type="text" id="dsSearchInput" placeholder="搜索数据源名称、IP地址、数据库类型..." 
+                                class="w-full pl-10 pr-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus" oninput="filterDatasources()">
+                        </div>
+                        <select id="dsSystemType" class="px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus" onchange="filterDatasources()">
+                            <option>全部系统类型</option>
+                            <option>HIS</option>
+                            <option>LIS</option>
+                            <option>PACS</option>
+                            <option>EMR</option>
+                            <option>其他</option>
+                        </select>
+                        <select id="dsStatus" class="px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus" onchange="filterDatasources()">
+                            <option>全部状态</option>
+                            <option>正常</option>
+                            <option>告警</option>
+                            <option>离线</option>
+                        </select>
+                        <select id="dsDbType" class="px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus" onchange="filterDatasources()">
+                            <option>全部数据库</option>
+                            <option>Oracle</option>
+                            <option>MySQL</option>
+                            <option>SQL Server</option>
+                            <option>PostgreSQL</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- 数据源表格 -->
+                <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
+                    <!-- 批量操作栏 -->
+                    <div id="batchBar" class="hidden px-4 py-3 bg-medical-50 dark:bg-medical-900/30 border-b border-gray-100 dark:border-gray-700 flex items-center gap-3">
+                        <span class="text-sm font-medium text-medical-700 dark:text-medical-400">已选择 <span id="batchCount">0</span> 项</span>
+                        <button class="px-3 py-1.5 text-xs font-medium bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" onclick="batchTestConnection()">
+                            <i class="fas fa-plug mr-1"></i>批量测试连接
+                        </button>
+                        <button class="px-3 py-1.5 text-xs font-medium bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" onclick="batchDelete()">
+                            <i class="fas fa-trash-alt mr-1"></i>批量删除
+                        </button>
+                        <button class="px-3 py-1.5 text-xs font-medium text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors ml-auto" onclick="clearSelection()">取消选择</button>
+                    </div>
+                    <div class="overflow-hidden max-h-[60vh]">
+                    <table class="w-full table-fixed" id="datasourceTable" aria-label="数据源列表">
+                        <colgroup>
+                            <col style="width: 40px;">
+                            <col style="width: 15%;">
+                            <col style="width: 7%;">
+                            <col style="width: 15%;">
+                            <col style="width: 13%;">
+                            <col style="width: 8%;">
+                            <col style="width: 10%;">
+                            <col style="width: 12%;">
+                            <col style="width: 8%;">
+                            <col style="width: 12%;">
+                        </colgroup>
+                        <thead class="sticky-head bg-gray-50 dark:bg-gray-900 border-b border-gray-100 dark:border-gray-700">
+                            <tr>
+                                <th scope="col" class="px-4 py-3 text-left w-10 whitespace-nowrap"><input type="checkbox" id="selectAll" aria-label="全选数据源" class="rounded border-gray-300 dark:border-gray-600 text-medical-600 focus:ring-medical-500" onchange="toggleSelectAll(this)"></th>
+                                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase whitespace-nowrap">数据源</th>
+                                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase whitespace-nowrap">系统类型</th>
+                                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase whitespace-nowrap ds-col-secondary">连接信息</th>
+                                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase whitespace-nowrap">数据库类型</th>
+                                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase whitespace-nowrap">状态</th>
+                                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase whitespace-nowrap ds-col-secondary">关联表</th>
+                                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase whitespace-nowrap ds-col-secondary">最近同步</th>
+                                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase whitespace-nowrap ds-col-secondary">安全等级</th>
+                                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase whitespace-nowrap">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            <tr class="table-row-hover hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                    <td class="px-4 py-3"><input type="checkbox" class="row-checkbox rounded border-gray-300 dark:border-gray-600 text-medical-600 focus:ring-medical-500" onchange="updateBatchBar()"></td>
+                                    <td class="px-4 py-3">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-8 h-8 bg-medical-50 rounded-lg flex items-center justify-center">
+                                                <i class="fas fa-database text-medical-600 text-sm"></i>
+                                            </div>
+                                            <div>
+                                                <p class="text-sm font-medium text-gray-900 dark:text-gray-100">HIS_主数据库</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <span class="text-xs bg-medical-50 text-medical-700 px-2 py-1 rounded-md">HIS</span>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <p class="text-sm text-gray-700">192.168.1.100:1521</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">ORCL</p>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div class="flex items-center gap-2">
+                                        <i class="fas fa-database text-gray-400 text-xs"></i>
+                                        <span class="text-sm text-gray-700">Oracle</span>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div class="flex items-center gap-2">
+                                        <span class="status-dot status-online"></span>
+                                        <span class="text-sm text-gray-700">正常</span>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div class="flex flex-col">
+                                        <span class="text-sm text-gray-700">342 表</span>
+                                        <span class="text-xs text-gray-400">5,120 字段</span>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div class="flex flex-col">
+                                        <span class="text-sm text-gray-700">2 分钟前</span>
+                                        <span class="text-xs text-success-600">元数据已同步</span>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <span class="text-xs bg-danger-50 text-danger-700 px-2 py-1 rounded-md">核心</span>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div class="flex items-center gap-2">
+                                        <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑" onclick="openEditModal(this)"><i class="fas fa-edit text-xs" aria-hidden="true"></i></button>
+                                        <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="采集元数据" onclick="openMetaCollectModal(this)"><i class="fas fa-sync text-xs" aria-hidden="true"></i></button>
+                                        <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="测试连接" onclick="testConnection(this, 'success')"><i class="fas fa-plug text-xs" aria-hidden="true"></i></button>
+                                        <button type="button" class="text-danger-600 hover:text-danger-700 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除" aria-label="删除数据源" onclick="showConfirm({title:'删除数据源',message:'确定要删除该数据源吗？删除后相关映射关系也将被清除。',type:'danger',onConfirm:function(){showToast('数据源已删除','success')}})"><i class="fas fa-trash-alt text-xs" aria-hidden="true"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="table-row-hover hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                <td class="px-4 py-3"><input type="checkbox" class="row-checkbox rounded border-gray-300 dark:border-gray-600 text-medical-600 focus:ring-medical-500" onchange="updateBatchBar()"></td>
+                                <td class="px-4 py-3">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-8 h-8 bg-primary-50 rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-flask text-primary-600 text-sm"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-medium text-gray-900 dark:text-gray-100">LIS_检验数据库</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <span class="text-xs bg-primary-50 text-primary-700 px-2 py-1 rounded-md">LIS</span>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <p class="text-sm text-gray-700">192.168.1.101:3306</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">lis_db</p>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div class="flex items-center gap-2">
+                                        <i class="fas fa-database text-gray-400 text-xs"></i>
+                                        <span class="text-sm text-gray-700">MySQL</span>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div class="flex items-center gap-2">
+                                        <span class="status-dot status-warning"></span>
+                                        <span class="text-sm text-gray-700">告警</span>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div class="flex flex-col">
+                                        <span class="text-sm text-gray-700">128 表</span>
+                                        <span class="text-xs text-gray-400">1,890 字段</span>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div class="flex flex-col">
+                                        <span class="text-sm text-gray-700">1 小时前</span>
+                                        <span class="text-xs text-warning-600">Schema变更待处理</span>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <span class="text-xs bg-warning-50 text-warning-700 px-2 py-1 rounded-md">重要</span>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div class="flex items-center gap-2">
+                                        <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑" onclick="openEditModal(this)"><i class="fas fa-edit text-xs" aria-hidden="true"></i></button>
+                                        <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="采集元数据" onclick="openMetaCollectModal(this)"><i class="fas fa-sync text-xs" aria-hidden="true"></i></button>
+                                        <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="测试连接" onclick="testConnection(this, 'error')"><i class="fas fa-plug text-xs" aria-hidden="true"></i></button>
+                                        <button type="button" class="text-danger-600 hover:text-danger-700 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除" aria-label="删除数据源" onclick="showConfirm({title:'删除数据源',message:'确定要删除该数据源吗？删除后相关映射关系也将被清除。',type:'danger',onConfirm:function(){showToast('数据源已删除','success')}})"><i class="fas fa-trash-alt text-xs" aria-hidden="true"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="table-row-hover hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                <td class="px-4 py-3"><input type="checkbox" class="row-checkbox rounded border-gray-300 dark:border-gray-600 text-medical-600 focus:ring-medical-500" onchange="updateBatchBar()"></td>
+                                <td class="px-4 py-3">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-8 h-8 bg-warning-50 rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-x-ray text-warning-600 text-sm"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-medium text-gray-900 dark:text-gray-100">PACS_影像数据库</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <span class="text-xs bg-warning-50 text-warning-700 px-2 py-1 rounded-md">PACS</span>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <p class="text-sm text-gray-700">192.168.1.102:1433</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">PACS_DB</p>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div class="flex items-center gap-2">
+                                        <i class="fas fa-database text-gray-400 text-xs"></i>
+                                        <span class="text-sm text-gray-700">SQL Server</span>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div class="flex items-center gap-2">
+                                        <span class="status-dot status-offline"></span>
+                                        <span class="text-sm text-gray-700">离线</span>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div class="flex flex-col">
+                                        <span class="text-sm text-gray-700">56 表</span>
+                                        <span class="text-xs text-gray-400">680 字段</span>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div class="flex flex-col">
+                                        <span class="text-sm text-gray-700">3 天前</span>
+                                        <span class="text-xs text-danger-600">元数据已过期</span>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <span class="text-xs bg-gray-100 dark:bg-gray-700 text-gray-700 px-2 py-1 rounded-md">一般</span>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div class="flex items-center gap-2">
+                                        <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="编辑" onclick="openEditModal(this)"><i class="fas fa-edit text-xs" aria-hidden="true"></i></button>
+                                        <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="采集元数据" onclick="openMetaCollectModal(this)"><i class="fas fa-sync text-xs" aria-hidden="true"></i></button>
+                                        <button type="button" class="text-gray-400 hover:text-medical-600 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none" title="测试连接" onclick="testConnection(this, 'error')"><i class="fas fa-plug text-xs" aria-hidden="true"></i></button>
+                                        <button type="button" class="text-danger-600 hover:text-danger-700 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-danger-400 focus-visible:outline-none" title="删除" aria-label="删除数据源" onclick="showConfirm({title:'删除数据源',message:'确定要删除该数据源吗？删除后相关映射关系也将被清除。',type:'danger',onConfirm:function(){showToast('数据源已删除','success')}})"><i class="fas fa-trash-alt text-xs" aria-hidden="true"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    </div>
+                    <!-- 分页 -->
+                    <div class="px-4 py-3 border-t border-gray-100 dark:border-gray-700 flex items-center justify-between">
+                        <span class="text-sm text-gray-500 dark:text-gray-400">显示 1-3 条，共 24 条</span>
+                        <div id="datasourcePagination" class="pagination"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 新增数据源模态框 -->
+    <div id="addDatasourceModal" class="modal fixed inset-0 z-50 items-center justify-center bg-black/50">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-2xl mx-4 shadow-2xl flex flex-col max-h-[90vh]">
+            <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between">
+                <div class="flex items-center gap-3"><div class="w-10 h-10 bg-medical-50 dark:bg-medical-900/30 rounded-xl flex items-center justify-center"><i class="fas fa-database text-medical-600" aria-hidden="true"></i></div><h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">新增数据源</h3></div>
+                <button type="button" class="text-gray-400 hover:text-gray-600 dark:text-gray-400 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:outline-none" data-action="closeModal" data-args="addDatasourceModal" aria-label="关闭"><i class="fas fa-times text-xs" aria-hidden="true"></i></button>
+            </div>
+            <div class="p-6 space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">数据源名称 <span class="text-danger-500">*</span></label>
+                        <input type="text" name="dsName" required placeholder="例如：HIS_主数据库"
+                            class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus">
+                        <p class="field-error" role="alert"></p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">系统类型 <span class="text-danger-500">*</span></label>
+                        <select name="dsSystemType" required class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus">
+                            <option value="">请选择</option>
+                            <option>HIS</option>
+                            <option>LIS</option>
+                            <option>PACS</option>
+                            <option>EMR</option>
+                            <option>其他</option>
+                        </select>
+                        <p class="field-error" role="alert"></p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">数据库类型 <span class="text-danger-500">*</span></label>
+                        <select name="dsDbType" required class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus">
+                            <option value="">请选择</option>
+                            <option>Oracle</option>
+                            <option>MySQL</option>
+                            <option>SQL Server</option>
+                            <option>PostgreSQL</option>
+                        </select>
+                        <p class="field-error" role="alert"></p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">安全等级</label>
+                        <select name="dsSecurity" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus">
+                            <option>核心</option>
+                            <option>重要</option>
+                            <option>一般</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">主机地址 <span class="text-danger-500">*</span></label>
+                        <input type="text" name="dsHost" required placeholder="192.168.1.100"
+                            class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus">
+                        <p class="field-error" role="alert"></p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">端口 <span class="text-danger-500">*</span></label>
+                        <input type="text" name="dsPort" required placeholder="1521"
+                            class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus">
+                        <p class="field-error" role="alert"></p>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">数据库名称 <span class="text-danger-500">*</span></label>
+                    <input type="text" name="dsDbName" required placeholder="ORCL"
+                        class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus">
+                    <p class="field-error" role="alert"></p>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">用户名 <span class="text-danger-500">*</span></label>
+                        <input type="text" name="dsUser" required placeholder="readonly_user"
+                            class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus">
+                        <p class="field-error" role="alert"></p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">密码 <span class="text-danger-500">*</span></label>
+                        <input type="password" name="dsPassword" required placeholder="••••••••"
+                            class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus">
+                        <p class="field-error" role="alert"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="px-6 py-4 border-t border-gray-100 dark:border-gray-700 flex justify-end gap-3">
+                <button class="px-4 py-2.5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors" data-action="closeModal" data-args="addDatasourceModal">取消</button>
+                <button class="px-4 py-2.5 bg-medical-600 text-white rounded-xl text-sm font-medium hover:bg-medical-700 transition-colors shadow-md shadow-medical-600/20" onclick="submitAddDatasource()">确认添加</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 编辑数据源模态框 -->
+    <div id="editDatasourceModal" class="modal fixed inset-0 z-50 items-center justify-center bg-black/50">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-2xl mx-4 shadow-2xl flex flex-col max-h-[90vh]">
+            <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between">
+                <div class="flex items-center gap-3"><div class="w-10 h-10 bg-medical-50 dark:bg-medical-900/30 rounded-xl flex items-center justify-center"><i class="fas fa-database text-medical-600" aria-hidden="true"></i></div><h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">编辑数据源</h3></div>
+                <button type="button" class="text-gray-400 hover:text-gray-600 dark:text-gray-400 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:outline-none" data-action="closeModal" data-args="editDatasourceModal" aria-label="关闭"><i class="fas fa-times text-xs" aria-hidden="true"></i></button>
+            </div>
+            <div class="p-6 space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">数据源名称 <span class="text-danger-500">*</span></label>
+                        <input type="text" id="editDsName" name="editDsName" required class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus">
+                        <p class="field-error" role="alert"></p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">系统类型 <span class="text-danger-500">*</span></label>
+                        <select id="editDsSystemType" name="editDsSystemType" required class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus">
+                            <option value="">请选择</option>
+                            <option>HIS</option>
+                            <option>LIS</option>
+                            <option>PACS</option>
+                            <option>EMR</option>
+                            <option>其他</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">数据库类型 <span class="text-danger-500">*</span></label>
+                        <select id="editDsDbType" name="editDsDbType" required class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus">
+                            <option value="">请选择</option>
+                            <option>Oracle</option>
+                            <option>MySQL</option>
+                            <option>SQL Server</option>
+                            <option>PostgreSQL</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="editDsSecurity" class="block text-sm font-medium text-gray-700 mb-2">安全等级</label>
+                        <select id="editDsSecurity" name="editDsSecurity" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus">
+                            <option>核心</option>
+                            <option>重要</option>
+                            <option>一般</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">主机地址 <span class="text-danger-500">*</span></label>
+                        <input type="text" id="editDsHost" name="editDsHost" required class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus">
+                        <p class="field-error" role="alert"></p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">端口 <span class="text-danger-500">*</span></label>
+                        <input type="text" id="editDsPort" name="editDsPort" required class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus">
+                        <p class="field-error" role="alert"></p>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">数据库名称 <span class="text-danger-500">*</span></label>
+                    <input type="text" id="editDsDbName" name="editDsDbName" required class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus">
+                    <p class="field-error" role="alert"></p>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">用户名 <span class="text-danger-500">*</span></label>
+                        <input type="text" id="editDsUser" name="editDsUser" required class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus">
+                        <p class="field-error" role="alert"></p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">密码 <span class="text-danger-500">*</span></label>
+                        <input type="password" id="editDsPassword" name="editDsPassword" required placeholder="••••••••" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus">
+                    </div>
+                </div>
+            </div>
+            <div class="px-6 py-4 border-t border-gray-100 dark:border-gray-700 flex justify-end gap-3">
+                <button class="px-4 py-2.5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors" data-action="closeModal" data-args="editDatasourceModal">取消</button>
+                <button class="px-4 py-2.5 bg-medical-600 text-white rounded-xl text-sm font-medium hover:bg-medical-700 transition-colors shadow-md shadow-medical-600/20" onclick="submitEditDatasource()">确认保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI智能配置模态框 -->
+    <div id="aiConfigModal" class="modal fixed inset-0 z-50 items-center justify-center bg-black/50">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-lg mx-4 shadow-2xl flex flex-col max-h-[90vh]">
+            <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between">
+                <div class="flex items-center gap-3"><div class="w-10 h-10 bg-medical-50 dark:bg-medical-900/30 rounded-xl flex items-center justify-center"><i class="fas fa-robot text-medical-600" aria-hidden="true"></i></div><h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">AI智能配置</h3></div>
+                <button type="button" class="text-gray-400 hover:text-gray-600 dark:text-gray-400 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:outline-none" data-action="closeModal" data-args="aiConfigModal" aria-label="关闭"><i class="fas fa-times text-xs" aria-hidden="true"></i></button>
+            </div>
+            <div class="p-6 space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">数据源地址 <span class="text-danger-500">*</span></label>
+                    <input type="text" id="aiDsAddress" placeholder="例如：192.168.1.100:1521" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus">
+                </div>
+                <button id="aiStartBtn" class="w-full px-4 py-2.5 bg-medical-600 text-white rounded-xl text-sm font-medium hover:bg-medical-700 transition-colors flex items-center justify-center gap-2" onclick="startAiRecognition()">
+                    <i class="fas fa-magic"></i> 开始智能识别
+                </button>
+                <div id="aiProgress" class="hidden">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-5 h-5 border-2 border-medical-600 border-t-transparent rounded-full animate-spin"></div>
+                        <span class="text-sm text-gray-600 dark:text-gray-400" id="aiProgressText">正在连接数据源...</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div id="aiProgressBar" class="bg-medical-600 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div id="aiResult" class="hidden">
+                    <div class="bg-success-50 border border-success-200 rounded-xl p-4">
+                        <div class="flex items-center gap-2 mb-3">
+                            <i class="fas fa-check-circle text-success-600"></i>
+                            <span class="text-sm font-medium text-success-700">智能识别完成</span>
+                        </div>
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-gray-600 dark:text-gray-400">数据库类型</span>
+                                <span class="font-medium text-gray-900 dark:text-gray-100">Oracle 19c</span>
+                            </div>
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-gray-600 dark:text-gray-400">表数量</span>
+                                <span class="font-medium text-gray-900 dark:text-gray-100">342</span>
+                            </div>
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-gray-600 dark:text-gray-400">字符集</span>
+                                <span class="font-medium text-gray-900 dark:text-gray-100">UTF-8</span>
+                            </div>
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-gray-600 dark:text-gray-400">存储引擎</span>
+                                <span class="font-medium text-gray-900 dark:text-gray-100">OLTP</span>
+                            </div>
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-gray-600 dark:text-gray-400">连接池推荐</span>
+                                <span class="font-medium text-gray-900 dark:text-gray-100">50</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="px-6 py-4 border-t border-gray-100 dark:border-gray-700 flex justify-end gap-3">
+                <button class="px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 dark:bg-gray-900 dark:hover:bg-gray-700 transition-colors" data-action="closeModal" data-args="aiConfigModal">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 测试连接结果模态框 -->
+    <div id="testConnectionModal" class="modal fixed inset-0 z-50 items-center justify-center bg-black/50">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-lg mx-4 shadow-2xl flex flex-col max-h-[90vh]">
+            <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between flex-shrink-0">
+                <div class="flex items-center gap-3">
+                    <div id="testConnHeaderIcon" class="w-10 h-10 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-plug text-lg" aria-hidden="true"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100" id="testConnTitle">测试连接</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400" id="testConnSubtitle">正在测试数据源连接...</p>
+                    </div>
+                </div>
+                <button type="button" class="text-gray-400 hover:text-gray-600 dark:text-gray-400 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:outline-none" data-action="closeModal" data-args="testConnectionModal" aria-label="关闭"><i class="fas fa-times text-xs" aria-hidden="true"></i></button>
+            </div>
+            <div class="px-6 py-5 overflow-y-auto scrollbar-thin flex-1">
+                <!-- 加载态 -->
+                <div id="testConnLoading" class="flex flex-col items-center justify-center py-8 gap-3">
+                    <div class="loading-spinner-lg" aria-hidden="true"></div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">正在连接数据源，请稍候...</p>
+                </div>
+                <!-- 结果态 -->
+                <div id="testConnResult" class="hidden">
+                    <!-- 状态摘要 -->
+                    <div id="testConnSummary" class="rounded-xl p-4 mb-4 flex items-start gap-3"></div>
+                    <!-- 详细指标 -->
+                    <div class="mb-4">
+                        <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">连接指标</p>
+                        <div class="bg-gray-50 dark:bg-gray-700 rounded-xl divide-y divide-gray-100 dark:divide-gray-700" id="testConnMetrics"></div>
+                    </div>
+                    <!-- 诊断日志 -->
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <p class="text-sm font-medium text-gray-700 dark:text-gray-300">诊断日志</p>
+                            <button type="button" class="text-xs text-medical-600 hover:text-medical-700 flex items-center gap-1 focus-visible:ring-2 focus-visible:ring-medical-400 focus-visible:outline-none rounded px-1.5 py-0.5" onclick="copyTestConnLog(this)">
+                                <i class="fas fa-copy" aria-hidden="true"></i> 复制
+                            </button>
+                        </div>
+                        <div id="testConnLog" class="bg-gray-900 text-gray-100 rounded-xl p-3 text-xs font-mono leading-relaxed max-h-40 overflow-y-auto scrollbar-thin"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="px-6 py-4 border-t border-gray-100 dark:border-gray-700 flex justify-end gap-3 flex-shrink-0">
+                <button id="testConnRetryBtn" class="hidden px-4 py-2.5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors" onclick="retryTestConnection()">重新测试</button>
+                <button class="px-4 py-2.5 bg-medical-600 text-white rounded-xl text-sm font-medium hover:bg-medical-700 transition-colors" data-action="closeModal" data-args="testConnectionModal">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 元数据采集模态框 -->
+    <div id="metaCollectModal" class="modal fixed inset-0 z-50 items-center justify-center bg-black/50">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-2xl mx-4 shadow-2xl flex flex-col max-h-[90vh]">
+            <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between flex-shrink-0">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-medical-50 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-database text-medical-600"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">Oracle 元数据采集</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400" id="metaCollectDsInfo">HIS_主数据库 · 192.168.1.100:1521/ORCL</p>
+                    </div>
+                </div>
+                <button type="button" class="text-gray-400 hover:text-gray-600 dark:text-gray-400 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:outline-none" data-action="closeModal" data-args="metaCollectModal" aria-label="关闭"><i class="fas fa-times text-xs" aria-hidden="true"></i></button>
+            </div>
+            <div class="p-6 space-y-5 overflow-y-auto">
+                <!-- Schema 选择 -->
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Schema 选择 <span class="text-danger-500">*</span></label>
+                        <div class="flex items-center gap-2">
+                            <button class="text-xs text-medical-600 hover:text-medical-700 font-medium" onclick="loadSchemas()">
+                                <i class="fas fa-refresh mr-1"></i>刷新Schema列表
+                            </button>
+                        </div>
+                    </div>
+                    <div class="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+                        <div class="bg-gray-50 dark:bg-gray-700 px-4 py-2 border-b border-gray-200 dark:border-gray-700 flex items-center gap-2">
+                            <input type="checkbox" id="selectAllSchemas" aria-label="全选 Schema" class="rounded border-gray-300 text-medical-600 focus:ring-medical-500" onchange="toggleAllSchemas(this)">
+                            <span class="text-xs font-medium text-gray-600 dark:text-gray-300">全选</span>
+                            <span class="text-xs text-gray-400 ml-auto">已选 <span id="selectedSchemaCount">0</span> 个 Schema</span>
+                        </div>
+                        <div class="max-h-48 overflow-y-auto p-2 space-y-1" id="schemaList">
+                            <div class="flex items-center gap-3 p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg">
+                                <input type="checkbox" class="schema-checkbox rounded border-gray-300 text-medical-600 focus:ring-medical-500" value="HISUSER" onchange="updateSchemaCount()">
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-sm font-medium text-gray-800 dark:text-gray-200">HISUSER</span>
+                                        <span class="text-[10px] bg-medical-50 text-medical-600 px-1.5 py-0.5 rounded">业务用户</span>
+                                    </div>
+                                    <p class="text-xs text-gray-500">186 张表 · 2,340 字段 · 最后采集：2小时前</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3 p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg">
+                                <input type="checkbox" class="schema-checkbox rounded border-gray-300 text-medical-600 focus:ring-medical-500" value="HISDATA" onchange="updateSchemaCount()">
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-sm font-medium text-gray-800 dark:text-gray-200">HISDATA</span>
+                                        <span class="text-[10px] bg-medical-50 text-medical-600 px-1.5 py-0.5 rounded">业务用户</span>
+                                    </div>
+                                    <p class="text-xs text-gray-500">342 张表 · 4,560 字段 · 最后采集：1天前</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3 p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg">
+                                <input type="checkbox" class="schema-checkbox rounded border-gray-300 text-medical-600 focus:ring-medical-500" value="HISREPORT" onchange="updateSchemaCount()">
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-sm font-medium text-gray-800 dark:text-gray-200">HISREPORT</span>
+                                        <span class="text-[10px] bg-primary-50 text-primary-600 px-1.5 py-0.5 rounded">报表用户</span>
+                                    </div>
+                                    <p class="text-xs text-gray-500">56 张表 · 680 字段 · 未采集</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3 p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg opacity-50">
+                                <input type="checkbox" class="schema-checkbox rounded border-gray-300 text-medical-600 focus:ring-medical-500" value="SYS" disabled onchange="updateSchemaCount()">
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-sm font-medium text-gray-500">SYS</span>
+                                        <span class="text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded">系统用户</span>
+                                    </div>
+                                    <p class="text-xs text-gray-400">已自动排除</p>
+                                </div>
+                                <i class="fas fa-ban text-gray-300 text-xs"></i>
+                            </div>
+                            <div class="flex items-center gap-3 p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg opacity-50">
+                                <input type="checkbox" class="schema-checkbox rounded border-gray-300 text-medical-600 focus:ring-medical-500" value="SYSTEM" disabled onchange="updateSchemaCount()">
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-sm font-medium text-gray-500">SYSTEM</span>
+                                        <span class="text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded">系统用户</span>
+                                    </div>
+                                    <p class="text-xs text-gray-400">已自动排除</p>
+                                </div>
+                                <i class="fas fa-ban text-gray-300 text-xs"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-2 flex items-center gap-4">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" id="excludeSystemSchemas" checked class="rounded border-gray-300 text-medical-600 focus:ring-medical-500" onchange="toggleSystemSchemaExclude()">
+                            <span class="text-xs text-gray-600 dark:text-gray-400">自动排除系统用户（SYS, SYSTEM, DBSNMP, OUTLN等）</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 表过滤规则 -->
+                <div class="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+                    <div class="px-4 py-3 bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between cursor-pointer" onclick="toggleTableFilter()">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-filter text-gray-400 text-sm"></i>
+                            <span class="text-sm font-medium text-gray-700 dark:text-gray-300">表过滤规则</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs text-gray-400" id="tableFilterSummary">已启用 3 条规则</span>
+                            <i id="tableFilterArrow" class="fas fa-chevron-down text-gray-400 text-xs transition-transform"></i>
+                        </div>
+                    </div>
+                    <div id="tableFilterPanel" class="hidden p-4 space-y-4">
+                        <div class="flex items-center gap-4">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" id="excludeSystemTables" checked class="rounded border-gray-300 text-medical-600 focus:ring-medical-500">
+                                <span class="text-sm text-gray-700 dark:text-gray-300">排除系统表</span>
+                            </label>
+                            <span class="text-xs text-gray-400">SYS_$, DUAL, V$_, USER_$, ALL_$, DBA_$ 等</span>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" id="excludeRecycleBin" checked class="rounded border-gray-300 text-medical-600 focus:ring-medical-500">
+                                <span class="text-sm text-gray-700 dark:text-gray-300">排除回收站表</span>
+                            </label>
+                            <span class="text-xs text-gray-400">BIN$ 开头的表</span>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" id="excludeTempTables" checked class="rounded border-gray-300 text-medical-600 focus:ring-medical-500">
+                                <span class="text-sm text-gray-700 dark:text-gray-300">排除临时表</span>
+                            </label>
+                            <span class="text-xs text-gray-400">以 TMP_, TEMP_, # 开头的表</span>
+                        </div>
+                        <div>
+                            <label for="customTableExclude" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">自定义表名排除规则</label>
+                            <textarea id="customTableExclude" placeholder="每行一个规则，支持通配符 * 和 ?&#10;例如：&#10;LOG_*&#10;BAK_*&#10;*TEST*" rows="3" class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus font-mono"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 采集内容 -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">采集内容</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="flex items-start gap-3 p-3 border-2 border-medical-500 bg-medical-50 dark:bg-medical-900/20 rounded-xl cursor-pointer">
+                            <input type="checkbox" checked class="mt-0.5 rounded border-gray-300 text-medical-600 focus:ring-medical-500" disabled>
+                            <div>
+                                <p class="text-sm font-medium text-gray-800 dark:text-gray-200">表结构</p>
+                                <p class="text-xs text-gray-500">表名、字段名、数据类型、长度、精度</p>
+                            </div>
+                        </label>
+                        <label class="flex items-start gap-3 p-3 border-2 border-gray-200 dark:border-gray-700 rounded-xl cursor-pointer hover:border-medical-300 transition-colors">
+                            <input type="checkbox" id="collectComments" checked class="mt-0.5 rounded border-gray-300 text-medical-600 focus:ring-medical-500">
+                            <div>
+                                <p class="text-sm font-medium text-gray-800 dark:text-gray-200">注释信息</p>
+                                <p class="text-xs text-gray-500">表注释、字段注释、备注说明</p>
+                            </div>
+                        </label>
+                        <label class="flex items-start gap-3 p-3 border-2 border-gray-200 dark:border-gray-700 rounded-xl cursor-pointer hover:border-medical-300 transition-colors">
+                            <input type="checkbox" id="collectConstraints" checked class="mt-0.5 rounded border-gray-300 text-medical-600 focus:ring-medical-500">
+                            <div>
+                                <p class="text-sm font-medium text-gray-800 dark:text-gray-200">约束与索引</p>
+                                <p class="text-xs text-gray-500">主键、外键、唯一约束、索引定义</p>
+                            </div>
+                        </label>
+                        <label class="flex items-start gap-3 p-3 border-2 border-gray-200 dark:border-gray-700 rounded-xl cursor-pointer hover:border-medical-300 transition-colors">
+                            <input type="checkbox" id="collectPartitions" class="mt-0.5 rounded border-gray-300 text-medical-600 focus:ring-medical-500">
+                            <div>
+                                <p class="text-sm font-medium text-gray-800 dark:text-gray-200">分区信息</p>
+                                <p class="text-xs text-gray-500">分区键、分区策略、子分区</p>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 数据采样 -->
+                <div class="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+                    <div class="px-4 py-3 bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between cursor-pointer" onclick="toggleDataSample()">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-vial text-gray-400 text-sm"></i>
+                            <span class="text-sm font-medium text-gray-700 dark:text-gray-300">数据采样与分析</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs text-gray-400" id="dataSampleSummary">未启用</span>
+                            <i id="dataSampleArrow" class="fas fa-chevron-down text-gray-400 text-xs transition-transform"></i>
+                        </div>
+                    </div>
+                    <div id="dataSamplePanel" class="hidden p-4 space-y-4">
+                        <div class="flex items-center gap-4 mb-3">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" id="enableDataSample" class="rounded border-gray-300 text-medical-600 focus:ring-medical-500" onchange="toggleSamplePanel()">
+                                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">启用数据采样</span>
+                            </label>
+                        </div>
+                        <div id="sampleConfig" class="opacity-50 pointer-events-none transition-opacity">
+                            <div class="grid grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">采样行数</label>
+                                    <div class="flex items-center gap-2">
+                                        <input type="number" id="sampleRows" value="1000" min="100" max="10000" step="100" class="flex-1 px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus">
+                                        <span class="text-xs text-gray-500">行/表</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="sampleMethod" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">采样方式</label>
+                                    <select id="sampleMethod" class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus">
+                                        <option value="random">随机采样</option>
+                                        <option value="top">前N行</option>
+                                        <option value="stratified">分层采样</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input type="checkbox" id="analyzeNullRate" checked class="rounded border-gray-300 text-medical-600 focus:ring-medical-500">
+                                    <span class="text-sm text-gray-700 dark:text-gray-300">分析空值率</span>
+                                </label>
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input type="checkbox" id="analyzeDistinct" checked class="rounded border-gray-300 text-medical-600 focus:ring-medical-500">
+                                    <span class="text-sm text-gray-700 dark:text-gray-300">分析唯一值分布</span>
+                                </label>
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input type="checkbox" id="analyzeDataLength" class="rounded border-gray-300 text-medical-600 focus:ring-medical-500">
+                                    <span class="text-sm text-gray-700 dark:text-gray-300">分析数据长度分布</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Oracle 特有选项 -->
+                <div class="bg-orange-50 dark:bg-orange-900/10 border border-orange-200 dark:border-orange-800 rounded-xl p-4">
+                    <div class="flex items-center gap-2 mb-3">
+                        <i class="fas fa-database text-orange-600 text-sm"></i>
+                        <span class="text-sm font-medium text-orange-800 dark:text-orange-300">Oracle 特有选项</span>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" id="useDbaViews" checked class="rounded border-gray-300 text-medical-600 focus:ring-medical-500">
+                                <span class="text-sm text-gray-700 dark:text-gray-300">使用 DBA_ 系统视图</span>
+                            </label>
+                            <span class="text-xs text-gray-400">需要 DBA 权限，采集更全面</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" id="collectSynonyms" class="rounded border-gray-300 text-medical-600 focus:ring-medical-500">
+                                <span class="text-sm text-gray-700 dark:text-gray-300">采集同义词（Synonym）</span>
+                            </label>
+                            <span class="text-xs text-gray-400">PUBLIC 和 PRIVATE 同义词</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" id="collectTriggers" class="rounded border-gray-300 text-medical-600 focus:ring-medical-500">
+                                <span class="text-sm text-gray-700 dark:text-gray-300">采集触发器定义</span>
+                            </label>
+                            <span class="text-xs text-gray-400">表级触发器信息</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 采集预览 -->
+                <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4">
+                    <div class="flex items-center gap-2 mb-2">
+                        <i class="fas fa-info-circle text-blue-600 text-sm"></i>
+                        <span class="text-sm font-medium text-blue-800 dark:text-blue-300">采集预览</span>
+                    </div>
+                    <div class="grid grid-cols-4 gap-3 text-xs text-blue-700 dark:text-blue-300">
+                        <div>
+                            <span class="text-blue-500">Schema：</span>
+                            <span id="previewSchemaCount" class="font-medium">0</span> 个
+                        </div>
+                        <div>
+                            <span class="text-blue-500">预计表：</span>
+                            <span id="previewTableCount" class="font-medium">-</span> 张
+                        </div>
+                        <div>
+                            <span class="text-blue-500">预计耗时：</span>
+                            <span id="previewTime" class="font-medium">-</span>
+                        </div>
+                        <div>
+                            <span class="text-blue-500">权限：</span>
+                            <span id="previewPrivilege" class="font-medium">DBA</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="px-6 py-4 border-t border-gray-100 dark:border-gray-700 flex justify-end gap-3 flex-shrink-0">
+                <button class="px-4 py-2.5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors" data-action="closeModal" data-args="metaCollectModal">取消</button>
+                <button id="startCollectBtn" class="px-4 py-2.5 bg-medical-600 text-white rounded-xl text-sm font-medium hover:bg-medical-700 transition-colors flex items-center gap-2" onclick="startMetaCollection()">
+                    <i class="fas fa-play"></i> 开始采集
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderPagination('datasourcePagination', 1, 8, 'changePage');
+        });
+
+        function changePage(page) {
+            renderPagination('datasourcePagination', page, 8, 'changePage');
+            showToast(`已切换到第 ${page} 页`, 'success');
+        }
+
+        // 新增数据源：全字段校验（必填/IP/端口），通过后给出加载反馈再入库
+        function submitAddDatasource() {
+            var rules = {
+                dsName: [MediData.validateRules.required],
+                dsSystemType: [MediData.validateRules.required],
+                dsDbType: [MediData.validateRules.required],
+                dsHost: [MediData.validateRules.required, MediData.validateRules.ip],
+                dsPort: [MediData.validateRules.required, MediData.validateRules.port],
+                dsDbName: [MediData.validateRules.required],
+                dsUser: [MediData.validateRules.required],
+                dsPassword: [MediData.validateRules.required, MediData.validateRules.minLength(6)]
+            };
+            var result = MediData.validateForm('addDatasourceModal', rules);
+            if (!result.valid) {
+                showToast('请修正表单中的 ' + result.errors.length + ' 处错误', 'error');
+                return;
+            }
+            var btn = document.querySelector('#addDatasourceModal .bg-medical-600');
+            MediData.btnLoading.show(btn, '添加中...');
+            setTimeout(function() {
+                MediData.btnLoading.hide(btn);
+                closeModal('addDatasourceModal');
+                showToast('数据源添加成功，正在初始化连接...', 'success');
+            }, 800);
+        }
+
+        // 编辑数据源：保存前同样执行连接参数校验
+        function submitEditDatasource() {
+            var rules = {
+                editDsName: [MediData.validateRules.required],
+                editDsHost: [MediData.validateRules.required, MediData.validateRules.ip],
+                editDsPort: [MediData.validateRules.required, MediData.validateRules.port],
+                editDsDbName: [MediData.validateRules.required],
+                editDsUser: [MediData.validateRules.required]
+            };
+            var result = MediData.validateForm('editDatasourceModal', rules);
+            if (!result.valid) {
+                showToast('请修正表单中的 ' + result.errors.length + ' 处错误', 'error');
+                return;
+            }
+            closeModal('editDatasourceModal');
+            showToast('数据源更新成功', 'success');
+        }
+
+        function openEditModal(btn) {
+            var tr = btn.closest('tr');
+            var tds = tr.querySelectorAll('td');
+            var name = tds[1].querySelector('.text-sm.font-medium').textContent;
+            var systemType = tds[2].querySelector('span').textContent;
+            var hostPort = tds[3].querySelector('.text-sm').textContent;
+            var dbName = tds[3].querySelector('.text-xs').textContent;
+            var dbType = tds[4].querySelector('.text-sm').textContent.split(' ')[0];
+            var security = tds[8].querySelector('span').textContent;
+            var parts = hostPort.split(':');
+            document.getElementById('editDsName').value = name;
+            document.getElementById('editDsSystemType').value = systemType;
+            document.getElementById('editDsDbType').value = dbType;
+            document.getElementById('editDsSecurity').value = security;
+            document.getElementById('editDsHost').value = parts[0] || '';
+            document.getElementById('editDsPort').value = parts[1] || '';
+            document.getElementById('editDsDbName').value = dbName;
+            document.getElementById('editDsUser').value = 'readonly_user';
+            document.getElementById('editDsPassword').value = '';
+            openModal('editDatasourceModal');
+        }
+
+        function filterDatasources() {
+            var searchText = document.getElementById('dsSearchInput').value.toLowerCase();
+            var systemType = document.getElementById('dsSystemType').value;
+            var status = document.getElementById('dsStatus').value;
+            var dbType = document.getElementById('dsDbType').value;
+            var rows = document.querySelectorAll('#datasourceTable tbody tr');
+            rows.forEach(function(row) {
+                var tds = row.querySelectorAll('td');
+                var name = tds[1].querySelector('.text-sm.font-medium').textContent.toLowerCase();
+                var ip = tds[3].querySelector('.text-sm').textContent.toLowerCase();
+                var rowDbType = tds[4].querySelector('.text-sm').textContent;
+                var rowSystemType = tds[2].querySelector('span').textContent;
+                var rowStatus = tds[5].querySelector('.text-sm').textContent;
+                var matchSearch = !searchText || name.includes(searchText) || ip.includes(searchText) || rowDbType.toLowerCase().includes(searchText);
+                var matchSystem = systemType === '全部系统类型' || rowSystemType === systemType;
+                var matchStatus = status === '全部状态' || rowStatus === status;
+                var matchDb = dbType === '全部数据库' || rowDbType.includes(dbType);
+                row.style.display = (matchSearch && matchSystem && matchStatus && matchDb) ? '' : 'none';
+            });
+        }
+
+        function startAiRecognition() {
+            var address = document.getElementById('aiDsAddress').value;
+            if (!address) { showToast('请输入数据源地址', 'warning'); return; }
+            document.getElementById('aiStartBtn').disabled = true;
+            document.getElementById('aiStartBtn').classList.add('opacity-50');
+            document.getElementById('aiProgress').classList.remove('hidden');
+            document.getElementById('aiResult').classList.add('hidden');
+            var bar = document.getElementById('aiProgressBar');
+            var text = document.getElementById('aiProgressText');
+            var steps = [
+                { pct: 20, msg: '正在连接数据源...' },
+                { pct: 45, msg: '正在采集元数据...' },
+                { pct: 70, msg: '正在分析表结构...' },
+                { pct: 90, msg: '正在生成配置建议...' },
+                { pct: 100, msg: '识别完成！' }
+            ];
+            var i = 0;
+            function next() {
+                if (i < steps.length) {
+                    bar.style.width = steps[i].pct + '%';
+                    text.textContent = steps[i].msg;
+                    i++;
+                    setTimeout(next, 800);
+                } else {
+                    setTimeout(function() {
+                        document.getElementById('aiProgress').classList.add('hidden');
+                        document.getElementById('aiResult').classList.remove('hidden');
+                        document.getElementById('aiStartBtn').disabled = false;
+                        document.getElementById('aiStartBtn').classList.remove('opacity-50');
+                    }, 500);
+                }
+            }
+            next();
+        }
+
+        function updateBatchBar() {
+            var checked = document.querySelectorAll('.row-checkbox:checked');
+            var bar = document.getElementById('batchBar');
+            var count = document.getElementById('batchCount');
+            count.textContent = checked.length;
+            bar.classList.toggle('hidden', checked.length === 0);
+            var all = document.querySelectorAll('.row-checkbox');
+            document.getElementById('selectAll').checked = all.length > 0 && checked.length === all.length;
+        }
+
+        function toggleSelectAll(el) {
+            document.querySelectorAll('.row-checkbox').forEach(function(cb) {
+                cb.checked = el.checked;
+            });
+            updateBatchBar();
+        }
+
+        function clearSelection() {
+            document.querySelectorAll('.row-checkbox').forEach(function(cb) { cb.checked = false; });
+            document.getElementById('selectAll').checked = false;
+            updateBatchBar();
+        }
+
+        function batchTestConnection() {
+            var checked = document.querySelectorAll('.row-checkbox:checked');
+            showToast('正在批量测试 ' + checked.length + ' 个数据源连接...', 'info');
+        }
+
+        function batchDelete() {
+            var checked = document.querySelectorAll('.row-checkbox:checked');
+            showConfirm({
+                title: '批量删除',
+                message: '确定要删除选中的 ' + checked.length + ' 个数据源吗？',
+                type: 'danger',
+                onConfirm: function() {
+                    showToast('已删除 ' + checked.length + ' 个数据源', 'success');
+                    clearSelection();
+                }
+            });
+        }
+
+        // 当前测试连接上下文（用于「重新测试」）
+        var _testConnCtx = null;
+
+        function testConnection(btn, result) {
+            if (btn.disabled) return;
+            var tr = btn.closest('tr');
+            var dsName = tr ? (tr.querySelector('.text-sm.font-medium') || {}).textContent : '未知数据源';
+            _testConnCtx = { btn: btn, dsName: dsName, result: result };
+
+            // 按钮进入加载态
+            var icon = btn.querySelector('i');
+            var origClass = icon.className;
+            btn.disabled = true;
+            icon.className = 'fas fa-spinner fa-spin';
+            btn.classList.add('opacity-50');
+
+            // 打开模态框并展示加载态
+            openModal('testConnectionModal');
+            var loadingEl = document.getElementById('testConnLoading');
+            var resultEl = document.getElementById('testConnResult');
+            var retryBtn = document.getElementById('testConnRetryBtn');
+            loadingEl.classList.remove('hidden');
+            resultEl.classList.add('hidden');
+            retryBtn.classList.add('hidden');
+            document.getElementById('testConnTitle').textContent = '测试连接 · ' + dsName;
+            document.getElementById('testConnSubtitle').textContent = '正在测试数据源连接...';
+            var headerIcon = document.getElementById('testConnHeaderIcon');
+            headerIcon.className = 'w-10 h-10 bg-gray-100 dark:bg-gray-700 rounded-xl flex items-center justify-center';
+            headerIcon.querySelector('i').className = 'fas fa-plug text-lg text-gray-400';
+
+            // 模拟连接测试（原型态）
+            setTimeout(function() {
+                btn.disabled = false;
+                icon.className = origClass;
+                btn.classList.remove('opacity-50');
+                renderTestConnResult(dsName, result);
+            }, 1500);
+        }
+
+        // 渲染测试连接结果到模态框
+        function renderTestConnResult(dsName, result) {
+            var success = result === 'success';
+            var loadingEl = document.getElementById('testConnLoading');
+            var resultEl = document.getElementById('testConnResult');
+            var retryBtn = document.getElementById('testConnRetryBtn');
+            loadingEl.classList.add('hidden');
+            resultEl.classList.remove('hidden');
+            retryBtn.classList.remove('hidden');
+
+            // 顶部图标与标题
+            var headerIcon = document.getElementById('testConnHeaderIcon');
+            var subtitle = document.getElementById('testConnSubtitle');
+            if (success) {
+                headerIcon.className = 'w-10 h-10 bg-success-50 dark:bg-success-900/30 rounded-xl flex items-center justify-center';
+                headerIcon.querySelector('i').className = 'fas fa-check-circle text-lg text-success-600';
+                subtitle.textContent = '连接测试成功 · ' + new Date().toLocaleTimeString('zh-CN', { hour12: false });
+            } else {
+                headerIcon.className = 'w-10 h-10 bg-danger-50 dark:bg-danger-900/30 rounded-xl flex items-center justify-center';
+                headerIcon.querySelector('i').className = 'fas fa-times-circle text-lg text-danger-600';
+                subtitle.textContent = '连接测试失败 · ' + new Date().toLocaleTimeString('zh-CN', { hour12: false });
+            }
+
+            // 摘要条
+            var summary = document.getElementById('testConnSummary');
+            if (success) {
+                summary.className = 'bg-success-50 dark:bg-success-900/20 border border-success-100 dark:border-success-800 rounded-xl p-4 mb-4 flex items-start gap-3';
+                summary.innerHTML = '<i class="fas fa-check-circle text-success-600 mt-0.5" aria-hidden="true"></i><div><p class="text-sm font-medium text-success-700 dark:text-success-400">数据源「' + MediData.escapeHtml(dsName) + '」连接正常</p><p class="text-xs text-success-600/80 dark:text-success-500/70 mt-0.5">握手成功，已读取数据库版本与字符集信息。</p></div>';
+            } else {
+                summary.className = 'bg-danger-50 dark:bg-danger-900/20 border border-danger-100 dark:border-danger-800 rounded-xl p-4 mb-4 flex items-start gap-3';
+                summary.innerHTML = '<i class="fas fa-exclamation-triangle text-danger-600 mt-0.5" aria-hidden="true"></i><div><p class="text-sm font-medium text-danger-700 dark:text-danger-400">数据源「' + MediData.escapeHtml(dsName) + '」连接失败</p><p class="text-xs text-danger-600/80 dark:text-danger-500/70 mt-0.5">请检查主机地址、端口、账号密码及网络防火墙配置。</p></div>';
+            }
+
+            // 连接指标
+            var metrics = success ? [
+                { label: '响应耗时', value: (Math.random() * 80 + 20).toFixed(0) + ' ms' },
+                { label: '数据库版本', value: 'Oracle 19c Enterprise' },
+                { label: '字符集', value: 'AL32UTF8 (UTF-8)' },
+                { label: '最大连接数', value: '150 / 200' },
+                { label: '空闲连接', value: '12' }
+            ] : [
+                { label: '错误代码', value: 'ORA-12170' },
+                { label: '错误信息', value: '连接超时（TNS:Connect timeout occurred）' },
+                { label: '远端地址', value: '192.168.1.100:1521' },
+                { label: '耗时', value: '30000 ms（超时）' }
+            ];
+            var metricsHtml = metrics.map(function(m) {
+                return '<div class="flex items-center justify-between px-4 py-2.5"><span class="text-sm text-gray-500 dark:text-gray-400">' + MediData.escapeHtml(m.label) + '</span><span class="text-sm font-medium text-gray-900 dark:text-gray-100">' + MediData.escapeHtml(m.value) + '</span></div>';
+            }).join('');
+            document.getElementById('testConnMetrics').innerHTML = metricsHtml;
+
+            // 诊断日志
+            var now = new Date();
+            var logLines = success ? [
+                '[' + formatLogTime(now, -3) + '] 开始测试数据源：' + dsName,
+                '[' + formatLogTime(now, -2) + '] 解析主机 192.168.1.100 → 192.168.1.100',
+                '[' + formatLogTime(now, -2) + '] 建立 TCP 连接 192.168.1.100:1521 ... 成功',
+                '[' + formatLogTime(now, -1) + '] 发送 TNS 握手包 ... 收到响应',
+                '[' + formatLogTime(now, 0) + '] 用户 readonly_user 认证通过',
+                '[' + formatLogTime(now, 0) + '] 读取数据库版本 Oracle 19c · 字符集 AL32UTF8',
+                '[' + formatLogTime(now, 0) + '] 测试完成，连接正常'
+            ] : [
+                '[' + formatLogTime(now, -30) + '] 开始测试数据源：' + dsName,
+                '[' + formatLogTime(now, -30) + '] 解析主机 192.168.1.100 → 192.168.1.100',
+                '[' + formatLogTime(now, -29) + '] 建立 TCP 连接 192.168.1.100:1521 ...',
+                '[' + formatLogTime(now, -5) + '] 警告：连接超过 25 秒仍未建立',
+                '[' + formatLogTime(now, 0) + '] 错误：ORA-12170 连接超时',
+                '[' + formatLogTime(now, 0) + '] 测试完成，连接失败'
+            ];
+            document.getElementById('testConnLog').textContent = logLines.join('\n');
+        }
+
+        function formatLogTime(date, offsetSec) {
+            var d = new Date(date.getTime() + offsetSec * 1000);
+            return d.toLocaleTimeString('zh-CN', { hour12: false }) + '.' + String(d.getMilliseconds()).padStart(3, '0');
+        }
+
+        function retryTestConnection() {
+            if (!_testConnCtx) return;
+            testConnection(_testConnCtx.btn, _testConnCtx.result);
+        }
+
+        function copyTestConnLog(btn) {
+            var log = document.getElementById('testConnLog').textContent;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(log).then(function() {
+                    showToast('诊断日志已复制', 'success');
+                }).catch(function() { fallbackCopy(log, btn); });
+            } else {
+                fallbackCopy(log, btn);
+            }
+        }
+
+        function fallbackCopy(text, btn) {
+            var ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            try { document.execCommand('copy'); showToast('诊断日志已复制', 'success'); } catch (e) { showToast('复制失败，请手动选择日志', 'error'); }
+            document.body.removeChild(ta);
+        }
+
+        function collectMetadata(btn) {
+            if (btn.disabled) return;
+            var icon = btn.querySelector('i');
+            var origClass = icon.className;
+            btn.disabled = true;
+            icon.className = 'fas fa-spinner fa-spin';
+            btn.classList.add('opacity-50');
+            var tr = btn.closest('tr');
+            var dsName = tr.querySelector('.text-sm.font-medium').textContent;
+            showToast('开始采集 ' + dsName + ' 的元数据...', 'info');
+            setTimeout(function() {
+                btn.disabled = false;
+                icon.className = origClass;
+                btn.classList.remove('opacity-50');
+                showToast(dsName + ' 元数据采集完成，新增 3 张表、45 个字段', 'success');
+            }, 2500);
+        }
+
+        // Oracle 元数据采集模态框交互
+        var currentDsName = '';
+        var currentDsHost = '';
+        var currentDsDb = '';
+
+        function openMetaCollectModal(btn) {
+            var tr = btn.closest('tr');
+            currentDsName = tr.querySelector('.text-sm.font-medium').textContent;
+            var hostPort = tr.querySelector('td:nth-child(4) .text-sm').textContent;
+            var dbName = tr.querySelector('td:nth-child(4) .text-xs').textContent;
+            currentDsHost = hostPort;
+            currentDsDb = dbName;
+            document.getElementById('metaCollectDsInfo').textContent = currentDsName + ' · ' + hostPort + '/' + dbName;
+            document.querySelectorAll('.schema-checkbox:not([disabled])').forEach(function(cb) { cb.checked = false; });
+            updateSchemaCount();
+            openModal('metaCollectModal');
+        }
+
+        function toggleAllSchemas(checkbox) {
+            document.querySelectorAll('.schema-checkbox:not([disabled])').forEach(function(cb) {
+                cb.checked = checkbox.checked;
+            });
+            updateSchemaCount();
+        }
+
+        function updateSchemaCount() {
+            var checked = document.querySelectorAll('.schema-checkbox:checked');
+            document.getElementById('selectedSchemaCount').textContent = checked.length;
+            var all = document.querySelectorAll('.schema-checkbox:not([disabled])');
+            document.getElementById('selectAllSchemas').checked = all.length > 0 && checked.length === all.length;
+            updateOracleCollectPreview();
+        }
+
+        function toggleSystemSchemaExclude() {
+            var exclude = document.getElementById('excludeSystemSchemas').checked;
+            document.querySelectorAll('.schema-checkbox').forEach(function(cb) {
+                var div = cb.closest('div');
+                var isSystem = div.querySelector('.bg-gray-100');
+                if (isSystem) {
+                    cb.disabled = exclude;
+                    div.classList.toggle('opacity-50', exclude);
+                    if (exclude) cb.checked = false;
+                }
+            });
+            updateSchemaCount();
+        }
+
+        function loadSchemas() {
+            showToast('正在刷新 Schema 列表...', 'info');
+            setTimeout(function() {
+                showToast('Schema 列表已刷新', 'success');
+            }, 1500);
+        }
+
+        function toggleTableFilter() {
+            var panel = document.getElementById('tableFilterPanel');
+            var arrow = document.getElementById('tableFilterArrow');
+            panel.classList.toggle('hidden');
+            arrow.style.transform = panel.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
+        }
+
+        function toggleDataSample() {
+            var panel = document.getElementById('dataSamplePanel');
+            var arrow = document.getElementById('dataSampleArrow');
+            panel.classList.toggle('hidden');
+            arrow.style.transform = panel.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
+        }
+
+        function toggleSamplePanel() {
+            var enabled = document.getElementById('enableDataSample').checked;
+            var config = document.getElementById('sampleConfig');
+            config.classList.toggle('opacity-50', !enabled);
+            config.classList.toggle('pointer-events-none', !enabled);
+            document.getElementById('dataSampleSummary').textContent = enabled ? '已启用' : '未启用';
+        }
+
+        function updateOracleCollectPreview() {
+            var checked = document.querySelectorAll('.schema-checkbox:checked');
+            var tableCount = 0;
+            checked.forEach(function(cb) {
+                var div = cb.closest('div');
+                var text = div.textContent;
+                var match = text.match(/(\d+)\s*张表/);
+                if (match) tableCount += parseInt(match[1]);
+            });
+            var hasSample = document.getElementById('enableDataSample') && document.getElementById('enableDataSample').checked;
+            var timeMin = Math.ceil(tableCount * (hasSample ? 0.015 : 0.005));
+            document.getElementById('previewSchemaCount').textContent = checked.length;
+            document.getElementById('previewTableCount').textContent = tableCount > 0 ? tableCount.toLocaleString() : '-';
+            document.getElementById('previewTime').textContent = checked.length > 0 ? '约 ' + timeMin + ' 分钟' : '-';
+            var useDba = document.getElementById('useDbaViews') && document.getElementById('useDbaViews').checked;
+            document.getElementById('previewPrivilege').textContent = useDba ? 'DBA' : '普通';
+        }
+
+        document.querySelectorAll('.schema-checkbox, #enableDataSample, #useDbaViews').forEach(function(el) {
+            el.addEventListener('change', updateOracleCollectPreview);
+        });
+
+        function startMetaCollection() {
+            var checked = document.querySelectorAll('.schema-checkbox:checked');
+            if (checked.length === 0) {
+                showToast('请至少选择一个 Schema', 'warning');
+                return;
+            }
+            var btn = document.getElementById('startCollectBtn');
+            var origHTML = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 采集中...';
+            btn.disabled = true;
+            btn.classList.add('opacity-60');
+            var schemaNames = Array.from(checked).map(function(cb) { return cb.value; }).join(', ');
+            showToast('正在采集 ' + currentDsName + ' 的 Schema: ' + schemaNames, 'info');
+            setTimeout(function() {
+                btn.innerHTML = origHTML;
+                btn.disabled = false;
+                btn.classList.remove('opacity-60');
+                showToast('元数据采集任务已完成', 'success');
+                closeModal('metaCollectModal');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0d9488">
+    <meta name="description" content="脚本生成 - 四步配置，AI 辅助生成 Kettle / Flink ETL 脚本">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="脚本生成 - MediData AI">
+    <meta property="og:description" content="四步配置，AI 辅助生成 Kettle / Flink ETL 脚本">
+    <title>脚本生成 - MediData AI</title>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="stylesheet" href="components/tailwind.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="components/common.css">
+    <script src="components/common.js" defer></script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+    <a href="#main-content" class="skip-link">跳转到主内容</a>
+    <div class="flex h-screen overflow-hidden">
+        <!-- 侧边栏 -->
+        <aside id="sidebar" class="w-64 gradient-bg text-white flex flex-col flex-shrink-0"></aside>
+
+        <!-- 主内容区 -->
+        <main id="main-content" class="flex-1 flex flex-col overflow-hidden" role="main">
+            <!-- 顶部导航 -->
+            <header id="header" class="glass-effect border-b border-gray-200 dark:border-gray-700 px-6 py-4 flex items-center justify-between flex-shrink-0 z-10"></header>
+
+            <!-- 面包屑 -->
+            <div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-2">
+                <nav id="breadcrumb" class="breadcrumb"></nav>
+            </div>
+
+            <!-- 页面内容 -->
+            <div class="flex-1 overflow-hidden flex flex-col">
+                <!-- 页面标题 -->
+                <div class="px-6 py-3 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between flex-shrink-0">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 bg-medical-50 dark:bg-medical-900/30 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-file-code text-medical-600"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-lg font-bold text-gray-900 dark:text-gray-100">脚本生成</h2>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">四步配置，AI 辅助生成 Kettle / Flink ETL 脚本</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="px-3 py-1.5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-xs font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors flex items-center gap-1.5" onclick="downloadScript()">
+                            <i class="fas fa-download"></i> 下载脚本
+                        </button>
+                        <button id="topAiGenerateBtn" class="px-3 py-1.5 bg-medical-600 text-white rounded-xl text-xs font-medium hover:bg-medical-700 transition-colors flex items-center gap-1.5 shadow-md shadow-medical-600/20" onclick="aiGenerateScript()">
+                            <i class="fas fa-robot"></i> AI 生成脚本
+                        </button>
+                    </div>
+                </div>
+                <div class="flex-1 overflow-hidden flex">
+                <!-- 左侧：配置面板 -->
+                <div class="w-96 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 overflow-y-auto scrollbar-thin flex-shrink-0">
+                    <div class="p-4 border-b border-gray-100 dark:border-gray-700">
+                        <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-4">ETL脚本配置</h3>
+                        
+                        <!-- 步骤向导（role=tablist，支持键盘 Enter/Space 切换） -->
+                        <div class="step-wizard mb-6" role="tablist" aria-label="脚本配置步骤">
+                            <div class="step-item step-completed" role="tab" tabindex="0" aria-selected="false" data-clickable onclick="switchStep(1)">
+                                <div class="step-number"><i class="fas fa-check text-xs"></i></div>
+                                <span class="text-xs">基础</span>
+                            </div>
+                            <div class="step-item step-active" role="tab" tabindex="0" aria-selected="true" data-clickable onclick="switchStep(2)">
+                                <div class="step-number">2</div>
+                                <span class="text-xs">源配置</span>
+                            </div>
+                            <div class="step-item step-pending" role="tab" tabindex="0" aria-selected="false" data-clickable onclick="switchStep(3)">
+                                <div class="step-number">3</div>
+                                <span class="text-xs">目标</span>
+                            </div>
+                            <div class="step-item step-pending" role="tab" tabindex="0" aria-selected="false" data-clickable onclick="switchStep(4)">
+                                <div class="step-number">4</div>
+                                <span class="text-xs">调度</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 步骤1：基础配置 -->
+                    <div id="step1Content" class="p-4 space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">脚本类型</label>
+                            <div class="grid grid-cols-2 gap-2" id="scriptTypeGrid">
+                                <button class="p-3 border-2 border-medical-500 rounded-xl text-center bg-medical-50" aria-pressed="true" onclick="selectScriptType(this, 'Kettle')">
+                                    <i class="fas fa-cogs text-medical-600 text-lg mb-1"></i>
+                                    <p class="text-xs font-medium text-gray-700 dark:text-gray-300">Kettle</p>
+                                </button>
+                                <button class="p-3 border-2 border-gray-200 dark:border-gray-600 rounded-xl text-center hover:border-gray-300 transition-colors" aria-pressed="false" onclick="selectScriptType(this, 'Flink')">
+                                    <i class="fas fa-bolt text-gray-400 text-lg mb-1"></i>
+                                    <p class="text-xs font-medium text-gray-700 dark:text-gray-300">Flink</p>
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="scriptNameInput" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">脚本名称 <span class="text-danger-500">*</span></label>
+                            <input type="text" id="scriptNameInput" value="PAT_PATIENT_INFO_ETL" class="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm form-control-focus" oninput="syncScriptFileTag()">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">脚本描述</label>
+                            <textarea class="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm form-control-focus" rows="3">患者基本信息抽取转换</textarea>
+                        </div>
+                    </div>
+
+                    <!-- 步骤2：源配置 -->
+                    <div id="step2Content" class="p-4 space-y-4" style="display:none">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">源数据源</label>
+                            <select class="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm form-control-focus mb-2">
+                                <option>HIS_主数据库</option>
+                                <option>LIS_检验数据库</option>
+                                <option>PACS_影像数据库</option>
+                            </select>
+                            <select class="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm form-control-focus">
+                                <option>PAT_PATIENT_INFO</option>
+                                <option>HIS_ORDER</option>
+                                <option>HIS_PRESCRIPTION</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">抽取模式</label>
+                            <div class="space-y-2">
+                                <label class="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-700 rounded-lg cursor-pointer">
+                                    <input type="radio" name="extractMode" checked class="text-medical-600">
+                                    <span class="text-sm text-gray-700 dark:text-gray-300">全量抽取</span>
+                                </label>
+                                <label class="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-700 rounded-lg cursor-pointer">
+                                    <input type="radio" name="extractMode" class="text-medical-600">
+                                    <span class="text-sm text-gray-700 dark:text-gray-300">增量抽取（按时间戳）</span>
+                                </label>
+                                <label class="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-700 rounded-lg cursor-pointer">
+                                    <input type="radio" name="extractMode" class="text-medical-600">
+                                    <span class="text-sm text-gray-700 dark:text-gray-300">增量抽取（按自增ID）</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">过滤条件</label>
+                            <textarea class="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm form-control-focus" rows="2" placeholder="WHERE UPDATE_TIME >= ?"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- 步骤3：目标配置 -->
+                    <div id="step3Content" class="p-4 space-y-4" style="display:none">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">目标数据源</label>
+                            <select class="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm form-control-focus mb-2">
+                                <option>数据中心_标准库</option>
+                            </select>
+                            <select class="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm form-control-focus">
+                                <option>STD_PATIENT_INFO</option>
+                                <option>STD_ORDER</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">写入模式</label>
+                            <div class="space-y-2">
+                                <label class="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-700 rounded-lg cursor-pointer">
+                                    <input type="radio" name="writeMode" checked class="text-medical-600">
+                                    <span class="text-sm text-gray-700 dark:text-gray-300">INSERT（追加）</span>
+                                </label>
+                                <label class="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-700 rounded-lg cursor-pointer">
+                                    <input type="radio" name="writeMode" class="text-medical-600">
+                                    <span class="text-sm text-gray-700 dark:text-gray-300">UPSERT（更新插入）</span>
+                                </label>
+                                <label class="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-700 rounded-lg cursor-pointer">
+                                    <input type="radio" name="writeMode" class="text-medical-600">
+                                    <span class="text-sm text-gray-700 dark:text-gray-300">REPLACE（覆盖）</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">字段映射</label>
+                            <div class="space-y-1 text-sm">
+                                <div class="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                    <span class="flex-1 text-gray-600 dark:text-gray-400">PAT_ID → PATIENT_ID</span>
+                                    <i class="fas fa-link text-medical-500 text-xs"></i>
+                                </div>
+                                <div class="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                    <span class="flex-1 text-gray-600 dark:text-gray-400">PAT_NAME → NAME</span>
+                                    <i class="fas fa-link text-medical-500 text-xs"></i>
+                                </div>
+                                <div class="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                    <span class="flex-1 text-gray-600 dark:text-gray-400">SEX → GENDER</span>
+                                    <i class="fas fa-link text-medical-500 text-xs"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 步骤4：调度配置 -->
+                    <div id="step4Content" class="p-4 space-y-4" style="display:none">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">调度策略</label>
+                            <select class="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm form-control-focus mb-2">
+                                <option>每小时</option>
+                                <option>每天</option>
+                                <option>每周</option>
+                                <option>每月</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">执行时间</label>
+                            <input type="time" value="02:00" class="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm form-control-focus">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">重试策略</label>
+                            <div class="flex items-center gap-3">
+                                <input type="number" value="3" min="0" max="10" class="w-20 px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm form-control-focus">
+                                <span class="text-sm text-gray-500 dark:text-gray-400">次重试，间隔</span>
+                                <input type="number" value="5" min="1" max="60" class="w-20 px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm form-control-focus">
+                                <span class="text-sm text-gray-500 dark:text-gray-400">分钟</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">超时设置</label>
+                            <div class="flex items-center gap-3">
+                                <input type="number" value="60" min="1" class="w-24 px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm form-control-focus">
+                                <span class="text-sm text-gray-500 dark:text-gray-400">分钟</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-700 rounded-lg cursor-pointer">
+                                <input type="checkbox" checked class="text-medical-600">
+                                <span class="text-sm text-gray-700 dark:text-gray-300">失败时发送告警通知</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- 数据质量规则配置 -->
+                    <div class="p-4 border-t border-gray-100 dark:border-gray-700">
+                        <div class="flex items-center justify-between mb-3">
+                            <h4 class="text-sm font-medium text-gray-800 dark:text-gray-200">数据质量规则</h4>
+                            <span class="text-xs bg-medical-50 text-medical-600 px-2 py-0.5 rounded">AI推荐</span>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-700 rounded-lg cursor-pointer">
+                                <input type="checkbox" checked class="text-medical-600">
+                                <div class="flex-1">
+                                    <span class="text-sm text-gray-700 dark:text-gray-300">非空校验</span>
+                                    <p class="text-xs text-gray-400">PATIENT_ID、NAME 字段</p>
+                                </div>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-700 rounded-lg cursor-pointer">
+                                <input type="checkbox" checked class="text-medical-600">
+                                <div class="flex-1">
+                                    <span class="text-sm text-gray-700 dark:text-gray-300">日期格式校验</span>
+                                    <p class="text-xs text-gray-400">BIRTH_DATE 字段</p>
+                                </div>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-700 rounded-lg cursor-pointer">
+                                <input type="checkbox" class="text-medical-600">
+                                <div class="flex-1">
+                                    <span class="text-sm text-gray-700 dark:text-gray-300">值域校验</span>
+                                    <p class="text-xs text-gray-400">GENDER 字段 (M/F/U)</p>
+                                </div>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-700 rounded-lg cursor-pointer">
+                                <input type="checkbox" class="text-medical-600">
+                                <div class="flex-1">
+                                    <span class="text-sm text-gray-700 dark:text-gray-300">重复记录检测</span>
+                                    <p class="text-xs text-gray-400">基于 PATIENT_ID</p>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- AI生成按钮（始终显示） -->
+                    <div class="p-4 border-t border-gray-100 dark:border-gray-700">
+                        <button id="aiGenerateBtn" class="w-full py-2.5 bg-medical-600 text-white rounded-xl text-sm font-medium hover:bg-medical-700 transition-colors flex items-center justify-center gap-2 btn-transition" onclick="aiGenerateScript()">
+                            <i class="fas fa-robot"></i> AI 生成脚本
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 右侧：脚本预览 -->
+                <div class="flex-1 overflow-y-auto p-6 bg-gray-900">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-2">
+                            <span id="scriptTypeTag" class="text-xs bg-gray-700 text-gray-300 px-2 py-1 rounded">Kettle</span>
+                            <span id="scriptFileTag" class="text-xs text-gray-500 dark:text-gray-400">PAT_PATIENT_INFO.ktr</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button class="text-xs bg-gray-700 text-gray-300 px-3 py-1.5 rounded-xl hover:bg-gray-600 transition-colors flex items-center gap-1" onclick="copyScript()">
+                                <i class="fas fa-copy"></i> 复制
+                            </button>
+                            <button class="text-xs bg-gray-700 text-gray-300 px-3 py-1.5 rounded-xl hover:bg-gray-600 transition-colors flex items-center gap-1" onclick="downloadScript()">
+                                <i class="fas fa-download"></i> 下载
+                            </button>
+                        </div>
+                    </div>
+                    <div class="bg-gray-800 rounded-xl p-4 overflow-x-auto">
+                        <!-- 预览内容单一数据源：页面加载时由 JS 从 kettleScript/flinkScript 渲染，杜绝双份维护漂移 -->
+                        <pre id="scriptPreview" class="text-sm text-gray-300 code-block"><code></code></pre>
+                    </div>
+
+                    <!-- Kettle 最佳实践（AI 汇总自历史成功任务） -->
+                    <div class="mt-6 bg-gray-800 rounded-xl p-4 border border-gray-700">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-lightbulb text-yellow-400"></i>
+                                <span class="text-sm font-semibold text-gray-200">Kettle 开发最佳实践</span>
+                            </div>
+                            <span class="text-xs bg-medical-900 text-medical-300 px-2 py-0.5 rounded">AI · 提炼自 67 个成功任务</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+                            <div class="bg-gray-900 rounded-lg p-3">
+                                <p class="text-xs font-medium text-gray-200 mb-1"><i class="fas fa-clock text-medical-400 mr-1.5"></i>增量抽取</p>
+                                <p class="text-xs text-gray-400 leading-relaxed">时间戳参数化（WHERE UPDATE_TIME >= ?），配合 LAST_SYNC_TIME 断点表实现失败续传。</p>
+                            </div>
+                            <div class="bg-gray-900 rounded-lg p-3">
+                                <p class="text-xs font-medium text-gray-200 mb-1"><i class="fas fa-shield-halved text-medical-400 mr-1.5"></i>幂等写入</p>
+                                <p class="text-xs text-gray-400 leading-relaxed">目标端统一 UPSERT（主键冲突更新），防止接口重发产生重复数据。</p>
+                            </div>
+                            <div class="bg-gray-900 rounded-lg p-3">
+                                <p class="text-xs font-medium text-gray-200 mb-1"><i class="fas fa-gauge-high text-medical-400 mr-1.5"></i>批量调优</p>
+                                <p class="text-xs text-gray-400 leading-relaxed">fetch size 5000、commit 1000~5000；大字段表单独拆分转换，避免拖慢主链路。</p>
+                            </div>
+                            <div class="bg-gray-900 rounded-lg p-3">
+                                <p class="text-xs font-medium text-gray-200 mb-1"><i class="fas fa-diagram-project text-medical-400 mr-1.5"></i>字典映射</p>
+                                <p class="text-xs text-gray-400 leading-relaxed">用 ValueMapper / 维表 JOIN 承载字典映射，禁止在 SQL 中硬编码 CASE WHEN 清单。</p>
+                            </div>
+                            <div class="bg-gray-900 rounded-lg p-3">
+                                <p class="text-xs font-medium text-gray-200 mb-1"><i class="fas fa-bug text-medical-400 mr-1.5"></i>错误处理</p>
+                                <p class="text-xs text-gray-400 leading-relaxed">错误行路由至 REJECT 表并保留原因列，超过阈值 0.5% 自动告警并挂起调度。</p>
+                            </div>
+                            <div class="bg-gray-900 rounded-lg p-3">
+                                <p class="text-xs font-medium text-gray-200 mb-1"><i class="fas fa-file-lines text-medical-400 mr-1.5"></i>命名与日志</p>
+                                <p class="text-xs text-gray-400 leading-relaxed">转换命名 {系统}_{表}_{动作}；记录起止时间、影响行数，日志保留 ≥ 180 天满足审计要求。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let currentStep = 2;
+        let currentScriptType = 'Kettle';
+
+        const kettleScript = `<?xml version="1.0" encoding="UTF-8"?>
+<transformation>
+  <info>
+    <name>PAT_PATIENT_INFO_ETL</name>
+    <description>患者基本信息抽取转换</description>
+    <created>2026-05-07</created>
+    <modified>2026-05-07</modified>
+  </info>
+
+  <connection>
+    <name>HIS_SOURCE</name>
+    <type>ORACLE</type>
+    <server>192.168.1.100</server>
+    <port>1521</port>
+    <database>ORCL</database>
+    <username>\${his_user}</username>
+  </connection>
+
+  <connection>
+    <name>DC_TARGET</name>
+    <type>POSTGRESQL</type>
+    <server>192.168.2.200</server>
+    <port>5432</port>
+    <database>datacenter</database>
+  </connection>
+
+  <step>
+    <name>表输入</name>
+    <type>TableInput</type>
+    <connection>HIS_SOURCE</connection>
+    <sql>
+      SELECT PAT_ID, PAT_NAME, SEX, BIRTHDAY,
+             ID_CARD, PHONE, ADDRESS
+      FROM HIS_PATIENT
+      WHERE UPDATE_TIME >= ?
+        AND STATUS = '1'
+    </sql>
+    <parameters>
+      <parameter>LAST_SYNC_TIME</parameter>
+    </parameters>
+  </step>
+
+  <step>
+    <name>数据清洗</name>
+    <type>ValueMapper</type>
+    <field>SEX</field>
+    <mappings>
+      <mapping>
+        <source>1</source>
+        <target>M</target>
+      </mapping>
+      <mapping>
+        <source>2</source>
+        <target>F</target>
+      </mapping>
+    </mappings>
+  </step>
+
+  <step>
+    <name>字段映射</name>
+    <type>SelectValues</type>
+    <fields>
+      <field>
+        <name>PAT_ID</name>
+        <rename>PATIENT_ID</rename>
+      </field>
+      <field>
+        <name>PAT_NAME</name>
+        <rename>NAME</rename>
+      </field>
+      <field>
+        <name>SEX</name>
+        <rename>GENDER</rename>
+      </field>
+      <field>
+        <name>BIRTHDAY</name>
+        <rename>BIRTH_DATE</rename>
+      </field>
+    </fields>
+  </step>
+
+  <step>
+    <name>数据校验</name>
+    <type>Validator</type>
+    <rules>
+      <rule field="PATIENT_ID" type="NOT_NULL"/>
+      <rule field="NAME" type="NOT_NULL"/>
+      <rule field="GENDER" type="IN" values="M,F,U"/>
+    </rules>
+  </step>
+
+  <step>
+    <name>表输出</name>
+    <type>TableOutput</type>
+    <connection>DC_TARGET</connection>
+    <target_table>STD_PATIENT_INFO</target_table>
+    <commit_size>1000</commit_size>
+    <update_mode>UPSERT</update_mode>
+    <key_fields>
+      <key>PATIENT_ID</key>
+    </key_fields>
+  </step>
+
+  <hop>
+    <from>表输入</from>
+    <to>数据清洗</to>
+  </hop>
+  <hop>
+    <from>数据清洗</from>
+    <to>字段映射</to>
+  </hop>
+  <hop>
+    <from>字段映射</from>
+    <to>数据校验</to>
+  </hop>
+  <hop>
+    <from>数据校验</from>
+    <to>表输出</to>
+  </hop>
+</transformation>`;
+
+        const flinkScript = `-- Flink SQL ETL Job: PAT_PATIENT_INFO
+-- Generated by MediData AI
+-- Date: 2026-05-07
+
+-- 源表定义（CDC连接）
+CREATE TABLE source_his_patient (
+    PAT_ID       VARCHAR(32),
+    PAT_NAME     VARCHAR(64),
+    SEX          VARCHAR(2),
+    BIRTHDAY     DATE,
+    ID_CARD      VARCHAR(18),
+    PHONE        VARCHAR(20),
+    ADDRESS      VARCHAR(256),
+    UPDATE_TIME  TIMESTAMP,
+    STATUS       VARCHAR(1),
+    PRIMARY KEY (PAT_ID) NOT ENFORCED
+) WITH (
+    'connector' = 'oracle-cdc',
+    'hostname' = '192.168.1.100',
+    'port' = '1521',
+    'database-name' = 'ORCL',
+    'schema-name' = 'HIS',
+    'table-name' = 'HIS_PATIENT',
+    'username' = '\${his_user}',
+    'password' = '\${his_pwd}',
+    'debezium.log.mining.strategy' = 'online_catalog'
+);
+
+-- 目标表定义（JDBC连接）
+CREATE TABLE target_std_patient (
+    PATIENT_ID   VARCHAR(32),
+    NAME         VARCHAR(64),
+    GENDER       VARCHAR(2),
+    BIRTH_DATE   DATE,
+    ID_CARD_NO   VARCHAR(18),
+    PHONE_NO     VARCHAR(20),
+    HOME_ADDR    VARCHAR(256),
+    SYNC_TIME    TIMESTAMP,
+    PRIMARY KEY (PATIENT_ID) NOT ENFORCED
+) WITH (
+    'connector' = 'jdbc',
+    'url' = 'jdbc:postgresql://192.168.2.200:5432/datacenter',
+    'table-name' = 'STD_PATIENT_INFO',
+    'username' = '\${dc_user}',
+    'password' = '\${dc_pwd}',
+    'sink.buffer-flush.max-rows' = '1000'
+);
+
+-- 维表：性别代码映射
+CREATE TABLE dim_gender_map (
+    src_code  VARCHAR(2),
+    std_code  VARCHAR(2),
+    PRIMARY KEY (src_code) NOT ENFORCED
+) WITH (
+    'connector' = 'jdbc',
+    'url' = 'jdbc:postgresql://192.168.2.200:5432/datacenter',
+    'table-name' = 'DIM_GENDER_MAP',
+    'username' = '\${dc_user}',
+    'password' = '\${dc_pwd}'
+);
+
+-- ETL转换逻辑
+INSERT INTO target_std_patient
+SELECT
+    s.PAT_ID                                    AS PATIENT_ID,
+    s.PAT_NAME                                  AS NAME,
+    COALESCE(g.std_code, 'U')                   AS GENDER,
+    s.BIRTHDAY                                  AS BIRTH_DATE,
+    s.ID_CARD                                   AS ID_CARD_NO,
+    s.PHONE                                     AS PHONE_NO,
+    s.ADDRESS                                   AS HOME_ADDR,
+    CURRENT_TIMESTAMP                           AS SYNC_TIME
+FROM source_his_patient s
+LEFT JOIN dim_gender_map g ON s.SEX = g.src_code
+WHERE s.STATUS = '1'
+  AND s.PAT_ID IS NOT NULL
+  AND s.PAT_NAME IS NOT NULL;
+
+-- 调度配置（通过Flink Deployment）
+-- schedule: hourly
+-- parallelism: 4
+-- checkpoint.interval: 60000
+-- restart.strategy: fixed-delay
+-- restart.fixed-delay.attempts: 3
+-- restart.fixed-delay.delay: 300000`;
+
+        function switchStep(step) {
+            currentStep = step;
+            const steps = document.querySelectorAll('.step-wizard .step-item');
+
+            steps.forEach((item, index) => {
+                const num = index + 1;
+                item.classList.remove('step-completed', 'step-active', 'step-pending');
+                const numberDiv = item.querySelector('.step-number');
+                item.setAttribute('aria-selected', String(num === step));
+
+                if (num < step) {
+                    item.classList.add('step-completed');
+                    numberDiv.innerHTML = '<i class="fas fa-check text-xs"></i>';
+                } else if (num === step) {
+                    item.classList.add('step-active');
+                    numberDiv.textContent = num;
+                } else {
+                    item.classList.add('step-pending');
+                    numberDiv.textContent = num;
+                }
+            });
+
+            for (let i = 1; i <= 4; i++) {
+                const content = document.getElementById('step' + i + 'Content');
+                if (content) content.style.display = (i === step) ? 'block' : 'none';
+            }
+        }
+
+        // 预览渲染（唯一入口）：类型 + 名称 → 预览与文件标签
+        function renderScriptPreview() {
+            const scriptContent = currentScriptType === 'Kettle' ? kettleScript : flinkScript;
+            document.getElementById('scriptPreview').querySelector('code').textContent = scriptContent;
+            document.getElementById('scriptTypeTag').textContent = currentScriptType;
+            syncScriptFileTag();
+        }
+
+        function getScriptBaseName() {
+            const name = (document.getElementById('scriptNameInput').value || '').trim();
+            return name || 'PAT_PATIENT_INFO';
+        }
+
+        function syncScriptFileTag() {
+            const base = getScriptBaseName().replace(/_ETL$/i, '');
+            const ext = currentScriptType === 'Kettle' ? '.ktr' : '.sql';
+            document.getElementById('scriptFileTag').textContent = base + ext;
+        }
+
+        function selectScriptType(element, type) {
+            currentScriptType = type;
+            // 限定在脚本类型栅格内选择，避免误伤页面其它 .grid button
+            document.querySelectorAll('#scriptTypeGrid button').forEach(btn => {
+                btn.classList.remove('border-medical-500', 'bg-medical-50');
+                btn.classList.add('border-gray-200');
+                btn.setAttribute('aria-pressed', 'false');
+                btn.querySelector('i').classList.remove('text-medical-600');
+                btn.querySelector('i').classList.add('text-gray-400');
+            });
+            element.classList.remove('border-gray-200');
+            element.classList.add('border-medical-500', 'bg-medical-50');
+            element.setAttribute('aria-pressed', 'true');
+            element.querySelector('i').classList.remove('text-gray-400');
+            element.querySelector('i').classList.add('text-medical-600');
+            // 切换类型即时刷新预览（单一数据源渲染）
+            renderScriptPreview();
+        }
+
+        function aiGenerateScript() {
+            // 生成前校验：脚本名称必填
+            const nameInput = document.getElementById('scriptNameInput');
+            if (!nameInput.value.trim()) {
+                showToast('请先填写脚本名称（步骤 1 · 基础配置）', 'warning');
+                nameInput.classList.add('border-danger-500', 'ring-1', 'ring-danger-500');
+                nameInput.addEventListener('input', function clearErr() {
+                    nameInput.classList.remove('border-danger-500', 'ring-1', 'ring-danger-500');
+                    nameInput.removeEventListener('input', clearErr);
+                });
+                switchStep(1);
+                nameInput.focus();
+                return;
+            }
+            // 顶部与面板底部两个入口同步 loading，避免反馈错位
+            const btns = [document.getElementById('aiGenerateBtn'), document.getElementById('topAiGenerateBtn')].filter(Boolean);
+            const originals = btns.map(b => b.innerHTML);
+            btns.forEach(b => {
+                b.innerHTML = '<i class="fas fa-spinner fa-spin"></i> AI生成中...';
+                b.disabled = true;
+                b.classList.add('opacity-60', 'cursor-not-allowed', 'pointer-events-none');
+            });
+
+            setTimeout(() => {
+                btns.forEach((b, i) => {
+                    b.innerHTML = originals[i];
+                    b.disabled = false;
+                    b.classList.remove('opacity-60', 'cursor-not-allowed', 'pointer-events-none');
+                });
+                renderScriptPreview();
+                showToast('AI脚本生成完成（' + currentScriptType + '）', 'success');
+            }, 2000);
+        }
+
+        // 初始渲染：预览与 kettleScript 保持一致
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', renderScriptPreview);
+        } else {
+            renderScriptPreview();
+        }
+
+        function getScriptContent() {
+            const codeEl = document.getElementById('scriptPreview').querySelector('code');
+            return codeEl.textContent;
+        }
+
+        function copyScript() {
+            const content = getScriptContent();
+            navigator.clipboard.writeText(content).then(() => {
+                showToast('脚本已复制到剪贴板', 'success');
+            }).catch(() => {
+                showToast('复制失败，请手动复制', 'error');
+            });
+        }
+
+        function downloadScript() {
+            const content = getScriptContent();
+            if (!content.trim()) { showToast('请先生成脚本', 'warning'); return; }
+            const ext = currentScriptType === 'Kettle' ? '.ktr' : '.sql';
+            const filename = getScriptBaseName().replace(/_ETL$/i, '') + ext;
+            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('脚本文件下载成功', 'success');
+        }
+    </script>
+</body>
+</html>

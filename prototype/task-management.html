@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0d9488">
+    <meta name="description" content="智能任务管理 - AI 辅助任务分配与进度跟踪，看板视图协作">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="智能任务管理 - MediData AI">
+    <meta property="og:description" content="AI 辅助任务分配与进度跟踪">
+    <title>智能任务管理 - MediData AI</title>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="stylesheet" href="components/tailwind.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="components/common.css">
+    <script src="components/common.js" defer></script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+    <a href="#main-content" class="skip-link">跳转到主内容</a>
+    <div class="flex h-screen overflow-hidden">
+        <!-- 侧边栏 -->
+        <aside id="sidebar" class="w-64 gradient-bg text-white flex flex-col flex-shrink-0"></aside>
+
+        <!-- 主内容区 -->
+        <main id="main-content" class="flex-1 flex flex-col overflow-hidden" role="main">
+            <!-- 顶部导航 -->
+            <header id="header" class="glass-effect border-b border-gray-200 dark:border-gray-700 px-6 py-4 flex items-center justify-between flex-shrink-0 z-10"></header>
+
+            <!-- 面包屑 -->
+            <div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-2">
+                <nav id="breadcrumb" class="breadcrumb"></nav>
+            </div>
+
+            <!-- 页面内容 -->
+            <div class="flex-1 overflow-hidden flex">
+                <!-- 左侧：任务列表 -->
+                <div class="flex-1 overflow-y-auto p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">任务管理</h2>
+                            <p class="text-gray-500 dark:text-gray-400 mt-1">AI 辅助任务分配与进度跟踪</p>
+                        </div>
+                        <div class="flex gap-3">
+                            <button id="aiAssignBtn" class="px-4 py-2.5 bg-medical-50 text-medical-700 border border-medical-200 rounded-xl text-sm font-medium hover:bg-medical-100 transition-colors flex items-center gap-2 btn-transition" onclick="handleAiAssign(this)">
+                                <i class="fas fa-robot" id="aiAssignIcon"></i> <span id="aiAssignText">AI 智能分配</span>
+                            </button>
+                            <button class="px-4 py-2.5 bg-medical-600 text-white rounded-xl text-sm font-medium hover:bg-medical-700 transition-colors flex items-center gap-2 shadow-md shadow-medical-600/20 btn-transition" onclick="openAddTaskModal()">
+                                <i class="fas fa-plus"></i> 新建任务
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 统计卡片 -->
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 stats-grid gap-4 mb-6">
+                        <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 card-hover">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-2xl font-bold text-gray-900 dark:text-gray-100">48</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">总任务</p>
+                                </div>
+                                <div class="w-10 h-10 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-tasks text-gray-600 dark:text-gray-300"></i>
+                                </div>
+                                
+</div>
+                                <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-3"><span class="text-success-600 font-medium">+6</span> 本周新建</div>
+                                
+                        </div>
+                                
+                        <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 card-hover">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-2xl font-bold text-warning-600">12</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">进行中</p>
+                                </div>
+                                
+                                <div class="w-10 h-10 bg-warning-50 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-spinner text-warning-600"></i>
+                                </div>
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+</div>
+                                <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-3"><span class="text-warning-600 font-medium">5</span> 个今日到期</div>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 card-hover">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-2xl font-bold text-danger-600">5</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">已逾期</p>
+                                </div>
+                                <div class="w-10 h-10 bg-danger-50 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-exclamation-circle text-danger-600"></i>
+                                </div>
+</div>
+                                <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-3"><span class="text-danger-600 font-medium">需今日处理</span></div>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 card-hover">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-2xl font-bold text-success-600">31</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">已完成</p>
+                                </div>
+                                <div class="w-10 h-10 bg-success-50 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-check-circle text-success-600"></i>
+                                </div>
+</div>
+                                <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-3">完成率 <span class="text-success-600 font-medium">64.6%</span></div>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 card-hover">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-2xl font-bold text-medical-600">3</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">质量任务</p>
+                                </div>
+                                <div class="w-10 h-10 bg-medical-50 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-shield-alt text-medical-600"></i>
+                                </div>
+</div>
+                                <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-3"><span class="text-danger-600 font-medium">1</span> 个高优先级</div>
+                        </div>
+                    </div>
+
+                    <!-- AI 智能分配建议 -->
+                    <div class="bg-gradient-to-r from-medical-50 to-primary-50 rounded-xl p-4 border border-medical-100 mb-6">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-medical-100 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-robot text-medical-600 text-lg"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-800 dark:text-gray-200">AI 智能分配建议</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">基于团队成员技能和当前负载分析</p>
+                                </div>
+                            </div>
+                            <button class="px-3 py-1.5 text-xs bg-medical-600 text-white rounded-xl hover:bg-medical-700 transition-colors btn-transition" data-action="showToast" data-args="已应用AI分配建议|success">
+                                应用建议
+                            </button>
+                        </div>
+                        <div class="mt-3 grid grid-cols-3 gap-3">
+                            <div class="p-3 bg-white dark:bg-gray-800 rounded-xl border border-medical-100 dark:border-gray-700">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <img loading="lazy" src="https://ui-avatars.com/api/?name=Zhang&background=0d9488&color=fff&size=24" class="w-6 h-6 rounded-full" alt="张工程师">
+                                    <span class="text-xs font-medium text-gray-700 dark:text-gray-300">张工程师</span>
+                                </div>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">推荐分配 3 个 HIS 映射任务</p>
+                                <p class="text-xs text-medical-600 mt-1">匹配度 95%</p>
+                            </div>
+                            <div class="p-3 bg-white dark:bg-gray-800 rounded-xl border border-medical-100 dark:border-gray-700">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <img loading="lazy" src="https://ui-avatars.com/api/?name=Li&background=2563eb&color=fff&size=24" class="w-6 h-6 rounded-full" alt="李工程师">
+                                    <span class="text-xs font-medium text-gray-700 dark:text-gray-300">李工程师</span>
+                                </div>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">推荐分配 2 个 LIS 对接任务</p>
+                                <p class="text-xs text-medical-600 mt-1">匹配度 92%</p>
+                            </div>
+                            <div class="p-3 bg-white dark:bg-gray-800 rounded-xl border border-medical-100 dark:border-gray-700">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <img loading="lazy" src="https://ui-avatars.com/api/?name=Wang&background=f59e0b&color=fff&size=24" class="w-6 h-6 rounded-full" alt="王工程师">
+                                    <span class="text-xs font-medium text-gray-700 dark:text-gray-300">王工程师</span>
+                                </div>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">推荐分配 1 个 PACS 配置任务</p>
+                                <p class="text-xs text-medical-600 mt-1">匹配度 88%</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 任务筛选 -->
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="flex gap-2" id="filterBtnGroup">
+                            <button class="filter-btn px-3 py-1.5 text-xs bg-medical-50 text-medical-700 rounded-xl font-medium" data-filter="all" aria-pressed="true" onclick="switchFilter(this)">全部</button>
+                            <button class="filter-btn px-3 py-1.5 text-xs text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-xl transition-colors" data-filter="progress" aria-pressed="false" onclick="switchFilter(this)">进行中</button>
+                            <button class="filter-btn px-3 py-1.5 text-xs text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-xl transition-colors" data-filter="pending" aria-pressed="false" onclick="switchFilter(this)">待处理</button>
+                            <button class="filter-btn px-3 py-1.5 text-xs text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-xl transition-colors" data-filter="done" aria-pressed="false" onclick="switchFilter(this)">已完成</button>
+                            <button class="filter-btn px-3 py-1.5 text-xs text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-xl transition-colors" data-filter="overdue" aria-pressed="false" onclick="switchFilter(this)">已逾期</button>
+                        </div>
+                        <div class="flex-1"></div>
+                        <select id="taskSortSelect" aria-label="任务排序方式" class="px-3 py-1.5 text-xs bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-lg form-control-focus" onchange="sortTasks(this)">
+                            <option value="priority">按优先级排序</option>
+                            <option value="deadline">按截止日期排序</option>
+                            <option value="created">按创建时间排序</option>
+                        </select>
+                    </div>
+
+                    <!-- 批量操作栏 -->
+                    <div id="batchBar" class="hidden mb-4 bg-medical-50 dark:bg-medical-900/30 border border-medical-200 dark:border-medical-700 rounded-xl px-4 py-3 flex items-center gap-3">
+                        <span class="text-sm font-medium text-medical-700 dark:text-medical-300">已选择 <span id="selectedCount">0</span> 项</span>
+                        <button class="px-3 py-1.5 text-xs bg-medical-600 text-white rounded-xl hover:bg-medical-700 transition-colors" onclick="batchComplete()">批量完成</button>
+                        <button class="px-3 py-1.5 text-xs bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors" onclick="batchReassign()">批量分配</button>
+                        <button class="px-3 py-1.5 text-xs bg-danger-50 dark:bg-danger-900/30 text-danger-600 rounded-xl hover:bg-danger-100 dark:hover:bg-danger-900/50 transition-colors" onclick="batchDelete()">批量删除</button>
+                        <button class="ml-auto text-xs text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200" onclick="clearSelection()">取消选择</button>
+                    </div>
+
+                    <!-- 任务列表 -->
+                    <div class="space-y-3" id="taskList">
+                        <div class="task-card bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700" data-status="overdue progress" data-priority="3" data-deadline="2026-05-03">
+                            <div class="flex items-start gap-4">
+                                <input type="checkbox" aria-label="选择任务" class="task-checkbox mt-1 w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-medical-600 focus:ring-medical-500 cursor-pointer" onchange="updateBatchBar()">
+                                <div class="w-10 h-10 bg-danger-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-project-diagram text-danger-600"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <h4 class="text-sm font-bold text-gray-900 dark:text-gray-100">HIS_ORDER 表字段映射审核</h4>
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-xs bg-danger-50 text-danger-600 px-2 py-1 rounded-full font-medium">高优先级</span>
+                                            <span class="text-xs bg-danger-50 text-danger-600 px-2 py-1 rounded-full">逾期 1 天</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-xs text-gray-500 mb-2">AI 已推荐 36 个字段映射，需要人工审核确认。涉及医嘱核心数据，请优先处理。</p>
+                                    <div class="flex items-center gap-4 text-xs text-gray-400">
+                                        <span><i class="fas fa-user mr-1"></i>张工程师</span>
+                                        <span><i class="fas fa-calendar mr-1"></i>截止：2026-05-03</span>
+                                        <span><i class="fas fa-clock mr-1"></i>预估 4 小时</span>
+                                        <span><i class="fas fa-percentage mr-1"></i>完成度 65%</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <button class="p-2 text-gray-400 hover:text-medical-600 hover:bg-medical-50 rounded-xl transition-colors" onclick="editTask(this)" title="编辑"><i class="fas fa-edit"></i></button>
+                                    <button class="p-2 text-gray-400 hover:text-success-600 hover:bg-success-50 rounded-xl transition-colors" onclick="completeTask(this)" title="完成"><i class="fas fa-check"></i></button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="task-card bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700" data-status="progress" data-priority="2" data-deadline="2026-05-04">
+                            <div class="flex items-start gap-4">
+                                <input type="checkbox" aria-label="选择任务" class="task-checkbox mt-1 w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-medical-600 focus:ring-medical-500 cursor-pointer" onchange="updateBatchBar()">
+                                <div class="w-10 h-10 bg-warning-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-code text-warning-600"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <h4 class="text-sm font-bold text-gray-900 dark:text-gray-100">优化 LIS_RESULT 映射 SQL</h4>
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-xs bg-warning-50 text-warning-600 px-2 py-1 rounded-full font-medium">中优先级</span>
+                                            <span class="text-xs bg-warning-50 text-warning-600 px-2 py-1 rounded-full">今天截止</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-xs text-gray-500 mb-2">AI 检测到 SQL 执行计划存在全表扫描，建议添加索引并优化 WHERE 条件。</p>
+                                    <div class="flex items-center gap-4 text-xs text-gray-400">
+                                        <span><i class="fas fa-user mr-1"></i>李工程师</span>
+                                        <span><i class="fas fa-calendar mr-1"></i>截止：2026-05-04</span>
+                                        <span><i class="fas fa-clock mr-1"></i>预估 2 小时</span>
+                                        <span><i class="fas fa-percentage mr-1"></i>完成度 30%</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <button class="p-2 text-gray-400 hover:text-medical-600 hover:bg-medical-50 rounded-xl transition-colors" onclick="editTask(this)" title="编辑"><i class="fas fa-edit"></i></button>
+                                    <button class="p-2 text-gray-400 hover:text-success-600 hover:bg-success-50 rounded-xl transition-colors" onclick="completeTask(this)" title="完成"><i class="fas fa-check"></i></button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="task-card bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700" data-status="pending" data-priority="1" data-deadline="2026-05-07">
+                            <div class="flex items-start gap-4">
+                                <input type="checkbox" aria-label="选择任务" class="task-checkbox mt-1 w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-medical-600 focus:ring-medical-500 cursor-pointer" onchange="updateBatchBar()">
+                                <div class="w-10 h-10 bg-primary-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-database text-primary-600"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <h4 class="text-sm font-bold text-gray-900 dark:text-gray-100">配置 PACS 影像数据源</h4>
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">低优先级</span>
+                                            <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">3 天内</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-xs text-gray-500 mb-2">新院区影像系统接入，需要配置 PostgreSQL 数据源连接并测试连通性。</p>
+                                    <div class="flex items-center gap-4 text-xs text-gray-400">
+                                        <span><i class="fas fa-user mr-1"></i>待分配</span>
+                                        <span><i class="fas fa-calendar mr-1"></i>截止：2026-05-07</span>
+                                        <span><i class="fas fa-clock mr-1"></i>预估 3 小时</span>
+                                        <span><i class="fas fa-percentage mr-1"></i>完成度 0%</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <button class="p-2 text-gray-400 hover:text-medical-600 hover:bg-medical-50 rounded-xl transition-colors" onclick="editTask(this)" title="编辑"><i class="fas fa-edit"></i></button>
+                                    <button class="p-2 text-gray-400 hover:text-success-600 hover:bg-success-50 rounded-xl transition-colors" onclick="completeTask(this)" title="完成"><i class="fas fa-check"></i></button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="task-card bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700" data-status="pending" data-priority="1" data-deadline="2026-05-08">
+                            <div class="flex items-start gap-4">
+                                <input type="checkbox" aria-label="选择任务" class="task-checkbox mt-1 w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-medical-600 focus:ring-medical-500 cursor-pointer" onchange="updateBatchBar()">
+                                <div class="w-10 h-10 bg-medical-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-language text-medical-600"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <h4 class="text-sm font-bold text-gray-900 dark:text-gray-100">更新药品字典映射</h4>
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">低优先级</span>
+                                            <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">本周</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-xs text-gray-500 mb-2">源系统药品字典有 23 条更新记录，需要同步更新标准药品字典映射关系。</p>
+                                    <div class="flex items-center gap-4 text-xs text-gray-400">
+                                        <span><i class="fas fa-user mr-1"></i>王工程师</span>
+                                        <span><i class="fas fa-calendar mr-1"></i>截止：2026-05-08</span>
+                                        <span><i class="fas fa-clock mr-1"></i>预估 2 小时</span>
+                                        <span><i class="fas fa-percentage mr-1"></i>完成度 0%</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <button class="p-2 text-gray-400 hover:text-medical-600 hover:bg-medical-50 rounded-xl transition-colors" onclick="editTask(this)" title="编辑"><i class="fas fa-edit"></i></button>
+                                    <button class="p-2 text-gray-400 hover:text-success-600 hover:bg-success-50 rounded-xl transition-colors" onclick="completeTask(this)" title="完成"><i class="fas fa-check"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右侧：团队负载 -->
+                <div class="w-80 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 overflow-y-auto scrollbar-thin flex-shrink-0">
+                    <div class="p-4 border-b border-gray-100 dark:border-gray-700">
+                        <h3 class="font-semibold text-gray-900 dark:text-gray-100">团队工作负载</h3>
+                    </div>
+                    <div class="p-4 space-y-4">
+                        <div class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-xl">
+                            <img loading="lazy" src="https://ui-avatars.com/api/?name=Zhang&background=0d9488&color=fff" class="w-10 h-10 rounded-full" alt="张工程师">
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm font-medium text-gray-800 dark:text-gray-200">张工程师</span>
+                                    <span class="text-xs bg-warning-50 text-warning-600 px-2 py-0.5 rounded-full">高负载</span>
+                                </div>
+                                <div class="mt-1">
+                                    <div class="flex items-center justify-between text-xs mb-1">
+                                    <span class="text-gray-500 dark:text-gray-400">任务完成度</span>
+                                    <span class="text-gray-700 dark:text-gray-300">75%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-1.5">
+                                        <div class="bg-warning-500 h-1.5 rounded-full" style="width: 75%"></div>
+                                    </div>
+                                </div>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">进行中: 4 · 待处理: 2 · 已完成: 12</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-xl">
+                            <img loading="lazy" src="https://ui-avatars.com/api/?name=Li&background=2563eb&color=fff" class="w-10 h-10 rounded-full" alt="李工程师">
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm font-medium text-gray-800 dark:text-gray-200">李工程师</span>
+                                    <span class="text-xs bg-medical-50 text-medical-600 px-2 py-0.5 rounded-full">正常</span>
+                                </div>
+                                <div class="mt-1">
+                                    <div class="flex items-center justify-between text-xs mb-1">
+                                        <span class="text-gray-500 dark:text-gray-400">任务完成度</span>
+                                        <span class="text-gray-700 dark:text-gray-300">60%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-1.5">
+                                        <div class="bg-medical-500 h-1.5 rounded-full" style="width: 60%"></div>
+                                    </div>
+                                </div>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">进行中: 3 · 待处理: 1 · 已完成: 10</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-xl">
+                            <img loading="lazy" src="https://ui-avatars.com/api/?name=Wang&background=f59e0b&color=fff" class="w-10 h-10 rounded-full" alt="王工程师">
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm font-medium text-gray-800 dark:text-gray-200">王工程师</span>
+                                    <span class="text-xs bg-success-50 text-success-600 px-2 py-0.5 rounded-full">低负载</span>
+                                </div>
+                                <div class="mt-1">
+                                    <div class="flex items-center justify-between text-xs mb-1">
+                                        <span class="text-gray-500 dark:text-gray-400">任务完成度</span>
+                                        <span class="text-gray-700 dark:text-gray-300">85%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-1.5">
+                                        <div class="bg-success-500 h-1.5 rounded-full" style="width: 85%"></div>
+                                    </div>
+                                </div>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">进行中: 1 · 待处理: 0 · 已完成: 9</p>
+                            </div>
+                        </div>
+
+                        <!-- 项目进度 -->
+                        <div class="border-t border-gray-100 dark:border-gray-700 pt-4">
+                            <h4 class="text-sm font-medium text-gray-800 dark:text-gray-200 mb-3">项目整体进度</h4>
+                            <div class="space-y-3">
+                                <div>
+                                    <div class="flex items-center justify-between text-xs mb-1">
+                                        <span class="text-gray-600 dark:text-gray-300">HIS 系统</span>
+                                        <span class="font-medium text-gray-900 dark:text-gray-100">85%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-100 rounded-full h-2">
+                                        <div class="bg-medical-500 h-2 rounded-full" style="width: 85%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex items-center justify-between text-xs mb-1">
+                                        <span class="text-gray-600 dark:text-gray-300">LIS 系统</span>
+                                        <span class="font-medium text-gray-900 dark:text-gray-100">62%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-100 rounded-full h-2">
+                                        <div class="bg-primary-500 h-2 rounded-full" style="width: 62%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex items-center justify-between text-xs mb-1">
+                                        <span class="text-gray-600 dark:text-gray-300">PACS 系统</span>
+                                        <span class="font-medium text-gray-900 dark:text-gray-100">35%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-100 rounded-full h-2">
+                                        <div class="bg-warning-500 h-2 rounded-full" style="width: 35%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 预计完成时间 -->
+                        <div class="border-t border-gray-100 dark:border-gray-700 pt-4">
+                            <h4 class="text-sm font-medium text-gray-800 dark:text-gray-200 mb-3">AI 进度预测</h4>
+                            <div class="p-3 bg-medical-50 border border-medical-100 rounded-xl">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <i class="fas fa-chart-line text-medical-600"></i>
+                                    <span class="text-xs font-medium text-medical-800">基于当前速率预测</span>
+                                </div>
+                                <p class="text-xs text-medical-700">按当前团队效率，预计项目将在 <span class="font-bold">2026-06-15</span> 完成</p>
+                                <p class="text-xs text-medical-600 mt-1">比计划提前 5 天</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="addTaskModal" class="modal fixed inset-0 z-50 items-center justify-center bg-black/50" onclick="if(event.target===this)closeModal('addTaskModal')">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-lg mx-4 shadow-2xl flex flex-col max-h-[90vh]">
+            <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between">
+                <div class="flex items-center gap-3"><div class="w-10 h-10 bg-medical-50 dark:bg-medical-900/30 rounded-xl flex items-center justify-center"><i class="fas fa-plus-circle text-medical-600" aria-hidden="true"></i></div><h3 class="text-lg font-bold text-gray-900 dark:text-gray-100" id="addTaskModalTitle">新建任务</h3></div>
+                <button type="button" aria-label="关闭" class="text-gray-400 hover:text-gray-600 dark:text-gray-400 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:outline-none" data-action="closeModal" data-args="addTaskModal"><i class="fas fa-times text-xs" aria-hidden="true"></i></button>
+            </div>
+            <form id="addTaskForm" class="px-6 py-5 space-y-4" onsubmit="return handleAddTask(event)">
+                <div>
+                    <label for="taskName" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">任务名称 <span class="text-danger-500">*</span></label>
+                    <input type="text" id="taskName" name="taskName" required class="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus" placeholder="请输入任务名称">
+                </div>
+                <div>
+                    <label for="taskDesc" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">任务描述</label>
+                    <textarea id="taskDesc" name="taskDesc" rows="3" class="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus resize-none" placeholder="请输入任务描述"></textarea>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="taskPriority" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">优先级</label>
+                        <select id="taskPriority" name="taskPriority" class="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus">
+                            <option value="高">高</option>
+                            <option value="中" selected>中</option>
+                            <option value="低">低</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="taskAssignee" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">负责人</label>
+                        <select id="taskAssignee" name="taskAssignee" class="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus">
+                            <option value="张工程师">张工程师</option>
+                            <option value="李工程师">李工程师</option>
+                            <option value="王工程师">王工程师</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="taskDeadline" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">截止日期</label>
+                        <input type="date" id="taskDeadline" name="taskDeadline" class="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus">
+                    </div>
+                    <div>
+                        <label for="taskHours" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">预估工时（小时）</label>
+                        <input type="number" id="taskHours" name="taskHours" min="0" step="0.5" class="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus" placeholder="如: 4">
+                    </div>
+                </div>
+                <div class="flex justify-end gap-3 pt-2">
+                    <button type="button" class="px-4 py-2.5 text-sm text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors" data-action="closeModal" data-args="addTaskModal">取消</button>
+                    <button type="submit" id="addTaskSubmit" class="px-4 py-2.5 text-sm text-white bg-medical-600 rounded-xl hover:bg-medical-700 transition-colors shadow-md shadow-medical-600/20">确认创建</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function handleAiAssign(btn) {
+            if (btn.disabled) return;
+            btn.disabled = true;
+            var icon = document.getElementById('aiAssignIcon');
+            var text = document.getElementById('aiAssignText');
+            icon.className = 'fas fa-spinner fa-spin';
+            text.textContent = '分配中...';
+            setTimeout(function() {
+                icon.className = 'fas fa-robot';
+                text.textContent = 'AI 智能分配';
+                btn.disabled = false;
+                showToast('AI已根据团队负载和技能匹配完成智能分配', 'success');
+            }, 2000);
+        }
+
+        function updateBatchBar() {
+            var checkboxes = document.querySelectorAll('.task-checkbox');
+            var checked = document.querySelectorAll('.task-checkbox:checked');
+            var bar = document.getElementById('batchBar');
+            var count = document.getElementById('selectedCount');
+            count.textContent = checked.length;
+            if (checked.length > 0) {
+                bar.classList.remove('hidden');
+                bar.classList.add('flex');
+            } else {
+                bar.classList.add('hidden');
+                bar.classList.remove('flex');
+            }
+        }
+
+        function clearSelection() {
+            document.querySelectorAll('.task-checkbox').forEach(function(cb) { cb.checked = false; });
+            updateBatchBar();
+        }
+
+        function batchComplete() {
+            var checked = document.querySelectorAll('.task-checkbox:checked');
+            checked.forEach(function(cb) {
+                var card = cb.closest('.task-card');
+                if (card) { card.style.opacity = '0.5'; card.style.textDecoration = 'line-through'; }
+            });
+            showToast(checked.length + ' 个任务已批量完成', 'success');
+            clearSelection();
+        }
+
+        function batchReassign() {
+            var checked = document.querySelectorAll('.task-checkbox:checked');
+            if (checked.length === 0) return;
+            showConfirm({
+                title: '批量分配',
+                message: '将选中的 ' + checked.length + ' 个任务分配给张工程师？',
+                confirmText: '确认分配',
+                type: 'info',
+                onConfirm: function() {
+                    checked.forEach(function(cb) {
+                        var card = cb.closest('.task-card');
+                        var assignee = card && card.querySelector('.flex.items-center.gap-4.text-xs.text-gray-400 span');
+                        if (assignee) assignee.innerHTML = '<i class="fas fa-user mr-1"></i>张工程师';
+                    });
+                    showToast(checked.length + ' 个任务已分配给张工程师', 'success');
+                    clearSelection();
+                }
+            });
+        }
+
+        // 批量删除：危险操作，先二次确认
+        function batchDelete() {
+            var checked = document.querySelectorAll('.task-checkbox:checked');
+            if (checked.length === 0) return;
+            showConfirm({
+                title: '批量删除任务',
+                message: '确定删除选中的 ' + checked.length + ' 个任务吗？此操作不可恢复。',
+                confirmText: '确认删除',
+                type: 'danger',
+                onConfirm: function() {
+                    checked.forEach(function(cb) {
+                        var card = cb.closest('.task-card');
+                        if (card) card.remove();
+                    });
+                    showToast(checked.length + ' 个任务已删除', 'success');
+                    updateBatchBar();
+                }
+            });
+        }
+
+        // 创建/编辑统一提交：编辑模式回写卡片，创建模式追加新卡片
+        function handleAddTask(event) {
+            event.preventDefault();
+            var name = document.getElementById('taskName').value.trim();
+            if (!name) {
+                showToast('请填写任务名称', 'warning');
+                document.getElementById('taskName').focus();
+                return false;
+            }
+            var desc = document.getElementById('taskDesc').value.trim();
+            var priority = document.getElementById('taskPriority').value;
+            var assignee = document.getElementById('taskAssignee').value;
+            var deadline = document.getElementById('taskDeadline').value || '2026-05-15';
+            var hours = document.getElementById('taskHours').value || '2';
+
+            if (_editingCard) {
+                // 编辑模式：回写现有卡片
+                _editingCard.querySelector('h4').textContent = name;
+                _editingCard.querySelector('p.text-xs.text-gray-500').textContent = desc || '暂无描述';
+                var meta = _editingCard.querySelectorAll('.flex.items-center.gap-4.text-xs.text-gray-400 span');
+                if (meta[0]) meta[0].innerHTML = '<i class="fas fa-user mr-1"></i>' + MediData.escapeHtml(assignee);
+                if (meta[1]) meta[1].innerHTML = '<i class="fas fa-calendar mr-1"></i>截止：' + deadline;
+                if (meta[2]) meta[2].innerHTML = '<i class="fas fa-clock mr-1"></i>预估 ' + hours + ' 小时';
+                _editingCard.dataset.deadline = deadline;
+                _editingCard.dataset.priority = { '高': '3', '中': '2', '低': '1' }[priority] || '2';
+                showToast('任务已更新', 'success');
+                _editingCard = null;
+            } else {
+                // 创建模式：追加新任务卡
+                var styleMap = {
+                    '高': { cls: 'bg-danger-50 text-danger-600', pri: '3' },
+                    '中': { cls: 'bg-warning-50 text-warning-600', pri: '2' },
+                    '低': { cls: 'bg-gray-100 text-gray-600', pri: '1' }
+                }[priority];
+                var card = document.createElement('div');
+                card.className = 'task-card bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700';
+                card.setAttribute('data-status', 'pending');
+                card.setAttribute('data-priority', styleMap.pri);
+                card.setAttribute('data-deadline', deadline);
+                card.innerHTML =
+                    '<div class="flex items-start gap-4">' +
+                    '<input type="checkbox" aria-label="选择任务" class="task-checkbox mt-1 w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-medical-600 focus:ring-medical-500 cursor-pointer" onchange="updateBatchBar()">' +
+                    '<div class="w-10 h-10 bg-medical-50 rounded-lg flex items-center justify-center flex-shrink-0"><i class="fas fa-tasks text-medical-600"></i></div>' +
+                    '<div class="flex-1">' +
+                    '<div class="flex items-center justify-between mb-1"><h4 class="text-sm font-bold text-gray-900 dark:text-gray-100"></h4>' +
+                    '<div class="flex items-center gap-2"><span class="text-xs ' + styleMap.cls + ' px-2 py-1 rounded-full font-medium">' + priority + '优先级</span><span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">新创建</span></div></div>' +
+                    '<p class="text-xs text-gray-500 mb-2"></p>' +
+                    '<div class="flex items-center gap-4 text-xs text-gray-400">' +
+                    '<span><i class="fas fa-user mr-1"></i>' + MediData.escapeHtml(assignee) + '</span>' +
+                    '<span><i class="fas fa-calendar mr-1"></i>截止：' + deadline + '</span>' +
+                    '<span><i class="fas fa-clock mr-1"></i>预估 ' + hours + ' 小时</span>' +
+                    '<span><i class="fas fa-percentage mr-1"></i>完成度 0%</span></div></div>' +
+                    '<div class="flex items-center gap-2">' +
+                    '<button class="p-2 text-gray-400 hover:text-medical-600 hover:bg-medical-50 rounded-xl transition-colors" onclick="editTask(this)" title="编辑"><i class="fas fa-edit"></i></button>' +
+                    '<button class="p-2 text-gray-400 hover:text-success-600 hover:bg-success-50 rounded-xl transition-colors" onclick="completeTask(this)" title="完成"><i class="fas fa-check"></i></button>' +
+                    '</div></div>';
+                card.querySelector('h4').textContent = name;
+                card.querySelector('p.text-xs.text-gray-500').textContent = desc || '暂无描述';
+                document.getElementById('taskList').prepend(card);
+                showToast('任务创建成功', 'success');
+            }
+            closeModal('addTaskModal');
+            document.getElementById('addTaskForm').reset();
+            return false;
+        }
+
+        function completeTask(btn) {
+            var card = btn.closest('.task-card');
+            if (card) {
+                card.style.opacity = '0.5';
+                card.style.textDecoration = 'line-through';
+            }
+            showToast('任务已完成', 'success');
+        }
+
+        // 筛选：样式切换（圆角固定 rounded-xl，与初始态一致）+ 真实过滤任务卡
+        var FILTER_NAMES = { all: '全部', progress: '进行中', pending: '待处理', done: '已完成', overdue: '已逾期' };
+        function switchFilter(btn) {
+            var group = document.getElementById('filterBtnGroup');
+            if (!group) return;
+            group.querySelectorAll('.filter-btn').forEach(function(b) {
+                b.className = 'filter-btn px-3 py-1.5 text-xs text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-xl transition-colors';
+                b.setAttribute('aria-pressed', 'false');
+            });
+            btn.className = 'filter-btn px-3 py-1.5 text-xs bg-medical-50 text-medical-700 rounded-xl font-medium';
+            btn.setAttribute('aria-pressed', 'true');
+
+            var filter = btn.getAttribute('data-filter') || 'all';
+            var visible = 0;
+            document.querySelectorAll('#taskList .task-card').forEach(function(card) {
+                var statuses = (card.getAttribute('data-status') || '').split(/\s+/);
+                var show = filter === 'all' || statuses.indexOf(filter) !== -1;
+                card.style.display = show ? '' : 'none';
+                if (show) visible++;
+            });
+            if (filter !== 'all') {
+                showToast('筛选「' + FILTER_NAMES[filter] + '」：共 ' + visible + ' 个任务', 'info');
+            }
+        }
+
+        // 排序：按优先级权重 / 截止日期 / 创建时间（DOM 顺序即创建顺序）
+        function sortTasks(sel) {
+            var list = document.getElementById('taskList');
+            var cards = Array.prototype.slice.call(list.querySelectorAll('.task-card'));
+            var mode = sel.value;
+            cards.sort(function(a, b) {
+                if (mode === 'priority') {
+                    return parseInt(b.dataset.priority || '0', 10) - parseInt(a.dataset.priority || '0', 10);
+                }
+                if (mode === 'deadline') {
+                    return (a.dataset.deadline || '9999').localeCompare(b.dataset.deadline || '9999');
+                }
+                return 0; // created：保持原顺序
+            });
+            cards.forEach(function(c) { list.appendChild(c); });
+            showToast('已按' + sel.options[sel.selectedIndex].text.replace('排序', '') + '排序', 'info');
+        }
+
+        // 编辑任务：从卡片回填表单，模态框切换为编辑模式
+        var _editingCard = null;
+        function editTask(btn) {
+            var card = btn.closest('.task-card');
+            if (!card) return;
+            _editingCard = card;
+            var title = card.querySelector('h4').textContent.trim();
+            var desc = card.querySelector('p.text-xs.text-gray-500').textContent.trim();
+            var meta = card.querySelectorAll('.flex.items-center.gap-4.text-xs.text-gray-400 span');
+            var assignee = meta[0] ? meta[0].textContent.trim() : '';
+            var deadline = meta[1] ? meta[1].textContent.replace('截止：', '').trim() : '';
+            var hours = meta[2] ? meta[2].textContent.replace('预估', '').replace('小时', '').trim() : '';
+            var priorityText = (card.querySelector('.font-medium') || {}).textContent || '中优先级';
+            document.getElementById('taskName').value = title;
+            document.getElementById('taskDesc').value = desc;
+            document.getElementById('taskPriority').value = priorityText.charAt(0);
+            document.getElementById('taskAssignee').value = assignee === '待分配' ? '张工程师' : assignee;
+            document.getElementById('taskDeadline').value = deadline;
+            document.getElementById('taskHours').value = hours;
+            document.getElementById('addTaskModalTitle').textContent = '编辑任务';
+            document.getElementById('addTaskSubmit').textContent = '保存修改';
+            openModal('addTaskModal');
+        }
+
+        // 新建模式入口：重置表单与标题
+        function openAddTaskModal() {
+            _editingCard = null;
+            document.getElementById('addTaskForm').reset();
+            document.getElementById('addTaskModalTitle').textContent = '新建任务';
+            document.getElementById('addTaskSubmit').textContent = '确认创建';
+            openModal('addTaskModal');
+        }
+    </script>
+</body>
+</html>

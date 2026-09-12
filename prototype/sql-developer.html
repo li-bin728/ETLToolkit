@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0d9488">
+    <meta name="description" content="SQL 开发 - 智能 SQL 编辑、执行与结果导出，支持对象树浏览">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="SQL 开发 - MediData AI">
+    <meta property="og:description" content="智能 SQL 编辑、执行与结果导出">
+    <title>SQL开发 - MediData AI</title>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="stylesheet" href="components/tailwind.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="components/common.css">
+    <script src="components/common.js" defer></script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+    <a href="#main-content" class="skip-link">跳转到主内容</a>
+    <div class="flex h-screen overflow-hidden">
+        <!-- 侧边栏 -->
+        <aside id="sidebar" class="w-64 gradient-bg text-white flex flex-col flex-shrink-0"></aside>
+
+        <!-- 主内容区 -->
+        <main id="main-content" class="flex-1 flex flex-col overflow-hidden" role="main">
+            <!-- 顶部导航 -->
+            <header id="header" class="glass-effect border-b border-gray-200 dark:border-gray-700 px-6 py-4 flex items-center justify-between flex-shrink-0 z-10"></header>
+
+            <!-- 面包屑 -->
+            <div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-2">
+                <nav id="breadcrumb" class="breadcrumb"></nav>
+            </div>
+
+            <!-- 页面内容 -->
+            <div class="flex-1 overflow-hidden flex flex-col">
+                <!-- 页面标题 -->
+                <div class="px-6 py-3 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between flex-shrink-0">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 bg-medical-50 dark:bg-medical-900/30 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-code text-medical-600"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-lg font-bold text-gray-900 dark:text-gray-100">SQL 开发</h2>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">智能 SQL 编辑、执行与结果导出</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="px-3 py-1.5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-xs font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors flex items-center gap-1.5" data-action="showToast" data-args="已加载查询历史（共 12 条）|info">
+                            <i class="fas fa-history"></i> 执行历史
+                        </button>
+                        <button class="px-3 py-1.5 bg-medical-600 text-white rounded-xl text-xs font-medium hover:bg-medical-700 transition-colors flex items-center gap-1.5 shadow-md shadow-medical-600/20" data-action="showToast" data-args="已新建查询标签页|success">
+                            <i class="fas fa-plus"></i> 新建查询
+                        </button>
+                    </div>
+                </div>
+                <div class="flex-1 overflow-hidden flex">
+                <!-- 左侧：数据库对象树 -->
+                <div class="w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 overflow-y-auto scrollbar-thin flex-shrink-0">
+                    <div class="p-4 border-b border-gray-100 dark:border-gray-700">
+                        <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-3">数据库对象</h3>
+                        <div class="relative">
+                            <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                            <input id="treeSearch" type="text" placeholder="搜索表、视图..." 
+                                class="w-full pl-8 pr-3 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-lg text-xs form-control-focus"
+                                oninput="filterTree(this.value)">
+                        </div>
+                    </div>
+                    <div class="p-2" id="objectTree">
+                        <div class="tree-item active flex items-center gap-2 px-3 py-2 rounded-lg mb-1" data-name="HIS_主数据库">
+                            <i class="fas fa-database text-medical-500 w-4"></i>
+                            <span class="text-sm font-medium text-gray-800 dark:text-gray-200">HIS_主数据库</span>
+                        </div>
+                        <div class="ml-4 space-y-1" id="hisTables">
+                            <div class="tree-item table-item flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700" data-name="PAT_PATIENT_INFO" onclick="onTreeItemClick(this)">
+                                <i class="fas fa-table text-gray-400 w-4"></i>
+                                <span class="text-sm text-gray-700 dark:text-gray-300">PAT_PATIENT_INFO</span>
+                            </div>
+                            <div class="tree-item table-item flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700" data-name="HIS_ORDER" onclick="onTreeItemClick(this)">
+                                <i class="fas fa-table text-gray-400 w-4"></i>
+                                <span class="text-sm text-gray-700 dark:text-gray-300">HIS_ORDER</span>
+                            </div>
+                            <div class="tree-item table-item flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700" data-name="HIS_PRESCRIPTION" onclick="onTreeItemClick(this)">
+                                <i class="fas fa-table text-gray-400 w-4"></i>
+                                <span class="text-sm text-gray-700 dark:text-gray-300">HIS_PRESCRIPTION</span>
+                            </div>
+                        </div>
+                        <div class="tree-item flex items-center gap-2 px-3 py-2 rounded-lg mb-1 mt-2" data-name="LIS_检验数据库">
+                            <i class="fas fa-database text-gray-400 w-4"></i>
+                            <span class="text-sm font-medium text-gray-800 dark:text-gray-200">LIS_检验数据库</span>
+                        </div>
+                        <div class="tree-item flex items-center gap-2 px-3 py-2 rounded-lg mb-1 mt-2" data-name="PACS_影像数据库">
+                            <i class="fas fa-database text-gray-400 w-4"></i>
+                            <span class="text-sm font-medium text-gray-800 dark:text-gray-200">PACS_影像数据库</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 中间：SQL编辑器 -->
+                <div class="flex-1 flex flex-col overflow-hidden">
+                    <!-- 编辑器工具栏 -->
+                    <div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 py-2 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs bg-medical-50 text-medical-700 px-2 py-1 rounded">Oracle</span>
+                            <span class="text-xs text-gray-500 dark:text-gray-400">HIS_主数据库</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button class="text-xs bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-700 px-3 py-1.5 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center gap-1" onclick="openNl2SqlModal()">
+                                <i class="fas fa-wand-magic-sparkles text-medical-600"></i> 自然语言转SQL
+                            </button>
+                            <button id="formatBtn" class="text-xs bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-700 px-3 py-1.5 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center gap-1" onclick="formatSQL()">
+                                <i class="fas fa-align-left text-gray-400"></i> 格式化
+                            </button>
+                            <button class="text-xs bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-700 px-3 py-1.5 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center gap-1" data-action="showToast" data-args="已保存到草稿|success">
+                                <i class="fas fa-save text-gray-400"></i> 保存
+                            </button>
+                            <button id="executeBtn" class="text-xs bg-medical-600 text-white px-3 py-1.5 rounded-xl hover:bg-medical-700 transition-colors flex items-center gap-1 shadow-md shadow-medical-600/20" onclick="executeSQL()">
+                                <i class="fas fa-play"></i> 执行
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 编辑器外壳 -->
+                    <div class="editor-chrome">
+                        <div class="editor-dots" aria-hidden="true">
+                            <i class="d-red"></i><i class="d-yellow"></i><i class="d-green"></i>
+                        </div>
+                        <span class="editor-tab"><i class="fas fa-file-code text-medical-500"></i> patient_query.sql</span>
+                        <span class="text-xs text-gray-500 dark:text-gray-400 ml-auto">Oracle · UTF-8</span>
+                    </div>
+                    <!-- SQL代码编辑器 -->
+                    <div class="flex-1 editor-body overflow-auto">
+                        <div class="flex">
+                            <!-- 行号 -->
+                            <div id="lineNumbers" class="bg-gray-800 text-gray-500 text-right py-4 px-3 select-none text-sm font-mono leading-6">
+                                <div>1</div>
+                                <div>2</div>
+                                <div>3</div>
+                                <div>4</div>
+                                <div>5</div>
+                                <div>6</div>
+                                <div>7</div>
+                                <div>8</div>
+                                <div>9</div>
+                                <div>10</div>
+                            </div>
+                            <!-- 代码区（可编辑：输入同步行号，失焦重新高亮，粘贴自动转纯文本） -->
+                            <div id="sqlCode" contenteditable="true" spellcheck="false" role="textbox" aria-multiline="true" aria-label="SQL 编辑器" class="flex-1 py-4 px-4 text-sm font-mono leading-6 sql-editor focus:outline-none">
+                                <div><span class="text-pink-400 font-bold">SELECT</span> </div>
+                                <div><span class="text-gray-100">    p.PATIENT_ID,</span></div>
+                                <div><span class="text-gray-100">    p.NAME,</span></div>
+                                <div><span class="text-gray-100">    p.GENDER,</span></div>
+                                <div><span class="text-gray-100">    p.BIRTH_DATE,</span></div>
+                                <div><span class="text-gray-100">    </span><span class="text-amber-400 font-bold">COUNT</span><span class="text-gray-100">(v.VISIT_ID) </span><span class="text-pink-400 font-bold">AS</span><span class="text-gray-100"> visit_count</span></div>
+                                <div><span class="text-pink-400 font-bold">FROM</span><span class="text-gray-100"> PAT_PATIENT_INFO p</span></div>
+                                <div><span class="text-pink-400 font-bold">LEFT JOIN</span><span class="text-gray-100"> PAT_VISIT_INFO v </span><span class="text-pink-400 font-bold">ON</span><span class="text-gray-100"> p.PATIENT_ID = v.PATIENT_ID</span></div>
+                                <div><span class="text-pink-400 font-bold">WHERE</span><span class="text-gray-100"> p.CREATE_TIME >= </span><span class="text-green-400 font-bold">'2026-01-01'</span></div>
+                                <div><span class="text-pink-400 font-bold">GROUP BY</span><span class="text-gray-100"> p.PATIENT_ID, p.NAME, p.GENDER, p.BIRTH_DATE;</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 结果面板 -->
+                    <div class="h-64 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 overflow-auto">
+                        <div class="px-4 py-2 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between">
+                            <div class="flex items-center gap-4">
+                                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">查询结果</span>
+                                <span id="resultInfo" class="text-xs text-gray-500 dark:text-gray-400">共 1,247 条记录 · 执行时间 0.23s</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button class="text-xs text-medical-600 hover:text-medical-700 px-2 py-1 rounded-xl hover:bg-medical-50 transition-colors" onclick="exportResult()">
+                                    <i class="fas fa-download mr-1"></i>导出
+                                </button>
+                            </div>
+                        </div>
+                        <table class="w-full" aria-label="查询结果">
+                            <thead class="sticky-head bg-gray-50 dark:bg-gray-900">
+                                <tr>
+                                    <th scope="col" class="px-4 py-2 text-left text-xs font-semibold text-gray-500 dark:text-gray-400">PATIENT_ID</th>
+                                    <th scope="col" class="px-4 py-2 text-left text-xs font-semibold text-gray-500 dark:text-gray-400">NAME</th>
+                                    <th scope="col" class="px-4 py-2 text-left text-xs font-semibold text-gray-500 dark:text-gray-400">GENDER</th>
+                                    <th scope="col" class="px-4 py-2 text-left text-xs font-semibold text-gray-500 dark:text-gray-400">BIRTH_DATE</th>
+                                    <th scope="col" class="px-4 py-2 text-left text-xs font-semibold text-gray-500 dark:text-gray-400">VISIT_COUNT</th>
+                                </tr>
+                            </thead>
+                            <tbody id="resultBody" class="divide-y divide-gray-100 dark:divide-gray-700">
+                                <tr class="table-row-hover">
+                                    <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">P20240001</td>
+                                    <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">张三</td>
+                                    <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">男</td>
+                                    <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">1985-03-15</td>
+                                    <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">3</td>
+                                </tr>
+                                <tr class="table-row-hover">
+                                    <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">P20240002</td>
+                                    <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">李四</td>
+                                    <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">女</td>
+                                    <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">1990-07-22</td>
+                                    <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">1</td>
+                                </tr>
+                                <tr class="table-row-hover">
+                                    <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">P20240003</td>
+                                    <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">王五</td>
+                                    <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">男</td>
+                                    <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">1978-11-08</td>
+                                    <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">5</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 右侧：AI辅助面板 -->
+                <div class="w-80 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 overflow-y-auto scrollbar-thin flex-shrink-0">
+                    <div class="p-4 border-b border-gray-100 dark:border-gray-700">
+                        <div class="flex items-center gap-2 mb-1">
+                            <i class="fas fa-robot text-medical-600"></i>
+                            <h3 class="font-semibold text-gray-900 dark:text-gray-100">AI SQL助手</h3>
+                        </div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">智能优化与建议</p>
+                    </div>
+                    <div class="p-4 space-y-4">
+                        <button id="aiOptBtn" class="w-full py-2.5 bg-medical-600 text-white rounded-xl text-sm font-medium hover:bg-medical-700 transition-colors flex items-center justify-center gap-2" onclick="aiOptimizeSQL()">
+                            <i class="fas fa-magic"></i> <span>AI优化SQL</span>
+                        </button>
+
+                        <div id="aiSuggestions" class="space-y-3">
+                            <div class="suggestion-card s-success">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <i class="fas fa-check-circle text-success-600"></i>
+                                    <span class="text-sm font-medium text-success-800">索引建议</span>
+                                </div>
+                                <p class="text-xs text-success-700">建议在 PATIENT_ID 列上创建索引，可提升查询性能约 40%</p>
+                            </div>
+                            <div class="suggestion-card s-warning">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <i class="fas fa-exclamation-triangle text-warning-600"></i>
+                                    <span class="text-sm font-medium text-warning-800">性能警告</span>
+                                </div>
+                                <p class="text-xs text-warning-700">LEFT JOIN 可能导致大量NULL值，建议评估是否需要</p>
+                            </div>
+                            <div class="suggestion-card s-info">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <i class="fas fa-lightbulb text-primary-600"></i>
+                                    <span class="text-sm font-medium text-primary-800">优化建议</span>
+                                </div>
+                                <p class="text-xs text-primary-700">考虑使用窗口函数替代 GROUP BY，简化查询逻辑</p>
+                            </div>
+                        </div>
+
+                        <div class="border-t border-gray-100 dark:border-gray-700 pt-4">
+                            <h4 class="text-sm font-medium text-gray-800 dark:text-gray-200 mb-2">执行计划预估</h4>
+                            <div class="space-y-2">
+                                <div class="flex items-center justify-between text-xs">
+                                    <span class="text-gray-500 dark:text-gray-400">全表扫描</span>
+                                    <span class="text-warning-600">是</span>
+                                </div>
+                                <div class="flex items-center justify-between text-xs">
+                                    <span class="text-gray-500 dark:text-gray-400">预估行数</span>
+                                    <span class="text-gray-700 dark:text-gray-300">12,450</span>
+                                </div>
+                                <div class="flex items-center justify-between text-xs">
+                                    <span class="text-gray-500 dark:text-gray-400">预估时间</span>
+                                    <span class="text-gray-700 dark:text-gray-300">0.23s</span>
+                                </div>
+                                <div class="flex items-center justify-between text-xs">
+                                    <span class="text-gray-500 dark:text-gray-400">成本评分</span>
+                                    <span class="text-success-600">良好</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="exportModal" class="modal fixed inset-0 z-50 items-center justify-center bg-black/40" onclick="if(event.target===this)closeExportModal()">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-6 w-80" role="dialog" aria-modal="true" aria-labelledby="exportModalTitle">
+            <h3 id="exportModalTitle" class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">导出结果</h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">请选择导出格式：</p>
+            <div class="space-y-2">
+                <button onclick="doExport('CSV')" class="w-full py-2.5 bg-medical-50 text-medical-700 rounded-xl text-sm font-medium hover:bg-medical-100 transition-colors flex items-center justify-center gap-2">
+                    <i class="fas fa-file-csv"></i> CSV
+                </button>
+                <button onclick="doExport('Excel')" class="w-full py-2.5 bg-green-50 text-green-700 rounded-xl text-sm font-medium hover:bg-green-100 transition-colors flex items-center justify-center gap-2">
+                    <i class="fas fa-file-excel"></i> Excel
+                </button>
+                <button onclick="doExport('JSON')" class="w-full py-2.5 bg-blue-50 text-blue-700 rounded-xl text-sm font-medium hover:bg-blue-100 transition-colors flex items-center justify-center gap-2">
+                    <i class="fas fa-file-code"></i> JSON
+                </button>
+            </div>
+            <button onclick="closeExportModal()" class="w-full mt-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-xl text-sm hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">取消</button>
+        </div>
+    </div>
+
+    <!-- 自然语言转SQL模态框（基于平台标准结构生成） -->
+    <div id="nl2sqlModal" class="modal fixed inset-0 z-50 items-center justify-center bg-black/50">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-2xl mx-4 shadow-2xl flex flex-col max-h-[90vh]">
+            <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between flex-shrink-0">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-medical-500 to-medical-700 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-wand-magic-sparkles text-white" aria-hidden="true"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">自然语言转 SQL</h3>
+                        <p class="text-xs text-gray-400">AI 基于平台标准结构（元数据 + 标准库）生成，防全表扫描</p>
+                    </div>
+                </div>
+                <button type="button" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:outline-none" data-action="closeModal" data-args="nl2sqlModal" aria-label="关闭"><i class="fas fa-times" aria-hidden="true"></i></button>
+            </div>
+            <div class="px-6 py-5 space-y-4 flex-1 overflow-y-auto scrollbar-thin">
+                <div>
+                    <label for="nl2sqlInput" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">用自然语言描述查询需求 <span class="text-danger-500">*</span></label>
+                    <textarea id="nl2sqlInput" rows="3" placeholder="例如：统计 2026 年以来每位患者的就诊次数，只看就诊大于等于 2 次的患者，按次数倒序" class="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm form-control-focus resize-none">统计2026年以来每位患者的就诊次数，只看就诊≥2次的患者，按次数倒序取前20名</textarea>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="nl2sqlTableSelect" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">目标标准表</label>
+                        <select id="nl2sqlTableSelect" class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus">
+                            <option value="patient">PAT_PATIENT_INFO（患者基本信息）</option>
+                            <option value="visit">PAT_VISIT_INFO（患者就诊信息）</option>
+                            <option value="order">HIS_ORDER（医嘱）</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="nl2sqlDialectSelect" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">SQL 方言</label>
+                        <select id="nl2sqlDialectSelect" class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm form-control-focus">
+                            <option>Oracle</option><option>MySQL</option><option>PostgreSQL</option><option>SQL Server</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- 生成进度 -->
+                <div id="nl2sqlProgress" class="hidden">
+                    <div class="rounded-xl bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-700 p-3 space-y-1.5 text-xs" aria-live="polite">
+                        <p id="nl2sqlStep1" style="color:var(--text-secondary)"><i class="fas fa-circle-notch fa-spin text-medical-500 mr-1.5"></i>解析自然语言语义…</p>
+                        <p id="nl2sqlStep2" class="text-gray-300"><i class="far fa-circle mr-1.5"></i>匹配平台元数据与标准表结构…</p>
+                        <p id="nl2sqlStep3" class="text-gray-300"><i class="far fa-circle mr-1.5"></i>按 Oracle 方言生成 SQL 并校验安全性…</p>
+                    </div>
+                </div>
+                <!-- 生成结果 -->
+                <div id="nl2sqlResult" class="hidden">
+                    <div class="flex items-center justify-between mb-1.5">
+                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">生成结果 <span class="text-[10px] bg-success-50 text-success-700 px-1.5 py-0.5 rounded-full ml-1">已通过安全校验</span></span>
+                        <span class="text-xs text-gray-400">置信度 93% · 引用 2 张标准表 · 命中 LIMIT 保护</span>
+                    </div>
+                    <pre id="nl2sqlCode" class="ddl-code text-xs overflow-x-auto" style="white-space:pre;max-height:220px"></pre>
+                    <p class="text-xs text-gray-400 mt-1.5"><i class="fas fa-shield-halved text-medical-500 mr-1"></i>已自动附加 ROWNUM 结果集上限；如需导出请改在结果面板操作。</p>
+                </div>
+            </div>
+            <div class="px-6 py-4 border-t border-gray-100 dark:border-gray-700 flex justify-end gap-3 flex-shrink-0">
+                <button type="button" class="px-4 py-2.5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors" data-action="closeModal" data-args="nl2sqlModal">取消</button>
+                <button id="nl2sqlGenBtn" type="button" class="px-4 py-2.5 bg-medical-600 text-white rounded-xl text-sm font-medium hover:bg-medical-700 transition-colors flex items-center gap-2" onclick="generateNL2SQL()">
+                    <i class="fas fa-wand-magic-sparkles"></i> AI 生成
+                </button>
+                <button id="nl2sqlInsertBtn" type="button" class="hidden px-4 py-2.5 bg-primary-600 text-white rounded-xl text-sm font-medium hover:bg-primary-700 transition-colors flex items-center gap-2" onclick="insertNL2SQL()">
+                    <i class="fas fa-arrow-right-to-bracket"></i> 插入编辑器
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    const SQL_KEYWORDS = ['SELECT','FROM','WHERE','AND','OR','NOT','IN','EXISTS','LEFT','RIGHT','INNER','OUTER','JOIN','ON','GROUP','BY','ORDER','HAVING','INSERT','UPDATE','DELETE','CREATE','ALTER','DROP','AS','COUNT','SUM','AVG','MAX','MIN','DISTINCT','UNION','ALL','SET','INTO','VALUES','TABLE','INDEX','LIKE','BETWEEN','IS','NULL','LIMIT','OFFSET','CASE','WHEN','THEN','ELSE','END'];
+
+    function getSQLText() {
+        const el = document.getElementById('sqlCode');
+        return el.innerText || el.textContent;
+    }
+
+    // ===== 编辑器可编辑行为 =====
+    (function initEditableSql() {
+        const el = document.getElementById('sqlCode');
+        if (!el) return;
+        // 输入时同步行号（不重排高亮，避免光标丢失）
+        el.addEventListener('input', function() {
+            const lines = el.innerText.replace(/\n$/, '').split('\n').length;
+            updateLineNumbers(lines);
+        });
+        // 粘贴强制纯文本，避免带入富文本样式
+        el.addEventListener('paste', function(e) {
+            e.preventDefault();
+            const text = (e.clipboardData || window.clipboardData).getData('text/plain');
+            document.execCommand('insertText', false, text);
+        });
+        // 失焦后重新语法高亮
+        el.addEventListener('blur', function() {
+            setSQLText(getSQLText());
+        });
+    })();
+
+    function setSQLText(sql) {
+        const el = document.getElementById('sqlCode');
+        const lines = sql.split('\n');
+        el.innerHTML = lines.map(line => {
+            let formatted = line.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+            formatted = formatted.replace(/'([^']*)'/g, '<span class="text-green-400 font-bold">\'$1\'</span>');
+            const kwRegex = new RegExp('\\b(' + SQL_KEYWORDS.join('|') + ')\\b', 'gi');
+            formatted = formatted.replace(kwRegex, '<span class="text-pink-400 font-bold">$1</span>');
+            if (!formatted.startsWith('<span')) {
+                formatted = '<span class="text-gray-100">' + formatted + '</span>';
+            }
+            return '<div>' + formatted + '</div>';
+        }).join('');
+        updateLineNumbers(lines.length);
+    }
+
+    function updateLineNumbers(count) {
+        const el = document.getElementById('lineNumbers');
+        el.innerHTML = Array.from({length: count}, (_, i) => `<div>${i + 1}</div>`).join('');
+    }
+
+    function formatSQL() {
+        let sql = getSQLText();
+        sql = sql.replace(/\s+/g, ' ').trim();
+        const breakBefore = ['SELECT','FROM','WHERE','LEFT JOIN','RIGHT JOIN','INNER JOIN','GROUP BY','ORDER BY','HAVING','UNION'];
+        breakBefore.forEach(kw => {
+            const re = new RegExp(' ' + kw + ' ', 'gi');
+            sql = sql.replace(re, '\n' + kw + ' ');
+        });
+        sql = sql.replace(/ AND /gi, '\n    AND ');
+        sql = sql.replace(/ OR /gi, '\n    OR ');
+        const lines = sql.split('\n');
+        const formatted = lines.map((line, i) => {
+            line = line.trim();
+            if (i === 0) return line;
+            const upper = line.toUpperCase();
+            if (['SELECT','FROM','WHERE','LEFT JOIN','RIGHT JOIN','INNER JOIN','GROUP BY','ORDER BY','HAVING'].some(k => upper.startsWith(k))) return line;
+            return '    ' + line;
+        }).join('\n');
+        const upperFormatted = formatted.replace(/\b(SELECT|FROM|WHERE|AND|OR|NOT|IN|EXISTS|LEFT|RIGHT|INNER|OUTER|JOIN|ON|GROUP|BY|ORDER|HAVING|AS|COUNT|SUM|AVG|MAX|MIN|DISTINCT|UNION|ALL|IS|NULL|LIKE|BETWEEN)\b/gi, m => m.toUpperCase());
+        setSQLText(upperFormatted);
+        showToast('SQL格式化完成', 'success');
+    }
+
+    function onTreeItemClick(item) {
+        document.querySelectorAll('.tree-item').forEach(el => el.classList.remove('active'));
+        item.classList.add('active');
+        const tableName = item.getAttribute('data-name');
+        setSQLText('SELECT *\nFROM ' + tableName + ';');
+    }
+
+    // ===== 自然语言转SQL（基于平台标准结构） =====
+    let _nl2sqlGenerated = '';
+
+    function openNl2SqlModal() {
+        document.getElementById('nl2sqlProgress').classList.add('hidden');
+        document.getElementById('nl2sqlResult').classList.add('hidden');
+        document.getElementById('nl2sqlInsertBtn').classList.add('hidden');
+        openModal('nl2sqlModal');
+    }
+
+    const NL2SQL_TEMPLATES = {
+        patient: `SELECT p.PATIENT_ID,\n       p.PATIENT_NAME,\n       p.GENDER,\n       p.BIRTH_DATE\nFROM PAT_PATIENT_INFO p\nWHERE p.CREATE_TIME >= DATE '2026-01-01'\n  AND p.PATIENT_ID IS NOT NULL\nFETCH FIRST 100 ROWS ONLY;`,
+        visit: `SELECT v.PATIENT_ID,\n       COUNT(v.VISIT_ID) AS visit_count\nFROM PAT_VISIT_INFO v\nWHERE v.VISIT_TIME >= DATE '2026-01-01'\nGROUP BY v.PATIENT_ID\nHAVING COUNT(v.VISIT_ID) >= 2\nORDER BY visit_count DESC\nFETCH FIRST 20 ROWS ONLY;`,
+        order: `SELECT o.PATIENT_ID,\n       o.ORDER_TYPE,\n       COUNT(o.ORDER_ID) AS order_count,\n       SUM(o.AMOUNT)     AS total_amount\nFROM HIS_ORDER o\nWHERE o.ORDER_TIME >= DATE '2026-01-01'\n  AND o.AMOUNT >= 0\nGROUP BY o.PATIENT_ID, o.ORDER_TYPE\nORDER BY total_amount DESC\nFETCH FIRST 20 ROWS ONLY;`
+    };
+
+    function generateNL2SQL() {
+        const desc = document.getElementById('nl2sqlInput').value.trim();
+        if (!desc) {
+            showToast('请先描述查询需求', 'warning');
+            return;
+        }
+        const btn = document.getElementById('nl2sqlGenBtn');
+        MediData.btnLoading.show(btn, 'AI 生成中...');
+        const progress = document.getElementById('nl2sqlProgress');
+        const s1 = document.getElementById('nl2sqlStep1');
+        const s2 = document.getElementById('nl2sqlStep2');
+        const s3 = document.getElementById('nl2sqlStep3');
+        progress.classList.remove('hidden');
+        [s1, s2, s3].forEach(el => { el.className = ''; el.style.color = 'var(--text-secondary)'; });
+        s1.innerHTML = '<i class="fas fa-circle-notch fa-spin text-medical-500 mr-1.5"></i>解析自然语言语义…';
+        s2.innerHTML = '<i class="far fa-circle mr-1.5"></i>匹配平台元数据与标准表结构…';
+        s3.innerHTML = '<i class="far fa-circle mr-1.5"></i>按 Oracle 方言生成 SQL 并校验安全性…';
+
+        setTimeout(() => { s1.innerHTML = '<i class="fas fa-circle-check text-success-500 mr-1.5"></i>解析自然语言语义：统计指标=就诊次数，过滤=时间+次数，排序=倒序'; }, 600);
+        setTimeout(() => {
+            s2.innerHTML = '<i class="fas fa-circle-check text-success-500 mr-1.5"></i>匹配标准表：PAT_PATIENT_INFO / PAT_VISIT_INFO（关联键 PATIENT_ID）';
+            s2.style.color = 'var(--text-secondary)';
+        }, 1300);
+        setTimeout(() => {
+            s3.innerHTML = '<i class="fas fa-circle-check text-success-500 mr-1.5"></i>生成完成：已附加行数上限与空值保护';
+            MediData.btnLoading.hide(btn);
+            _nl2sqlGenerated = NL2SQL_TEMPLATES[document.getElementById('nl2sqlTableSelect').value] || NL2SQL_TEMPLATES.visit;
+            document.getElementById('nl2sqlCode').textContent = _nl2sqlGenerated;
+            document.getElementById('nl2sqlResult').classList.remove('hidden');
+            document.getElementById('nl2sqlInsertBtn').classList.remove('hidden');
+            showToast('AI 已基于平台标准结构生成 SQL', 'success');
+        }, 2100);
+    }
+
+    function insertNL2SQL() {
+        if (!_nl2sqlGenerated) return;
+        setSQLText(_nl2sqlGenerated);
+        closeModal('nl2sqlModal');
+        showToast('SQL 已插入编辑器，可直接执行或继续修改', 'success');
+    }
+
+    function aiOptimizeSQL() {
+        const btn = document.getElementById('aiOptBtn');
+        const originalHTML = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>AI分析中...</span>';
+        btn.disabled = true;
+        setTimeout(() => {
+            btn.innerHTML = originalHTML;
+            btn.disabled = false;
+            const container = document.getElementById('aiSuggestions');
+            const card = document.createElement('div');
+            card.className = 'bg-purple-50 rounded-lg p-3 border border-purple-100';
+            card.innerHTML = '<div class="flex items-center gap-2 mb-1"><i class="fas fa-robot text-purple-600"></i><span class="text-sm font-medium text-purple-800">查询重写建议</span></div><p class="text-xs text-purple-700">使用EXISTS替代IN子查询，可提升性能约25%</p>';
+            container.insertBefore(card, container.firstChild);
+            showToast('AI优化分析完成', 'success');
+        }, 2000);
+    }
+
+    // 演示用结果数据集：执行后随机抽样刷新结果表格
+    const DEMO_RESULT_ROWS = [
+        ['P20240001','张三','男','1985-03-15','3'],
+        ['P20240002','李四','女','1990-07-22','1'],
+        ['P20240003','王五','男','1978-11-08','5'],
+        ['P20240004','赵六','女','1995-01-30','2'],
+        ['P20240005','孙七','男','1988-06-17','4'],
+        ['P20240006','周八','女','1992-09-05','1']
+    ];
+
+    function executeSQL() {
+        const btn = document.getElementById('executeBtn');
+        const sql = getSQLText().trim();
+        if (!sql) { showToast('请输入要执行的 SQL', 'warning'); return; }
+        const originalHTML = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 执行中...';
+        btn.disabled = true;
+        btn.classList.add('opacity-60', 'cursor-not-allowed');
+        setTimeout(() => {
+            btn.innerHTML = originalHTML;
+            btn.disabled = false;
+            btn.classList.remove('opacity-60', 'cursor-not-allowed');
+            // 刷新结果表：随机抽取 3-6 行演示数据
+            const shuffled = DEMO_RESULT_ROWS.slice().sort(() => Math.random() - 0.5);
+            const rows = shuffled.slice(0, 3 + Math.floor(Math.random() * 4));
+            const tbody = document.getElementById('resultBody');
+            if (tbody) {
+                tbody.innerHTML = rows.map(r =>
+                    '<tr class="table-row-hover">' + r.map(c =>
+                        '<td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">' + c + '</td>'
+                    ).join('') + '</tr>'
+                ).join('');
+            }
+            const total = Math.floor(Math.random() * 9000) + 100;
+            const time = (Math.random() * 2 + 0.1).toFixed(2);
+            document.getElementById('resultInfo').textContent = '显示 ' + rows.length + ' 条 · 共 ' + total.toLocaleString() + ' 条记录 · 执行时间 ' + time + 's';
+            showToast('SQL执行成功，返回 ' + rows.length + ' 行预览', 'success');
+        }, 1500);
+    }
+
+    function exportResult() {
+        openModal('exportModal');
+    }
+
+    function closeExportModal() {
+        closeModal('exportModal');
+    }
+
+    function doExport(format) {
+        closeExportModal();
+        showToast('结果已导出为 ' + format + ' 格式', 'success');
+    }
+
+    function filterTree(keyword) {
+        const items = document.querySelectorAll('#objectTree .tree-item');
+        const kw = keyword.trim().toLowerCase();
+        items.forEach(item => {
+            const name = (item.getAttribute('data-name') || '').toLowerCase();
+            const isDB = item.querySelector('.fa-database');
+            if (!kw) {
+                item.style.display = '';
+                return;
+            }
+            if (isDB) {
+                const hasMatch = Array.from(item.nextElementSibling ? [item.nextElementSibling] : []).some(sib => {
+                    if (!sib) return false;
+                    return Array.from(sib.querySelectorAll('.table-item')).some(ti => (ti.getAttribute('data-name') || '').toLowerCase().includes(kw));
+                });
+                item.style.display = hasMatch || name.includes(kw) ? '' : 'none';
+            } else if (item.classList.contains('table-item')) {
+                item.style.display = name.includes(kw) ? '' : 'none';
+            }
+        });
+        const hisTables = document.getElementById('hisTables');
+        if (hisTables) {
+            const visibleTables = Array.from(hisTables.querySelectorAll('.table-item')).filter(ti => ti.style.display !== 'none');
+            hisTables.style.display = visibleTables.length > 0 || !kw ? '' : 'none';
+        }
+    }
+    </script>
+</body>
+</html>
